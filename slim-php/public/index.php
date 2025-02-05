@@ -14,7 +14,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
 });
 
 $app->addErrorMiddleware(false, true, true);
-$app->setBasePath("/room-vibe-backend/slim-php/public");
+$app->setBasePath("/room-vibe-backend/slim-php");
 
 $app->run();
 
