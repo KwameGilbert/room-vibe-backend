@@ -7,6 +7,8 @@ use Monolog\Handler\StreamHandler;
 use Dotenv\Dotenv;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Middleware\ContentLengthMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
+
 
 // Autoload dependencies
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -28,6 +30,35 @@ $container->set('logger', function () {
     return $logger;
 });
 
+// Define custom error handler
+$container->set('customErrorHandler', function () use ($container) {
+    return function (
+        ServerRequestInterface $request,
+        Throwable $exception,
+        bool $displayErrorDetails,
+        bool $logErrors,
+        bool $logErrorDetails
+    ) use ($container) {
+        // Retrieve the logger from the container
+        $logger = $container->get('logger');
+        $logger->error($exception->getMessage(), ['exception' => $exception]);
+
+        // Create a response object (using Slim's Response class)
+        $response = new \Slim\Psr7\Response();
+
+        // Prepare error payload
+        $payload = json_encode([
+            'error' => 'An internal error occurred. Please try again later.'
+        ]);
+
+        // Write payload to the response body
+        $response->getBody()->write($payload);
+
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(500);
+    };
+});
+
 // Set the container on AppFactory
 AppFactory::setContainer($container);
 
@@ -46,9 +77,9 @@ $errorMiddleware = new ErrorMiddleware(
     false
 );
 
-// Set custom error handler
-// $errorMiddleware->setDefaultErrorHandler($container->get('customErrorHandler'));
-// $app->add($errorMiddleware);
+// Set custom error handler from the container
+$errorMiddleware->setDefaultErrorHandler($container->get('customErrorHandler'));
+$app->add($errorMiddleware);
 
 // Add middleware for security headers
 $app->add(function ($request, $handler) {
@@ -74,8 +105,8 @@ $app->get('/health', function ($request, $response, $args) {
 
 // Default route
 $app->get('/', function ($request, $response, $args) {
-    $response->getBody()->write("Welcome to my Slim App")->withHeader('Content-Type', 'application/json');
-    return $response;
+    $response->getBody()->write("Welcome to my Slim App");
+    return $response->withHeader('Content-Type', 'application/json');
 });
 
 // Additional routes can be defined here...
