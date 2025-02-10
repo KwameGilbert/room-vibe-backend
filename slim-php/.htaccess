@@ -1,8 +1,9 @@
 # Enable URL rewriting
-RewriteEngine on
+# RewriteEngine on
 
 # Redirect the root URL to the public directory
-RewriteRule ^$ public/ [L]
+# RewriteRule ^$ public/ [L]
 
 # Redirect all other requests to the public directory, preserving the requested path
-RewriteRule (.*) public/$1 [L]
+# RewriteRule (.*) public/$1 [L]
+

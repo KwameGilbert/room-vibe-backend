@@ -7,14 +7,12 @@ use Monolog\Handler\StreamHandler;
 use Dotenv\Dotenv;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Middleware\ContentLengthMiddleware;
-use Psr\Http\Message\ServerRequestInterface;
-
 
 // Autoload dependencies
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Create Container (using PHP-DI)
@@ -30,33 +28,11 @@ $container->set('logger', function () {
     return $logger;
 });
 
-// Define custom error handler
+
+// Here, we’re registering it under the key "customErrorHandler".
 $container->set('customErrorHandler', function () use ($container) {
-    return function (
-        ServerRequestInterface $request,
-        Throwable $exception,
-        bool $displayErrorDetails,
-        bool $logErrors,
-        bool $logErrorDetails
-    ) use ($container) {
-        // Retrieve the logger from the container
-        $logger = $container->get('logger');
-        $logger->error($exception->getMessage(), ['exception' => $exception]);
-
-        // Create a response object (using Slim's Response class)
-        $response = new \Slim\Psr7\Response();
-
-        // Prepare error payload
-        $payload = json_encode([
-            'error' => 'An internal error occurred. Please try again later.'
-        ]);
-
-        // Write payload to the response body
-        $response->getBody()->write($payload);
-
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(500);
-    };
+    // Note: We are using the fully qualified class name from the App namespace.
+    return new \App\Middleware\CustomErrorHandler($container->get('logger'));
 });
 
 // Set the container on AppFactory
@@ -69,15 +45,16 @@ $app = AppFactory::create();
 $app->setBasePath($_ENV['BASE_PATH']);
 
 // Add middleware for error handling
+// Here, we set displayErrorDetails to true to get detailed error messages.
 $errorMiddleware = new ErrorMiddleware(
     $app->getCallableResolver(),
     $app->getResponseFactory(),
-    $_ENV['DISPLAY_ERROR_DETAILS'] === 'true', // Display errors in development
+    true,  // Display detailed error details
     false,
     false
 );
 
-// Set custom error handler from the container
+// Use the custom error handler registered in the container.
 $errorMiddleware->setDefaultErrorHandler($container->get('customErrorHandler'));
 $app->add($errorMiddleware);
 
