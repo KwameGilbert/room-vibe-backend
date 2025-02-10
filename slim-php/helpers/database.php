@@ -1,10 +1,11 @@
 <?php
 
+namespace App\Helpers;
 
 require '../vendor/autoload.php';
 require_once '../helpers/Logger.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 class Database{
@@ -30,16 +31,16 @@ class Database{
         $this->conn = null;
 
         try {
-            $this->conn = new PDO(
+            $this->conn = new \PDO(
                 "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
                 $this->username,
                 $this->password
             );
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             // Log successful connection (optional)
             $this->logger->info(date('Y-m-d H:i:s') . ": Database connection established successfully.");
-        } catch (PDOException $exception) {
+        } catch (\PDOException $exception) {
             // Log connection error
             $this->logger->error("Connection error: " . $exception->getMessage(). " in " . $exception->getFile() . " on line " . $exception->getLine() . " with code " . $exception->getCode(). " at " . date('Y-m-d H:i:s'). "\n \n");
             // Optionally display the error message

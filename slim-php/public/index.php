@@ -7,6 +7,7 @@ use Monolog\Handler\StreamHandler;
 use Dotenv\Dotenv;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Middleware\ContentLengthMiddleware;
+use App\Middleware\CustomErrorHandler;
 
 // Autoload dependencies
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -28,12 +29,12 @@ $container->set('logger', function () {
     return $logger;
 });
 
-
-// Here, we’re registering it under the key "customErrorHandler".
-$container->set('customErrorHandler', function () use ($container) {
-    // Note: We are using the fully qualified class name from the App namespace.
-    return new \App\Middleware\CustomErrorHandler($container->get('logger'));
-});
+// Here, we’re registering it under the key "errorHandler".
+// Then in the container setup:
+// $container->set('errorHandler', function () use ($container) {
+//     $customErrorHandler = new CustomErrorHandler($container->get('logger'));
+//     return $customErrorHandler;
+// });
 
 // Set the container on AppFactory
 AppFactory::setContainer($container);
@@ -55,8 +56,8 @@ $errorMiddleware = new ErrorMiddleware(
 );
 
 // Use the custom error handler registered in the container.
-$errorMiddleware->setDefaultErrorHandler($container->get('customErrorHandler'));
-$app->add($errorMiddleware);
+// $errorMiddleware->setDefaultErrorHandler($container->get('errorHandler'));
+// $app->add($errorMiddleware);
 
 // Add middleware for security headers
 $app->add(function ($request, $handler) {
