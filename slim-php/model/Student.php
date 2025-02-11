@@ -37,4 +37,24 @@ class Student
 
     }
 
+    public function getAllStudents(){
+        $query = "SELECT * FROM " . $this->table_name;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $students;
+    }
+
+    public function getStudentById($id){
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    
+}
+
 

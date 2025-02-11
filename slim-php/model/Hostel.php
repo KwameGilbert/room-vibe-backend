@@ -16,7 +16,7 @@ class Hostel{
 
     // Create a new hostel
     public function createHostel($hostel){
-        $query = "INSERT INTO hostels (name, description, location, distance, manager_id, school_id, views, image) 
+        $query = "INSERT INTO " . $this->table_name . " (name, description, location, distance, manager_id, school_id, views, image) 
                   VALUES (:name, :description, :location, :distance, :manager_id, :school_id, :views, :image)";
 
         $stmt = $this->conn->prepare($query);
@@ -65,7 +65,7 @@ class Hostel{
     }
 
     // Update a hostel
-    public function updateHostel($hostel)
+    public function updateHostel($id, $hostel)
     {
         $query = "UPDATE " . $this->table_name . " 
                   SET name = :name, description = :description, location = :location, distance = :distance, manager_id = :manager_id, school_id = :school_id, views = :views, price = :price, rating = :rating, image = :image
@@ -74,7 +74,7 @@ class Hostel{
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        $stmt->bindParam(':id', $hostel['id']);
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':name', $hostel['name']);
         $stmt->bindParam(':location', $hostel['location']);
         $stmt->bindParam(':description', $hostel['description']);
@@ -110,7 +110,10 @@ class Hostel{
     // Get all hostels of a manager
     public function getHostelsByManagerId($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE manager_id = :manager_id";
+        $query = "SELECT h.*, m.name as manager_name, m.email as manager_email 
+              FROM " . $this->table_name . " h 
+              JOIN managers m ON h.manager_id = m.id 
+              WHERE h.manager_id = :manager_id";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
@@ -184,7 +187,7 @@ class Hostel{
         return $hostels;
     }
 
-    
+
     
 
 
