@@ -50,6 +50,7 @@ class HostelController{
         }
     }
 
+    // Update a hostel by Id
     public function updateHostel($id, $hostel){
         if($this->updateHostel($id, $hostel)){
             return json_encode([
@@ -65,6 +66,7 @@ class HostelController{
         }
     }
 
+    // Delete a hostel by Id        
     public function deleteHostel($id){
         if($this->deleteHostel($id)){
             return json_encode([
@@ -79,6 +81,7 @@ class HostelController{
         }
     }
 
+    // Get all hostels by manager id
     public function getHostelsByManagerId($id){
         $managerHostels = $this->getHostelById($id);
         if($managerHostels >= 0){
@@ -94,6 +97,7 @@ class HostelController{
 
     }
 
+    // Get all hostels by school id
     public function getHostelsBySchoolId($id){
         $schoolHostels = $this->getHostelsBySchoolId($id);
         if($schoolHostels >= 0){
@@ -104,6 +108,51 @@ class HostelController{
         }else{
             return json_encode([
                 "message" => "Failed to fetch hostels for school ID {$id}"
+            ], 500);
+        }
+    }
+
+    // Get all hostels by location
+    public function getHostelsByLocation($location){
+        $locationHostels = $this->getHostelsByLocation($location);
+        if($locationHostels >= 0){
+            return json_encode([
+                "location" => $location,
+                "locationHostels" => $locationHostels
+            ], 200);
+        }else{
+            return json_encode([
+                "message" => "Failed to fetch hostels for location {$location}"
+            ], 500);
+        }
+    }
+
+    // Get all hostels with price range
+    public function getHostelsByPriceRange($min, $max){
+        $priceHostels = $this->getHostelsByPriceRange($min, $max);
+        if($priceHostels >= 0){
+            return json_encode([
+                "priceRange" => ["min" => $min, "max" => $max],
+                "priceHostels" => $priceHostels
+            ], 200);
+        }else{
+            return json_encode([
+                "message" => "Failed to fetch hostels within price range {$min} - {$max}"
+            ], 500);
+        }
+    }
+
+    // Get all hostels within a certain distance
+    public function getHostelsByDistance($distance){
+        $distanceHostels = $this->getHostelsByDistance($distance);
+        if($distanceHostels >= 0){
+            return json_encode([
+                "distance" => $distance,
+                "distanceHostels" => $distanceHostels
+            ], 200);
+        }else{
+            return json_encode([
+                "message" => "Failed to fetch hostels within distance {$distance}"
             ], 500);
         }
     }

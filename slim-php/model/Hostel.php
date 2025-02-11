@@ -143,6 +143,37 @@ class Hostel{
         return $hostels;
     }
 
+    //Get all hostels by location
+    public function getHostelsByLocation($location)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE location = :location";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':location', $location);
+        $stmt->execute();
+
+        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $hostels;
+    }
+
+    // Get all hostels with price range 
+    public function getHostelsByPriceRange($min, $max)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE min_price >= :min AND max_price <= :max";
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':min', $min);
+        $stmt->bindParam(':max', $max);
+        $stmt->execute();
+
+        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $hostels;
+    }
+
     // Get all hostels within a certain distance
     public function getHostelsByDistance($distance)
     {
@@ -157,41 +188,6 @@ class Hostel{
 
         return $hostels;
     }
-
-    // Get all hostels within a certain distance of a school
-    public function getHostelsByDistanceAndSchool($distance, $school_id)
-    {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE distance <= :distance AND school_id = :school_id";
-        $stmt = $this->conn->prepare($query);
-
-        // Bind parameters
-        $stmt->bindParam(':distance', $distance);
-        $stmt->bindParam(':school_id', $school_id);
-        $stmt->execute();
-
-        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $hostels;
-    }
-
-    // Get all hostels within a certain distance of a manager
-    public function getHostelsByDistanceAndManager($distance, $manager_id)
-    {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE distance <= :distance AND manager_id = :manager_id";
-        $stmt = $this->conn->prepare($query);
-
-        // Bind parameters
-        $stmt->bindParam(':distance', $distance);
-        $stmt->bindParam(':manager_id', $manager_id);
-        $stmt->execute();
-
-        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $hostels;
-    }
-
-
-    
 
 
 }
