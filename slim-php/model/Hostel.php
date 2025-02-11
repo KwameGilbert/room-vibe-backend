@@ -128,7 +128,10 @@ class Hostel{
     // Get all hostels of a school
     public function getHostelsBySchoolId($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE school_id = :school_id";
+        $query = "SELECT h.*, s.name as school_name, s.address as school_address 
+              FROM " . $this->table_name . " h 
+              JOIN schools s ON h.school_id = s.id 
+              WHERE h.school_id = :school_id";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
