@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
-use App\Helpers\Database;
+use App\Config\Database;
 
 class Hostel{
     private $conn;
-    private $table_name = "hostels";
+    private $table_name = "hostel";
 
     public function __construct()
     {
@@ -16,8 +16,8 @@ class Hostel{
 
     // Create a new hostel
     public function createHostel($hostel){
-        $query = "INSERT INTO " . $this->table_name . " (name, description, location, distance, manager_id, school_id, views, image) 
-                  VALUES (:name, :description, :location, :distance, :manager_id, :school_id, :views, :image)";
+        $query = "INSERT INTO " . $this->table_name . " (name, description, location, distance, manager_id, school_id, views, rating, image) 
+                  VALUES (:name, :description, :location, :distance, :manager_id, :school_id, :views, :rating, :image)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -29,7 +29,6 @@ class Hostel{
         $stmt->bindParam(':manager_id', $hostel['manager_id']);
         $stmt->bindParam(':school_id', $hostel['school_id']);
         $stmt->bindParam(':views', $hostel['views']);
-        $stmt->bindParam(':price', $hostel['price']);
         $stmt->bindParam(':rating', $hostel['rating']);
         $stmt->bindParam(':image', $hostel['image']);
 

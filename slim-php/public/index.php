@@ -5,36 +5,20 @@ use Slim\Factory\AppFactory;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Dotenv\Dotenv;
-use Slim\Middleware\ErrorMiddleware;
 use Slim\Middleware\ContentLengthMiddleware;
-use App\Middleware\CustomErrorHandler;
+use App\Helpers\LoggerFactory;
 
-// Autoload dependencies
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// Create Container (using PHP-DI)
+// Create Container using PHP-DI
 $container = new Container();
 
 // Set up Logger service using Monolog
-$container->set('logger', function () {
-    $logger = new Logger('slim_app');
-    // Log file path and level from environment variables
-    $logFile = __DIR__ . '/../logs/app.log';
-    $logLevel = Logger::toMonologLevel($_ENV['LOG_LEVEL'] ?: 'DEBUG');
-    $logger->pushHandler(new StreamHandler($logFile, $logLevel));
-    return $logger;
-});
-
-// Here, we’re registering it under the key "errorHandler".
-// Then in the container setup:
-// $container->set('errorHandler', function () use ($container) {
-//     $customErrorHandler = new CustomErrorHandler($container->get('logger'));
-//     return $customErrorHandler;
-// });
+$container->set('logger', LoggerFactory::getLogger('App'));
 
 // Set the container on AppFactory
 AppFactory::setContainer($container);
@@ -42,22 +26,16 @@ AppFactory::setContainer($container);
 // Create Slim App instance
 $app = AppFactory::create();
 
-// Set Base Path (from environment variable)
-$app->setBasePath($_ENV['BASE_PATH']);
+// Set Base Path from environment variable (if not set, default to an empty string)
+$app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
-// Add middleware for error handling
-// Here, we set displayErrorDetails to true to get detailed error messages.
-$errorMiddleware = new ErrorMiddleware(
-    $app->getCallableResolver(),
-    $app->getResponseFactory(),
-    true,  // Display detailed error details
-    false,
-    false
+// Add Error Middleware
+// In production, consider setting the first parameter (displayErrorDetails) to false.
+$app->addErrorMiddleware(
+    (bool) ($_ENV['DISPLAY_ERROR_DETAILS'] ?? true),
+    true,
+    true
 );
-
-// Use the custom error handler registered in the container.
-// $errorMiddleware->setDefaultErrorHandler($container->get('errorHandler'));
-// $app->add($errorMiddleware);
 
 // Add middleware for security headers
 $app->add(function ($request, $handler) {
@@ -71,23 +49,16 @@ $app->add(function ($request, $handler) {
 // Optional: Middleware to enforce content length limits
 $app->add(new ContentLengthMiddleware());
 
-// Define application routes
-
-// Health check endpoint (useful for load balancers and monitoring)
-$app->get('/health', function ($request, $response, $args) {
-    $data = ['status' => 'ok'];
+// Default route
+$app->get('/', function ($request, $response, $args) {
+    $data = ['message' => 'Welcome to my Slim App'];
     $payload = json_encode($data);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// Default route
-$app->get('/', function ($request, $response, $args) {
-    $response->getBody()->write("Welcome to my Slim App");
-    return $response->withHeader('Content-Type', 'application/json');
-});
-
-// Additional routes can be defined here...
+// Load API routes (assuming routes/api.php returns a callable that accepts the app)
+(require __DIR__ . '/../src/routes/api.php')($app);
 
 // Run the application
 $app->run();

@@ -1,64 +1,71 @@
-<?php 
- 
+<?php
+
 namespace App\Controller;
 
 use App\Model\Hostel;
 
-class HostelController{
+class HostelController
+{
     private $hostel;
 
-    public function __construct(){
-        $this->hostel;
+    public function __construct()
+    {
+        $this->hostel = new Hostel();
     }
 
     // Create a new hostel
-    public function createHostel($hostel){
-        if($this->hostel->createHostel($hostel)){
+    public function createHostel($hostel)
+    {
+        if ($this->hostel->createHostel($hostel)) {
             return json_encode([
                 "message" => "Hostel created successfully.",
                 "data" => $hostel
             ], 201);
         } else {
             return json_encode([
-                "message" => "Failed to create hostel."], 500);
+                "message" => "Failed to create hostel."
+            ], 500);
         }
     }
 
     // Read all hostels
-    public function getAllHostels(){
-        $hostels = $this->getAllHostels();
-        if($hostels >= 0){
+    public function getAllHostels()
+    {
+        $hostels = $this->hostel->getAllHostels();
+        if ($hostels >= 0) {
             return json_encode(["allHostels" => $hostels], 200);
         } else {
             return json_encode([
-                "message"=>"Failed to fetch all hostels"
+                "message" => "Failed to fetch all hostels"
             ], 500);
         }
     }
 
     // Read a single hostel by Id
-    public function getHostelById($id){
-        $hostel = $this->getHostelById($id);
-        if($hostel >=0){
+    public function getHostelById($id)
+    {
+        $hostel = $this->hostel->getHostelById($id);
+        if ($hostel >= 0) {
             return json_encode([
-                "hostel" => $hostel 
+                "hostel" => $hostel
             ], 200);
-        }else{
+        } else {
             return json_encode([
-                "message"=>"Failed to fetch hostel with ID {$id}"
+                "message" => "Failed to fetch hostel with ID {$id}"
             ], 500);
         }
     }
 
     // Update a hostel by Id
-    public function updateHostel($id, $hostel){
-        if($this->updateHostel($id, $hostel)){
+    public function updateHostel($id, $hostel)
+    {
+        if ($this->hostel->updateHostel($id, $hostel)) {
             return json_encode([
                 "status" => true,
                 "message" => "Hostel ID {$id} Updated Successfully",
                 "hostel" => $hostel
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "status" => false,
                 "message" => "Failed to update Hostel {$id}"
@@ -67,13 +74,14 @@ class HostelController{
     }
 
     // Delete a hostel by Id        
-    public function deleteHostel($id){
-        if($this->deleteHostel($id)){
+    public function deleteHostel($id)
+    {
+        if ($this->hostel->deleteHostel($id)) {
             return json_encode([
                 "status" => true,
                 "message" => "Hostel ID {$id} Deleted Successfully"
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "status" => false,
                 "message" => "Failed to delete hostel id: {$id}"
@@ -82,30 +90,31 @@ class HostelController{
     }
 
     // Get all hostels by manager id
-    public function getHostelsByManagerId($id){
-        $managerHostels = $this->getHostelById($id);
-        if($managerHostels >= 0){
+    public function getHostelsByManagerId($id)
+    {
+        $managerHostels = $this->hostel->getHostelsByManagerId($id);
+        if ($managerHostels >= 0) {
             return json_encode([
-                "manager"=> $id,
+                "manager" => $id,
                 "managerHostels" => $managerHostels
             ], 200);
-        } else{
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostels for manager ID {$id}"
             ], 500);
         }
-
     }
 
     // Get all hostels by school id
-    public function getHostelsBySchoolId($id){
-        $schoolHostels = $this->getHostelsBySchoolId($id);
-        if($schoolHostels >= 0){
+    public function getHostelsBySchoolId($id)
+    {
+        $schoolHostels = $this->hostel->getHostelsBySchoolId($id);
+        if ($schoolHostels >= 0) {
             return json_encode([
                 "school" => $id,
                 "schoolHostels" => $schoolHostels
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostels for school ID {$id}"
             ], 500);
@@ -113,14 +122,15 @@ class HostelController{
     }
 
     // Get all hostels by location
-    public function getHostelsByLocation($location){
-        $locationHostels = $this->getHostelsByLocation($location);
-        if($locationHostels >= 0){
+    public function getHostelsByLocation($location)
+    {
+        $locationHostels = $this->hostel->getHostelsByLocation($location);
+        if ($locationHostels >= 0) {
             return json_encode([
                 "location" => $location,
                 "locationHostels" => $locationHostels
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostels for location {$location}"
             ], 500);
@@ -128,14 +138,15 @@ class HostelController{
     }
 
     // Get all hostels with price range
-    public function getHostelsByPriceRange($min, $max){
-        $priceHostels = $this->getHostelsByPriceRange($min, $max);
-        if($priceHostels >= 0){
+    public function getHostelsByPriceRange($min, $max)
+    {
+        $priceHostels = $this->hostel->getHostelsByPriceRange($min, $max);
+        if ($priceHostels >= 0) {
             return json_encode([
                 "priceRange" => ["min" => $min, "max" => $max],
                 "priceHostels" => $priceHostels
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostels within price range {$min} - {$max}"
             ], 500);
@@ -143,19 +154,18 @@ class HostelController{
     }
 
     // Get all hostels within a certain distance
-    public function getHostelsByDistance($distance){
-        $distanceHostels = $this->getHostelsByDistance($distance);
-        if($distanceHostels >= 0){
+    public function getHostelsByDistance($distance)
+    {
+        $distanceHostels = $this->hostel->getHostelsByDistance($distance);
+        if ($distanceHostels >= 0) {
             return json_encode([
                 "distance" => $distance,
                 "distanceHostels" => $distanceHostels
             ], 200);
-        }else{
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostels within distance {$distance}"
             ], 500);
         }
     }
-
-
 }
