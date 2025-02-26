@@ -6,7 +6,7 @@ use App\Config\Database;
 
 class Hostel{
     private $conn;
-    private $table_name = "hostel";
+    private $table_name = "hostels";
 
     public function __construct()
     {

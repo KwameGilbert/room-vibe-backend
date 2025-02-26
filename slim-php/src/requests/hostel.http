@@ -1,7 +1,8 @@
-###
 #Home
-
 http://localhost:5000/
-
 ###
+
 #Get all hostels
+http://localhost:5000/hostels
+###
+

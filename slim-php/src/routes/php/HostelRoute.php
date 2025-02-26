@@ -15,7 +15,7 @@ return function ($app) {
         });
 
         // Route to get a hostel by ID
-        $app->get('/{id:[0-9]+}', function ($request, $response, $args) use ($hostelController) {
+        $app->get('/hostels/{id:[0-9]+}', function ($request, $response, $args) use ($hostelController) {
             $id = $args['id'];
             $result = $hostelController->getHostelById($id);
             $response->getBody()->write($result);

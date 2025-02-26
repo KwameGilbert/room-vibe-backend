@@ -32,10 +32,13 @@ class HostelController
     public function getAllHostels()
     {
         $hostels = $this->hostel->getAllHostels();
-        if ($hostels >= 0) {
+        if ($hostels > 0) {
             return json_encode(["allHostels" => $hostels], 200);
-        } else {
+        } elseif($hostels == 0) {
+            return json_encode(["allHostels" => []], 200);  
+        } else{
             return json_encode([
+                "status" => false,
                 "message" => "Failed to fetch all hostels"
             ], 500);
         }
@@ -45,11 +48,18 @@ class HostelController
     public function getHostelById($id)
     {
         $hostel = $this->hostel->getHostelById($id);
-        if ($hostel >= 0) {
+        if ($hostel > 0) {
             return json_encode([
+                "status" => true,
                 "hostel" => $hostel
             ], 200);
-        } else {
+        } else if($hostel == 0){
+            return json_encode([
+                "status" => false,
+                "message" => "Hostel with ID {$id} not found"
+            ], 404);            
+        }
+        else {
             return json_encode([
                 "message" => "Failed to fetch hostel with ID {$id}"
             ], 500);

@@ -2,8 +2,6 @@
 
 use DI\Container;
 use Slim\Factory\AppFactory;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Dotenv\Dotenv;
 use Slim\Middleware\ContentLengthMiddleware;
 use App\Helpers\LoggerFactory;
@@ -32,9 +30,10 @@ $app->setBasePath($_ENV['BASE_PATH'] ?? '');
 // Add Error Middleware
 // In production, consider setting the first parameter (displayErrorDetails) to false.
 $app->addErrorMiddleware(
-    (bool) ($_ENV['DISPLAY_ERROR_DETAILS'] ?? true),
+    (bool) $_ENV['DISPLAY_ERROR_DETAILS'],
     true,
-    true
+    true, 
+    $container->get('logger')
 );
 
 // Add middleware for security headers
