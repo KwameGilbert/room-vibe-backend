@@ -15,7 +15,7 @@ return function ($app) {
         });
 
         // Route to get a hostel by ID
-        $app->get('/hostels/{id:[0-9]+}', function ($request, $response, $args) use ($hostelController) {
+        $app->get('/hostel/{id:[0-9]+}', function ($request, $response, $args) use ($hostelController) {
             $id = $args['id'];
             $result = $hostelController->getHostelById($id);
             $response->getBody()->write($result);
@@ -23,7 +23,7 @@ return function ($app) {
         });
 
         // Route to create a new hostel
-        $app->post('', function ($request, $response) use ($hostelController) {
+        $app->post('/hostels', function ($request, $response) use ($hostelController) {
             $data = json_decode($request->getBody()->getContents(), true);
             $result = $hostelController->createHostel($data);
             $response->getBody()->write($result);
