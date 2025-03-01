@@ -23,7 +23,7 @@ return function ($app) {
         });
 
         // Route to create a new hostel
-        $app->post('/hostels', function ($request, $response) use ($hostelController) {
+        $app->post('/hostel', function ($request, $response) use ($hostelController) {
             $data = json_decode($request->getBody()->getContents(), true);
             $result = $hostelController->createHostel($data);
             $response->getBody()->write($result);

@@ -6,7 +6,7 @@ use App\Config\Database;
 
 class Hostel{
     private $conn;
-    private $table_name = "hostels";
+    private $table_name = "hostel";
 
     public function __construct()
     {
@@ -39,16 +39,86 @@ class Hostel{
         }
     }
 
-    // Read all hostels
-    public function getAllHostels()
-    {
-        $query = "SELECT * FROM " . $this->table_name;
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        return $hostels;
-    }
+  public function getAllHostels()
+{
+    $query = "
+SELECT JSON_ARRAY(
+      JSON_OBJECT(
+        'id', h.id,
+        'hostel_name', h.hostel_name,
+        'location', h.location,
+        'distance', h.distance,
+        'image', (
+             SELECT JSON_ARRAY(hi.image_url)
+             FROM hostel_image hi
+             WHERE hi.hostel_id = h.id
+        ),
+        'school_id', h.school_id,
+        'manager', (
+             SELECT JSON_OBJECT(
+               'id', m.id,
+               'name', m.name,
+               'email', m.email,
+               'phone', m.phone
+             )
+             FROM manager m
+             WHERE m.hostel_id = h.id
+             LIMIT 1
+        ),
+        'amenities', (
+             SELECT JSON_ARRAY(a.amenity_name)
+             FROM amenity a
+             WHERE a.hostel_id = h.id
+        ),
+        'room_type', (
+             JSON_OBJECT(
+               'one_in_one', (
+                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
+                 FROM room r
+                 WHERE r.hostel_id = h.id AND r.room_type = 'one_in_one'
+               ),
+               'two_in_one', (
+                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
+                 FROM room r
+                 WHERE r.hostel_id = h.id AND r.room_type = 'two_in_one'
+               ),
+               'three_in_one', (
+                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
+                 FROM room r
+                 WHERE r.hostel_id = h.id AND r.room_type = 'three_in_one'
+               ),
+               'four_in_one', (
+                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
+                 FROM room r
+                 WHERE r.hostel_id = h.id AND r.room_type = 'four_in_one'
+               )
+             )
+        ),
+        'price_range', JSON_ARRAY(h.price_min, h.price_max),
+        'rating', h.rating,
+        'description', h.description,
+        'address', h.address,
+        'reviews', (
+             SELECT JSON_ARRAY(JSON_OBJECT(
+                'id', rv.id,
+                'rating', rv.rating,
+                'text', rv.text,
+                'date', rv.review_date,
+                'time', rv.review_time
+             ))
+             FROM review rv
+             WHERE rv.hostel_id = h.id
+        )
+      )
+    ) AS hostels_json FROM hostel h;";
+    
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch( \PDO::FETCH_ASSOC);
+    
+    // The query returns one row with the JSON array in 'hostels_json'
+    return $result['hostels_json'];
+}
 
     // Read a single hostel by ID
     public function getHostelById($id)

@@ -16,15 +16,15 @@ class HostelController
     // Create a new hostel
     public function createHostel($hostel)
     {
-        if ($this->hostel->createHostel($hostel)) {
-            return json_encode([
+        if ($this->hostel->createHostel(hostel: $hostel)) {
+            return json_encode(value: [
                 "message" => "Hostel created successfully.",
                 "data" => $hostel
-            ], 201);
+            ], flags: 201);
         } else {
-            return json_encode([
+            return json_encode(value: [
                 "message" => "Failed to create hostel."
-            ], 500);
+            ], flags: 500);
         }
     }
 
@@ -47,7 +47,7 @@ class HostelController
     // Read a single hostel by Id
     public function getHostelById($id)
     {
-        $hostel = $this->hostel->getHostelById($id);
+        $hostel = $this->hostel->getHostelById(id: $id);
         if ($hostel > 0) {
             return json_encode([
                 "status" => true,
@@ -58,8 +58,7 @@ class HostelController
                 "status" => false,
                 "message" => "Hostel with ID {$id} not found"
             ], 404);            
-        }
-        else {
+        } else {
             return json_encode([
                 "message" => "Failed to fetch hostel with ID {$id}"
             ], 500);
