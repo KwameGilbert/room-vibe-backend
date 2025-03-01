@@ -14,114 +14,133 @@ class Hostel{
         $this->conn = $database->getConnection();
     }
 
-    // Create a new hostel
-    public function createHostel($hostel){
-        $query = "INSERT INTO " . $this->table_name . " (name, description, location, distance, manager_id, school_id, views, rating, image) 
-                  VALUES (:name, :description, :location, :distance, :manager_id, :school_id, :views, :rating, :image)";
+    public function createHostel($manager_id, array $hostel): bool
+    {
+        // The SQL query now matches the new schema for the hostel table.
+        $query = "INSERT INTO " . $this->table_name . " (
+                    hostel_name, 
+                    location, 
+                    distance, 
+                    school_id, 
+                    manager_id,
+                    rating, 
+                    description, 
+                    address, 
+                    price_min, 
+                    price_max
+              ) VALUES (
+                    :hostel_name, 
+                    :location, 
+                    :distance, 
+                    :school_id, 
+                    :manager_id,
+                    :rating, 
+                    :description, 
+                    :address, 
+                    :price_min, 
+                    :price_max
+              )";
 
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
-        $stmt->bindParam(':name', $hostel['name']);
-        $stmt->bindParam(':location', $hostel['location']);
-        $stmt->bindParam(':description', $hostel['description']);
-        $stmt->bindParam(':distance', $hostel['distance']);
-        $stmt->bindParam(':manager_id', $hostel['manager_id']);
-        $stmt->bindParam(':school_id', $hostel['school_id']);
-        $stmt->bindParam(':views', $hostel['views']);
-        $stmt->bindParam(':rating', $hostel['rating']);
-        $stmt->bindParam(':image', $hostel['image']);
+        // Bind parameters with default values if not provided
+        $stmt->bindValue(':hostel_name', $hostel['hostel_name'] ?? '', \PDO::PARAM_STR);
+        $stmt->bindValue(':location', $hostel['location'] ?? '', \PDO::PARAM_STR);
+        $stmt->bindValue(':distance', isset($hostel['distance']) ? $hostel['distance'] : null, \PDO::PARAM_STR);
+        $stmt->bindValue(':school_id', $hostel['school_id'] ?? null, \PDO::PARAM_INT);
+        $stmt->bindValue(':manager_id', $manager_id, \PDO::PARAM_INT);
+        $stmt->bindValue(':rating', $hostel['rating'] ?? 0.00, \PDO::PARAM_STR);
+        $stmt->bindValue(':description', $hostel['description'] ?? null, \PDO::PARAM_STR);
+        $stmt->bindValue(':address', $hostel['address'] ?? '', \PDO::PARAM_STR);
+        $stmt->bindValue(':price_min', $hostel['price_min'] ?? 0.00, \PDO::PARAM_STR);
+        $stmt->bindValue(':price_max', $hostel['price_max'] ?? 0.00, \PDO::PARAM_STR);
 
-        if ($stmt->execute()) {
-            return true;
-        } else {
+        try {
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            // Optionally log the error: e.g., $this->logger->error($e->getMessage());
             return false;
         }
     }
 
-  public function getAllHostels()
-{
-    $query = "
-SELECT JSON_ARRAY(
-      JSON_OBJECT(
-        'id', h.id,
-        'hostel_name', h.hostel_name,
-        'location', h.location,
-        'distance', h.distance,
-        'image', (
-             SELECT JSON_ARRAY(hi.image_url)
-             FROM hostel_image hi
-             WHERE hi.hostel_id = h.id
-        ),
-        'school_id', h.school_id,
-        'manager', (
-             SELECT JSON_OBJECT(
-               'id', m.id,
-               'name', m.name,
-               'email', m.email,
-               'phone', m.phone
-             )
-             FROM manager m
-             WHERE m.hostel_id = h.id
-             LIMIT 1
-        ),
-        'amenities', (
-             SELECT JSON_ARRAY(a.amenity_name)
-             FROM amenity a
-             WHERE a.hostel_id = h.id
-        ),
-        'room_type', (
-             JSON_OBJECT(
-               'one_in_one', (
-                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
-                 FROM room r
-                 WHERE r.hostel_id = h.id AND r.room_type = 'one_in_one'
-               ),
-               'two_in_one', (
-                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
-                 FROM room r
-                 WHERE r.hostel_id = h.id AND r.room_type = 'two_in_one'
-               ),
-               'three_in_one', (
-                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
-                 FROM room r
-                 WHERE r.hostel_id = h.id AND r.room_type = 'three_in_one'
-               ),
-               'four_in_one', (
-                 SELECT JSON_ARRAY(JSON_OBJECT('id', r.id, 'price', r.price, 'type', r.type))
-                 FROM room r
-                 WHERE r.hostel_id = h.id AND r.room_type = 'four_in_one'
-               )
-             )
-        ),
-        'price_range', JSON_ARRAY(h.price_min, h.price_max),
-        'rating', h.rating,
-        'description', h.description,
-        'address', h.address,
-        'reviews', (
-             SELECT JSON_ARRAY(JSON_OBJECT(
-                'id', rv.id,
-                'rating', rv.rating,
-                'text', rv.text,
-                'date', rv.review_date,
-                'time', rv.review_time
-             ))
-             FROM review rv
-             WHERE rv.hostel_id = h.id
-        )
-      )
-    ) AS hostels_json FROM hostel h;";
-    
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
-    $result = $stmt->fetch( \PDO::FETCH_ASSOC);
-    
-    // The query returns one row with the JSON array in 'hostels_json'
-    return $result['hostels_json'];
-}
+    public function getAllHostels(): array
+    {
+        // Get all hostels
+        $stmt = $this->conn->query("SELECT * FROM hostel");
+        $hostels = $stmt->fetchAll( \PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($hostels as $hostel) {
+            $hostelId = $hostel['id'];
+
+            // Get hostel images
+            $stmtImages = $this->conn->prepare("SELECT image_url FROM hostel_image WHERE hostel_id = ?");
+            $stmtImages->execute([$hostelId]);
+            $images = $stmtImages->fetchAll(\PDO::FETCH_COLUMN);
+
+            // Get manager record (assuming one manager per hostel)
+            $stmtManager = $this->conn->prepare("SELECT id, name, email, phone FROM manager WHERE hostel_id = ? LIMIT 1");
+            $stmtManager->execute([$hostelId]);
+            $manager = $stmtManager->fetch(\PDO::FETCH_ASSOC);
+            if (!$manager) {
+                $manager = null;
+            }
+
+            // Get amenities as a simple array of names
+            $stmtAmenities = $this->conn->prepare("SELECT amenity_name FROM amenity WHERE hostel_id = ?");
+            $stmtAmenities->execute([$hostelId]);
+            $amenities = $stmtAmenities->fetchAll(\PDO::FETCH_COLUMN);
+
+            // Get rooms and group them by room_type
+            $stmtRooms = $this->conn->prepare("SELECT id, room_type, price, type FROM room WHERE hostel_id = ?");
+            $stmtRooms->execute([$hostelId]);
+            $rooms = $stmtRooms->fetchAll(\PDO::FETCH_ASSOC);
+            $roomTypes = [
+                'one_in_one'   => [],
+                'two_in_one'   => [],
+                'three_in_one' => [],
+                'four_in_one'  => []
+            ];
+            foreach ($rooms as $room) {
+                $rtype = $room['room_type'];
+                if (isset($roomTypes[$rtype])) {
+                    $roomTypes[$rtype][] = [
+                        'id'    => $room['id'],
+                        'price' => $room['price'],
+                        'type'  => $room['type']
+                    ];
+                }
+            }
+
+            // Get reviews
+            $stmtReviews = $this->conn->prepare("SELECT id, rating, text, review_date AS date, review_time AS time FROM review WHERE hostel_id = ?");
+            $stmtReviews->execute(params: [$hostelId]);
+            $reviews = $stmtReviews->fetchAll(\PDO::FETCH_ASSOC);
+
+            // Build final structure for this hostel
+            $result[] = [
+                'id'          => (int)$hostel['id'],
+                'hostel_name' => $hostel['hostel_name'],
+                'location'    => $hostel['location'],
+                'distance'    => $hostel['distance'],  // if you need it as a string, you can cast here
+                'image'       => $images,
+                'school_id'   => (int)$hostel['school_id'],
+                'manager'     => $manager,
+                'amenities'   => $amenities,
+                'room_type'   => $roomTypes,
+                'price_range' => [$hostel['price_min'], $hostel['price_max']],
+                'rating'      => $hostel['rating'],
+                'description' => $hostel['description'],
+                'address'     => $hostel['address'],
+                'reviews'     => $reviews
+            ];
+        }
+        
+        return $result;
+    }
 
     // Read a single hostel by ID
-    public function getHostelById($id)
+    public function getHostelById($id): array
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -163,7 +182,7 @@ SELECT JSON_ARRAY(
     }
 
     // Delete a hostel
-    public function deleteHostel($id)
+    public function deleteHostel($id): bool
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
         $stmt = $this->conn->prepare($query);

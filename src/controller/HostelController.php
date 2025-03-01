@@ -14,9 +14,9 @@ class HostelController
     }
 
     // Create a new hostel
-    public function createHostel($hostel)
+    public function createHostel($manager_id, $hostel): bool|string
     {
-        if ($this->hostel->createHostel(hostel: $hostel)) {
+        if ($this->hostel->createHostel( manager_id: $manager_id, hostel: $hostel)) {
             return json_encode(value: [
                 "message" => "Hostel created successfully.",
                 "data" => $hostel
@@ -28,8 +28,8 @@ class HostelController
         }
     }
 
-    // Read all hostels
-    public function getAllHostels()
+ // Read all hostels
+    public function getAllHostels(): bool|string
     {
         $hostels = $this->hostel->getAllHostels();
         if ($hostels > 0) {
@@ -43,6 +43,7 @@ class HostelController
             ], 500);
         }
     }
+
 
     // Read a single hostel by Id
     public function getHostelById($id)

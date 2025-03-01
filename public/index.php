@@ -46,7 +46,7 @@ $app->add(function ($request, $handler) {
 });
 
 // Optional: Middleware to enforce content length limits
-$app->add(new ContentLengthMiddleware());
+$app->add(middleware: new ContentLengthMiddleware());
 
 // Default route
 $app->get('/', function ($request, $response, $args) {
