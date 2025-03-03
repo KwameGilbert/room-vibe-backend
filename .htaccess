@@ -1,9 +1,9 @@
 # Enable URL rewriting
-# RewriteEngine on
+RewriteEngine On
 
-# Redirect the root URL to the public directory
-# RewriteRule ^$ public/ [L]
+# If the requested file or directory does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
-# Redirect all other requests to the public directory, preserving the requested path
-# RewriteRule (.*) public/$1 [L]
-
+# Redirect all requests to index.php
+ RewriteRule ^ index.php [QSA,L]

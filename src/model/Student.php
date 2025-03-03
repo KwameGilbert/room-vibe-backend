@@ -2,12 +2,12 @@
 
 namespace App\Model;
 
-use App\Helpers\Database;
+use App\Config\Database;
 
 class Student
 {
     private $conn;
-    private $table_name = "students";
+    private $table_name = "student";
 
     public function __construct()
     {
@@ -51,8 +51,27 @@ class Student
         $stmt->bindParam(':id', $id);
         $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $user;
     }
+
+    public function updateStudent($id, $student){
+        $query = "UPDATE " . $this->table_name . " SET firstName = :firstName, lastName = :lastName, email = :email, phone = :phone, gender = :gender WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':firstName', $student['firstName']);
+        $stmt->bindParam(':lastName', $student['lastName']);
+        $stmt->bindParam(':email', $student['email']);
+        $stmt->bindParam(':phone', $student['phone']);
+        $stmt->bindParam(':gender', $student['gender']);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
 
     
 }

@@ -63,10 +63,10 @@ class Hostel{
         }
     }
 
-    public function getAllHostels(): array
+    public function getAllHostels()
     {
         // Get all hostels
-        $stmt = $this->conn->query("SELECT * FROM hostel");
+        $stmt = $this->conn->query("SELECT * FROM " . $this->table_name);
         $hostels = $stmt->fetchAll( \PDO::FETCH_ASSOC);
 
         $result = [];
@@ -140,7 +140,7 @@ class Hostel{
     }
 
     // Read a single hostel by ID
-    public function getHostelById($id): array
+    public function getHostelById($id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -148,7 +148,6 @@ class Hostel{
         $stmt->execute();
 
         $hostel = $stmt->fetch(\PDO::FETCH_ASSOC);
-
         return $hostel;
     }
 
@@ -156,23 +155,22 @@ class Hostel{
     public function updateHostel($id, $hostel)
     {
         $query = "UPDATE " . $this->table_name . " 
-                  SET name = :name, description = :description, location = :location, distance = :distance, manager_id = :manager_id, school_id = :school_id, views = :views, price = :price, rating = :rating, image = :image
-                  WHERE id = :id";
+                  SET hostel_name = :hostel_name, location = :location, distance = :distance, school_id = :school_id, manager_id = :manager_id, rating = :rating, description = :description, address = :address, price_min = :price_min, price_max = :price_max WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':name', $hostel['name']);
+        $stmt->bindParam(':hostel_name', $hostel['hostel_name']);
         $stmt->bindParam(':location', $hostel['location']);
-        $stmt->bindParam(':description', $hostel['description']);
         $stmt->bindParam(':distance', $hostel['distance']);
-        $stmt->bindParam(':manager_id', $hostel['manager_id']);
         $stmt->bindParam(':school_id', $hostel['school_id']);
-        $stmt->bindParam(':views', $hostel['views']);
-        $stmt->bindParam(':price', $hostel['price']);
+        $stmt->bindParam(':manager_id', $hostel['manager_id']);
         $stmt->bindParam(':rating', $hostel['rating']);
-        $stmt->bindParam(':image', $hostel['image']);
+        $stmt->bindParam(':description', $hostel['description']);
+        $stmt->bindParam(':address', $hostel['address']);
+        $stmt->bindParam(':price_min', $hostel['price_min']);
+        $stmt->bindParam(':price_max', $hostel['price_max']);
 
         if ($stmt->execute()) {
             return true;
@@ -200,7 +198,7 @@ class Hostel{
     {
         $query = "SELECT h.*, m.name as manager_name, m.email as manager_email 
               FROM " . $this->table_name . " h 
-              JOIN managers m ON h.manager_id = m.id 
+              JOIN manager m ON h.manager_id = m.id 
               WHERE h.manager_id = :manager_id";
         $stmt = $this->conn->prepare($query);
 
@@ -218,7 +216,7 @@ class Hostel{
     {
         $query = "SELECT h.*, s.name as school_name, s.address as school_address 
               FROM " . $this->table_name . " h 
-              JOIN schools s ON h.school_id = s.id 
+              JOIN school s ON h.school_id = s.id 
               WHERE h.school_id = :school_id";
         $stmt = $this->conn->prepare($query);
 
@@ -249,7 +247,7 @@ class Hostel{
     // Get all hostels with price range 
     public function getHostelsByPriceRange($min, $max)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE min_price >= :min AND max_price <= :max";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE price_min >= :min AND price_max <= :max";
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters

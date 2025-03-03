@@ -2,7 +2,7 @@
 
 namespace App\Config;
 
-require '../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use App\Helpers\LoggerFactory;
 
@@ -46,9 +46,9 @@ class Database
             $this->logger->info(date('Y-m-d H:i:s') . " : Database connection established successfully. \n \n");
         } catch (\PDOException $exception) {
             // Log connection error using Monolog
-            $this->logger->error("Connection error: " . $exception->getMessage() .
-                " in " . $exception->getFile() . " on line " . $exception->getLine() .
-                " with code " . $exception->getCode() . " at " . date('Y-m-d H:i:s') . "\n \n");
+            $this->logger->error("\n Connection error: " . $exception->getMessage() .
+                "\n in " . $exception->getFile() . "\n on line " . $exception->getLine() .
+                "\n with code " . $exception->getCode() . "\n at " . date('Y-m-d H:i:s') . "\n \n");
 
             // Optionally, you can display the error or handle it differently
             echo "Connection error: " . $exception->getMessage();

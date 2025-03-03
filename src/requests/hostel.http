@@ -3,7 +3,7 @@ http://localhost:5000/
 ###
 
 #Get all hostels
-GET http://localhost:8000/hostels
+GET http://localhost:5000/api/explore/hostels
 ###
 
 #Get single hostel by ID
