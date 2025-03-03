@@ -55,7 +55,8 @@ class Student
         return $user;
     }
 
-    public function updateStudent($id, $student){
+    public function updateStudent($id, $student)
+    {
         $query = "UPDATE " . $this->table_name . " SET firstName = :firstName, lastName = :lastName, email = :email, phone = :phone, gender = :gender WHERE id = :id";
         $stmt = $this->conn->prepare($query);
 
@@ -72,8 +73,31 @@ class Student
         } else {
             return false;
         }
-
+    }
     
+    // Delete a Student
+    public function deleteStudent($id){
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function searchStudent($search)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE firstName LIKE :search OR lastName LIKE :search OR email LIKE :search OR phone LIKE :search";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(':search', '%' . $search . '%');
+        $stmt->execute();
+        $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $students;
+    }
+
 }
 
 
