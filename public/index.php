@@ -6,10 +6,10 @@ use Dotenv\Dotenv;
 use Slim\Middleware\ContentLengthMiddleware;
 use App\Helpers\LoggerFactory;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__ . '/');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Create Container using PHP-DI
@@ -57,7 +57,7 @@ $app->get('/', function ($request, $response, $args) {
 });
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
-(require __DIR__ . '/src/routes/api.php')($app);
+(require __DIR__ . '/../src/routes/api.php')($app);
 
 // Run the application
 $app->run();
