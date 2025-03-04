@@ -27,7 +27,6 @@
     }
   },
   "framework": {
-    "name": "slim",
     "plugins": ["@vercel/php"]
   }
 }
