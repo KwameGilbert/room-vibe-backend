@@ -1,0 +1,28 @@
+#Home
+http://localhost:5000/
+###
+
+#Get all hostels
+GET http://localhost:5000/api/explore/hostels
+###
+
+#Get single hostel by ID
+GET http://localhost:5000/hostel/2
+###
+
+#Create a new hostel
+POST http://localhost:5000/hostel
+
+{
+    "name": "Sample Hostel",
+    "description": "A modern student accommodation",
+    "location": "123 College Street",
+    "distance": 2.5,
+    "manager_id": 1,
+    "school_id": 1,
+    "views": 0,
+    "rating": 0,
+    "image": "hostel1.jpg"
+}
+
+###

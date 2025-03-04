@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "type": "php",
+      "request": "launch",
+      "name": "Launch Slim PHP App",
+      "program": "${workspaceFolder}/slim-php/public/index.php",
+      "runtimeExecutable": "php",
+      "runtimeArgs": [
+        "-S",
+        "localhost:5000",
+        "-t",
+        "public"
+      ],
+      "port": 5000
+    }
+  ]
+}
