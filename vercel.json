@@ -1,8 +1,34 @@
 {
-    "builds":[
-        {"src": "public/index.php", "use":"@vercel/php"}
-    ],
-    "routes":[
-        {"src": "/(.*)", "dest": "/index.php"}
-    ]
+  "version": 2,
+  "env": {
+    "DB_HOST" :"localhost",
+    "DB_NAME" :"room_vibe",
+    "DB_USERNAME" : "root",
+    "DB_PASSWORD" : "",
+    "DISPLAY_ERROR_DETAILS": false,
+    "BASE_PATH":"",
+    "LOG_LEVEL":"DEBUG"
+  },
+  "builds": [
+    {
+      "src": "public/index.php",
+      "use": "@vercel/php"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.php"
+    }
+  ],
+  "functions": {
+    "public/*.php": {
+      "runtime": "vercel-php@0.5.2"
+    }
+  },
+  "framework": {
+    "name": "slim",
+    "plugins": ["@vercel/php"]
+  }
 }
+    
