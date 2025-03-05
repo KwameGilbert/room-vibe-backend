@@ -79,7 +79,7 @@ class Hostel{
             $images = $stmtImages->fetchAll(\PDO::FETCH_COLUMN);
 
             // Get manager record (assuming one manager per hostel)
-            $stmtManager = $this->conn->prepare("SELECT id, name, email, phone FROM manager WHERE hostel_id = ? LIMIT 1");
+            $stmtManager = $this->conn->prepare("SELECT id, name, email, phone FROM manager WHERE id = ? LIMIT 1");
             $stmtManager->execute([$hostelId]);
             $manager = $stmtManager->fetch(\PDO::FETCH_ASSOC);
             if (!$manager) {
