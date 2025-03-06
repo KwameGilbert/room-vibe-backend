@@ -74,7 +74,7 @@ class Hostel{
             $hostelId = $hostel['id'];
 
             // Get hostel images
-            $stmtImages = $this->conn->prepare("SELECT image_url FROM hostel_image WHERE hostel_id = ?");
+            $stmtImages = $this->conn->prepare("SELECT public_id, url FROM hostel_image WHERE hostel_id = ?");
             $stmtImages->execute([$hostelId]);
             $images = $stmtImages->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -122,7 +122,7 @@ class Hostel{
                 'id'          => (int)$hostel['id'],
                 'hostel_name' => $hostel['hostel_name'],
                 'location'    => $hostel['location'],
-                'distance'    => $hostel['distance'],  // if you need it as a string, you can cast here
+                'distance'    => $hostel['distance'],
                 'image'       => $images,
                 'school_id'   => (int)$hostel['school_id'],
                 'manager'     => $manager,

@@ -27,17 +27,23 @@ class ReviewController{
     // Read a single review by Id
     public function getReview($id){
         $review = $this->review->getReview($id);
-        if($review){
+        if($review > 0){
             return json_encode([
                 "status" => true,
                 "review" => $review
             ], 200);
+        }elseif($review == 0){
+            return json_encode([
+                "status" => false,
+                "message" => "Review not found."
+            ], 404);
         } else {
             return json_encode([
                 "status" => false,
                 "message" => "Failed to fetch review."
             ], 500);
-        }
+        } 
+        
     }
 
     //Get all reviews of a hostel
@@ -48,6 +54,12 @@ class ReviewController{
                 "status" => true,
                 "reviews" => $reviews
             ], 200);
+        
+        } elseif($reviews == 0){
+            return json_encode([
+                "status" => false,
+                "message" => "No reviews found."
+            ], 404);
         } else {
             return json_encode([
                 "status" => false,

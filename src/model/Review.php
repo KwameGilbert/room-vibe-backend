@@ -12,7 +12,7 @@ class Review{
 
     public function __construct(){
         $database = new Database();
-        $conn = $database->getConnection();
+        $this->conn = $database->getConnection();
     }
 
     public function createHostelReview($review)
@@ -43,13 +43,10 @@ class Review{
         $query = "SELECT * FROM {$this->table_name} WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
+        $stmt->execute();
 
-        try {
-            $stmt->execute();
-            return $stmt->fetch();
-        } catch (\PDOException $e) {
-            return false;
-        }
+        $review =  $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $review;
     }
 
     //Get all reviews of a hostel
@@ -58,13 +55,10 @@ class Review{
         $query = "SELECT * FROM {$this->table_name} WHERE hostel_id = :hostel_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':hostel_id', $hostel_id);
+        $stmt->execute();
 
-        try {
-            $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (\PDOException $e) {
-            return false;
-        }
+        $reviews = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $reviews;
     }
 
     public function updateReview($id, $review)

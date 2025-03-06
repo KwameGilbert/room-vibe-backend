@@ -52,5 +52,5 @@ class HostelImage
         return $stmt;
     }
 
-    
+
 }

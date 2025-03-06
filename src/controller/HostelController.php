@@ -37,9 +37,14 @@ class HostelController
     {
         $hostels = $this->hostel->getAllHostels();
         if ($hostels > 0) {
-            return json_encode(["allHostels" => $hostels], 200);
+            return json_encode([
+                "status" => true,
+                "allHostels" => $hostels], 200);
         } elseif($hostels == 0) {
-            return json_encode(["allHostels" => []], 200);  
+            return json_encode([
+                "status" => false,
+                "allHostels" => []
+            ], 200);  
         } else{
             return json_encode([
                 "status" => false,
