@@ -11,9 +11,8 @@ class HostelImageController
     private $conn;
     private $hostelImage;
 
-    public function __construct($db)
+    public function __construct()
     {
-        $this->conn = $db;
         $this->hostelImage = new HostelImage();
 
         // Set Cloudinary configuration.
@@ -30,7 +29,7 @@ class HostelImageController
     }
 
     // Upload an image for a given hostel ID
-    public function uploadImage($hostel_id)
+    public function uploadImage($hostel_id, $_FILES)
     {
         // Check that a file was uploaded
         if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
@@ -68,10 +67,82 @@ class HostelImageController
     }
 
     // Fetch images for a given hostel ID
-    public function getImages($hostel_id)
+    public function getHostelImages($hostel_id)
     {
-        $images = $this->hostelImage->getImageByHostelId($hostel_id);
+        $images = $this->hostelImage->getImagesByHostelId($hostel_id);
         return json_encode([
-            'data' => $images],200);
+            'status'=> true,
+            'hostelImages' => $images],200);
+    }
+
+    // Fetch an image by ID
+    public function getHostelImageById($id)
+    {
+        $image = $this->hostelImage->getImageById($id);
+        return json_encode([
+            'status'=> true,
+            'hostelImage' => $image],200);
+    }
+
+    // Update an image by ID
+    public function updateHostelImage($id, $_FILES)
+    {
+        // Check that a file was uploaded
+        if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            return json_encode([
+                'error' => 'No image file uploaded or upload error.'
+            ] , 400);
+        }
+
+        $filePath = $_FILES['image']['tmp_name'];
+
+        try {
+            // Fetch the image from the database
+            $image = $this->hostelImage->getImageById($id);
+
+            // Delete the image from Cloudinary
+            $uploadApi = new UploadApi();
+            $uploadApi->destroy($image['public_id']);
+
+            // Upload the new image to Cloudinary
+            $result = $uploadApi->upload($filePath, [
+                'folder' => "hostels/{$image['hostel_id']}"
+            ]);
+
+            // Prepare data to store in the database
+            $data = [
+                'public_id' => $result['public_id'],
+                'url'       => $result['secure_url']
+            ];
+
+            if($this->hostelImage->updateHostelImage($id, $data)){
+                return json_encode([
+                    'message' => 'Image updated successfully.',
+                    'data'    => $data
+                ]);
+            }
+        } catch (\Exception $e) {
+            return json_encode(
+                ['error' => 'Update failed: '. $e->getMessage()],500);
+        }
+    }
+
+    // Delete an image by ID
+    public function deleteImage($id)
+    {
+        // Fetch the image from the database
+        $image = $this->hostelImage->getImageById($id);
+
+        // Delete the image from Cloudinary
+        $uploadApi = new UploadApi();
+        $uploadApi->destroy($image['public_id']);
+
+        if($this->hostelImage->deleteImage($id)){
+            return json_encode([
+                'message' => 'Image deleted successfully.'
+            ]);
+        }
     }
 }
+
+

@@ -35,7 +35,7 @@ class HostelImage
     }
 
     // Fetch all images for a given hostel
-    public function getImageByHostelId($hostel_id)
+    public function getImagesByHostelId($hostel_id)
     {
         $query = "SELECT * FROM " . $this->table_name . " 
                   WHERE hostel_id = :hostel_id 
@@ -44,5 +44,37 @@ class HostelImage
         $stmt->bindParam(':hostel_id', $hostel_id);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // fetch an image by ID
+    public function getImageById($id)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " 
+                  WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+    
+    // Update an image by ID
+    public function updateHostelImage($id, $data)
+    {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET url = :url, updated_at = NOW() 
+                  WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':url', $data['url']);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+    
+    // Delete an image by ID
+    public function deleteImage($id)
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 }
