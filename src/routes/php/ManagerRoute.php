@@ -30,6 +30,22 @@ return function ($app) {
         return $response->withHeader('Content-Type', 'application/json');
     });
 
+    // Route to get manager by email
+    $app->get('/api/manager/email/{email}', function ($request, $response, $args) use ($managerController) {
+        $email = $args['email'];
+        $result = $managerController->getManagerByEmail($email);
+        $response->getBody()->write($result);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+
+    // Route to get manager by phone
+    $app->get('/api/manager/phone/{phone}', function ($request, $response, $args) use ($managerController) {
+        $phone = $args['phone'];
+        $result = $managerController->getManagerByPhone($phone);
+        $response->getBody()->write($result);
+        return $response->withHeader('Content-Type', 'application/json');
+    });
+    
     // Route to get manager of a specific hostel
     $app->get('/api/manager/hostel/{id:[0-9]+}', function ($request, $response, $args) use ($managerController) {
         $hostel_id = $args['id'];
@@ -55,36 +71,5 @@ return function ($app) {
         return $response->withHeader('Content-Type', 'application/json');
     });
 
-    // Route to get manager by email
-    $app->get('/api/manager/email/{email}', function ($request, $response, $args) use ($managerController) {
-        $email = $args['email'];
-        $result = $managerController->getManagerByEmail($email);
-        $response->getBody()->write($result);
-        return $response->withHeader('Content-Type', 'application/json');
-    });
 
-    // Route to get manager by phone
-    $app->get('/api/manager/phone/{phone}', function ($request, $response, $args) use ($managerController) {
-        $phone = $args['phone'];
-        $result = $managerController->getManagerByPhone($phone);
-        $response->getBody()->write($result);
-        return $response->withHeader('Content-Type', 'application/json');
-    });
-
-    // Route to update a manager
-    $app->patch('/api/manager/{id}', function ($request, $response, $args) use ($managerController) {
-        $id = $args['id'];
-        $data = json_decode($request->getBody()->getContents(), true);
-        $result = $managerController->updateManager($id, $data);
-        $response->getBody()->write($result);
-        return $response->withHeader('Content-Type', 'application/json');
-    });
-
-    // Route to delete a manager
-    $app->delete('/api/manager/{id}', function ($request, $response, $args) use ($managerController) {
-        $id = $args['id'];
-        $result = $managerController->deleteManager($id);
-        $response->getBody()->write($result);
-        return $response->withHeader('Content-Type', 'application/json');
-    });
 };

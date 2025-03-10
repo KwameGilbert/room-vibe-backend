@@ -55,6 +55,7 @@ class Student
         return $user;
     }
 
+
     public function updateStudent($id, $student)
     {
         $query = "UPDATE " . $this->table_name . " SET firstName = :firstName, lastName = :lastName, email = :email, phone = :phone, gender = :gender WHERE id = :id";

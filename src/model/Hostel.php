@@ -92,14 +92,16 @@ class Hostel{
             $amenities = $stmtAmenities->fetchAll(\PDO::FETCH_COLUMN);
 
             // Get rooms and group them by room_type
-            $stmtRooms = $this->conn->prepare("SELECT id, room_type, price, type FROM room WHERE hostel_id = ?");
+            $stmtRooms = $this->conn->prepare("SELECT id, room_type, price, specification FROM room WHERE hostel_id = ?");
             $stmtRooms->execute([$hostelId]);
             $rooms = $stmtRooms->fetchAll(\PDO::FETCH_ASSOC);
             $roomTypes = [
                 'one_in_one'   => [],
                 'two_in_one'   => [],
                 'three_in_one' => [],
-                'four_in_one'  => []
+                'four_in_one'  => [],
+                'five_in_one'  => [],
+                'six_in_one'   => []
             ];
             foreach ($rooms as $room) {
                 $rtype = $room['room_type'];
@@ -107,7 +109,7 @@ class Hostel{
                     $roomTypes[$rtype][] = [
                         'id'    => $room['id'],
                         'price' => $room['price'],
-                        'type'  => $room['type']
+                        'specification'  => $room['specification']
                     ];
                 }
             }

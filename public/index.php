@@ -27,13 +27,12 @@ $app = AppFactory::create();
 // Set Base Path from environment variable (if not set, default to an empty string)
 $app->setBasePath(basePath: $_ENV['BASE_PATH']);
 
-// Add Error Middleware
 // In production, consider setting the first parameter (displayErrorDetails) to false.
 $app->addErrorMiddleware(
     displayErrorDetails: (bool) $_ENV['DISPLAY_ERROR_DETAILS'],
     logErrors: true,
     logErrorDetails: true, 
-    logger: $container->get('logger')
+    logger: $container->get('logger'),
 );
 
 // Add middleware for security headers
@@ -57,7 +56,7 @@ $app->get('/', function ($request, $response, $args) {
 });
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
-(require __DIR__ . '/../src/routes/api.php')($app);
+(require __DIR__ . '/../src/routes/api.php')(app: $app);
 
 // Run the application
 $app->run();

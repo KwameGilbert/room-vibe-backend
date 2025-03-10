@@ -8,7 +8,7 @@ return function ($app) {
     $studentController = new StudentController();
 
     // Route to get all students
-    $app->get('/api/explore/students', function ($request, $response) use ($studentController) {
+    $app->get('/api/students', function ($request, $response) use ($studentController) {
         $result = $studentController->getAllStudents();
         $response->getBody()->write($result);
         return $response->withHeader('Content-Type', 'application/json');
