@@ -7,7 +7,7 @@ use App\Config\Database;
 class HostelImage
 {
     private $conn;
-    private $table_name = "hostel_images";
+    private $table_name = "hostel_image";
 
     public function __construct()
     {

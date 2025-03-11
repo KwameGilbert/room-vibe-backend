@@ -9,14 +9,14 @@ use App\Helpers\LoggerFactory;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv::createImmutable(paths: __DIR__ . '/../');
 $dotenv->load();
 
 // Create Container using PHP-DI
 $container = new Container();
 
 // Set up Logger service using Monolog
-$container->set('logger', LoggerFactory::getLogger('App'));
+$container->set(name: 'logger', value: LoggerFactory::getLogger(channel: 'App'));
 
 // Set the container on AppFactory
 AppFactory::setContainer(container: $container);
@@ -32,11 +32,11 @@ $app->addErrorMiddleware(
     displayErrorDetails: (bool) $_ENV['DISPLAY_ERROR_DETAILS'],
     logErrors: true,
     logErrorDetails: true, 
-    logger: $container->get('logger'),
+    logger: $container->get(id: 'logger'),
 );
 
 // Add middleware for security headers
-$app->add(function ($request, $handler) {
+$app->add(middleware: function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('X-Frame-Options', 'DENY')
@@ -48,9 +48,9 @@ $app->add(function ($request, $handler) {
 $app->add(middleware: new ContentLengthMiddleware());
 
 // Default route
-$app->get('/', function ($request, $response, $args) {
+$app->get(pattern: '/', callable: function ($request, $response, $args) {
     $data = ['message' => 'Welcome to my Slim App'];
-    $payload = json_encode($data);
+    $payload = json_encode(value: $data);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });

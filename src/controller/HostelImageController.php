@@ -29,7 +29,7 @@ class HostelImageController
     }
 
     // Upload an image for a given hostel ID
-    public function uploadImage($hostel_id, $_FILES)
+    public function uploadImage($hostel_id)
     {
         // Check that a file was uploaded
         if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
@@ -62,7 +62,7 @@ class HostelImageController
             }
         } catch (\Exception $e) {
             return json_encode(
-                ['error' => 'Upload failed: '. $e->getMessage()],500);
+                ['error' => 'Upload failed: '. $e->getMessage()],flags: 500);
         }
     }
 
@@ -85,7 +85,7 @@ class HostelImageController
     }
 
     // Update an image by ID
-    public function updateHostelImage($id, $_FILES)
+    public function updateHostelImage($id)
     {
         // Check that a file was uploaded
         if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
