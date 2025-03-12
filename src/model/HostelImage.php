@@ -29,7 +29,6 @@ class HostelImage
         try{
            return $stmt->execute();
         }catch(\PDOException $e){
-            
             return false;
         }
     }
