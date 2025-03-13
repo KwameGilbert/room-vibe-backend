@@ -21,4 +21,6 @@ return function ($app){
         $response->getBody()->write($result);
         return $response->withHeader('Content-Type', 'application/json');
     });
+
+    
 };
