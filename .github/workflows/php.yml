@@ -1,33 +1,98 @@
-Can i add this to a github workflow yml?
-services:
-  web:
-    build: .
-    ports:
-      - "8080:80"     # Map port 80 in the container to port 8080 on your host
-    volumes:
-      - .:/var/www/html  # Useful in development for live changes; remove in production
-    environment:
-      # Define environment variables needed for your application (.env file can be used locally)
-      - APP_ENV=production
-      - DB_HOST=localhost
-      - DB_NAME=room_vibe
-      - DB_USERNAME=root
-      - DB_PASSWORD=
-    depends_on:
-      - db
+name: PHP Composer
 
-  db:
-    image: mysql:8.0
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: 
-      MYSQL_DATABASE: room_vibe
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 
-    volumes:
-      - db_data:/var/lib/mysql
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]aname: PHP Application Build and Deploy
 
-volumes:
-  db_data:
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push Docker images
+      run: |
+        docker compose build
+        docker compose push
+
+    - name: Deploy to production
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_PRIVATE_KEY }}
+        script: |
+          cd /path/to/your/project
+          docker compose down
+          docker compose pull
+          docker compose up -d
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # Docs: https://getcomposer.org/doc/articles/scripts.md
+
+    # - name: Run test suite
+    #   run: composer run-script test
