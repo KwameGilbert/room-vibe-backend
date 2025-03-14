@@ -8,36 +8,36 @@ use Dotenv\Dotenv;
 use Slim\Middleware\ContentLengthMiddleware;
 use App\Helpers\LoggerFactory;
 
-
 // Load environment variables
-$dotenv = Dotenv::createImmutable(paths: __DIR__ . '/../');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Create Container using PHP-DI
 $container = new Container();
 
-// Set up Logger service using Monolog
-$container->set(name: 'logger', value: LoggerFactory::getLogger(channel: 'App'));
+// Instantiate LoggerFactory and set up the logger service
+$loggerFactory = new LoggerFactory('App');
+$container->set('logger', $loggerFactory->getLogger());
 
 // Set the container on AppFactory
-AppFactory::setContainer(container: $container);
+AppFactory::setContainer($container);
 
 // Create Slim App instance
 $app = AppFactory::create();
 
 // Set Base Path from environment variable (if not set, default to an empty string)
-$app->setBasePath(basePath: $_ENV['BASE_PATH']);
+$app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
-// In production, consider setting the first parameter (displayErrorDetails) to false.
+// In production, consider setting displayErrorDetails to false.
 $app->addErrorMiddleware(
-    displayErrorDetails: (bool) $_ENV['DISPLAY_ERROR_DETAILS'],
-    logErrors: true,
-    logErrorDetails: true, 
-    logger: $container->get(id: 'logger'),
+    (bool) ($_ENV['DISPLAY_ERROR_DETAILS'] ?? false),
+    true,
+    true,
+    $container->get('logger')
 );
 
 // Add middleware for security headers
-$app->add(middleware: function ($request, $handler) {
+$app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
         ->withHeader('X-Frame-Options', 'DENY')
@@ -46,18 +46,18 @@ $app->add(middleware: function ($request, $handler) {
 });
 
 // Optional: Middleware to enforce content length limits
-$app->add(middleware: new ContentLengthMiddleware());
+$app->add(new ContentLengthMiddleware());
 
 // Default route
-$app->get(pattern: '/', callable: function ($request, $response, $args) {
+$app->get('/', function ($request, $response, $args) {
     $data = ['message' => 'Welcome to my Slim App'];
-    $payload = json_encode(value: $data);
+    $payload = json_encode($data);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
-(require __DIR__ . '/../src/routes/api.php')(app: $app);
+(require __DIR__ . '/../src/routes/api.php')($app);
 
 // Run the application
 $app->run();
