@@ -20,10 +20,10 @@ class Booking
     /**
      * Generate a random alphanumerical booking code of a given length.
      *
-     * @param int $length The length of the booking code. Default is 5.
+     * @param int $length The length of the booking code. Default is 10.
      * @return string The generated booking code.
      */
-    private function generateBookingCode($length = 8): string
+    private function generateBookingCode($length = 10): string
     {
         do {
             $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -67,7 +67,7 @@ class Booking
      * @param array $booking Associative array with booking details.
      * @return bool Returns true on success, false on failure.
      */
-    public function createBooking(array $booking): bool
+    public function createBooking(int $student_id, array $booking): bool
     {
         // Generate booking code
         $booking_code = $this->generateBookingCode();
@@ -112,7 +112,7 @@ class Booking
         $stmt = $this->conn->prepare($query);
 
         // Bind parameters
-        $stmt->bindValue(':student_id', $booking['student_id'], PDO::PARAM_INT);
+        $stmt->bindValue(':student_id', $student_id, PDO::PARAM_INT);
         $stmt->bindValue(':room_id', $booking['room_id'], PDO::PARAM_INT);
         $stmt->bindValue(':hostel_id', $booking['hostel_id'], PDO::PARAM_INT);
         $stmt->bindValue(':start_date', $booking['start_date'], PDO::PARAM_STR);
