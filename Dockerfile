@@ -7,8 +7,11 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Enable Apache mod_rewrite for URL routing
 RUN a2enmod rewrite
 
-# Copy Composer from the official Composer image
+# Copy Composer from the official Composer image (using multi-stage build)
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+# Set environment variable to allow Composer plugins to run as superuser
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Set the working directory
 WORKDIR /var/www/html
@@ -16,11 +19,11 @@ WORKDIR /var/www/html
 # Copy composer files first for better caching if you are using Composer
 COPY composer.json composer.lock ./
 
-# Install composer dependencies (if vendor is not already built)
+# Install composer dependencies (if composer.json exists)
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
 
 # Copy the rest of the application code.
-# Here, we assume your public files are in the "public" folder.
+# Assuming your public files are in the "public" folder.
 COPY public/ ./public/
 COPY src/ ./src/
 
