@@ -31,6 +31,7 @@ RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloade
 # Here, we assume your public files are in the "public" folder.
 COPY public/ ./public/
 COPY src/ ./src/
+COPY .env ./.env
 
 # Update Apache configuration to use the public folder as DocumentRoot.
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
