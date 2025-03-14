@@ -3,6 +3,7 @@
 namespace App\Route;
 
 use App\Controller\AmenityController;
+require_once __DIR__ . '/../../controller/AmenityController.php';
 
 return function ($app) {
     $amenityController = new AmenityController();
