@@ -142,11 +142,11 @@ class Booking
      * @param int $id The booking ID.
      * @return mixed Returns an associative array of booking data or false if not found.
      */
-    public function getBookingById($id)
+    public function getBookingById($booking_id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE booking_id = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $booking_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -238,6 +238,26 @@ class Booking
     public function cancelBooking($id): bool
     {
         $query = "UPDATE " . $this->table_name . " SET status = 'cancelled' WHERE booking_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            // Optionally log error
+            return false;
+        }
+    }
+
+    /**
+     * Delete a booking by its ID.
+     *
+     * @param int $id The booking ID.
+     * @return bool Returns true on success, false on failure.
+     */
+    public function deleteBooking($id): bool
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE booking_id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
