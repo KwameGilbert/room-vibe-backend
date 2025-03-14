@@ -41,3 +41,6 @@ EXPOSE 80
 
 # Start Apache in the foreground
 CMD ["apache2-foreground"]
+
+# Run composer dump-autoload after everything is set up
+RUN composer dump-autoload --optimize

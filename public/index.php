@@ -1,12 +1,13 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use DI\Container;
 use Slim\Factory\AppFactory;
 use Dotenv\Dotenv;
 use Slim\Middleware\ContentLengthMiddleware;
 use App\Helpers\LoggerFactory;
 
-require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables
 $dotenv = Dotenv::createImmutable(paths: __DIR__ . '/../');
