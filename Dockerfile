@@ -1,13 +1,18 @@
 # Use an official PHP Apache image with the latest PHP version (adjust tag as needed)
 FROM php:8.1-apache
 
-# Install PHP extensions required by your application (e.g., PDO and pdo_mysql)
-RUN docker-php-ext-install pdo pdo_mysql
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    unzip \
+    git \
+  && docker-php-ext-install pdo pdo_mysql zip \
+  && apt-get clean
 
 # Enable Apache mod_rewrite for URL routing
 RUN a2enmod rewrite
 
-# Copy Composer from the official Composer image (using multi-stage build)
+# Copy Composer from the official Composer image
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Set environment variable to allow Composer plugins to run as superuser
@@ -23,7 +28,7 @@ COPY composer.json composer.lock ./
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
 
 # Copy the rest of the application code.
-# Assuming your public files are in the "public" folder.
+# Here, we assume your public files are in the "public" folder.
 COPY public/ ./public/
 COPY src/ ./src/
 
