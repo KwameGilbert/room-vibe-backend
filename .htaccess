@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteBase /room-vibe-backend/
+RewriteRule ^(.*)$ public/$1 [L]

@@ -7,6 +7,9 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Enable Apache mod_rewrite for URL routing
 RUN a2enmod rewrite
 
+# Copy Composer from the official Composer image
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
 # Set the working directory
 WORKDIR /var/www/html
 
