@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Config;
-
-require __DIR__ . '/../../vendor/autoload.php';
-
-use App\Helpers\LoggerFactory;
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../helpers/LoggerFactory.php';
 
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
@@ -27,7 +24,7 @@ class Database
         $this->password = $_ENV['DB_PASSWORD'];
 
         // Initialize the Monolog logger
-        $this->logger = LoggerFactory::getLogger('Database');
+        $this->logger = new LoggerFactory('Database');
     }
 
     public function getConnection()
@@ -43,10 +40,10 @@ class Database
             $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             // Log successful connection
-            $this->logger->info(date('Y-m-d H:i:s') . " : Database connection established successfully. \n \n");
+            $this->logger->getLogger()->info(date('Y-m-d H:i:s') . " : Database connection established successfully. \n \n");
         } catch (\PDOException $exception) {
             // Log connection error using Monolog
-            $this->logger->error("\n Connection error: " . $exception->getMessage() .
+            $this->logger->getLogger()->error("\n Connection error: " . $exception->getMessage() .
                 "\n in " . $exception->getFile() . "\n on line " . $exception->getLine() .
                 "\n with code " . $exception->getCode() . "\n at " . date('Y-m-d H:i:s') . "\n \n");
 

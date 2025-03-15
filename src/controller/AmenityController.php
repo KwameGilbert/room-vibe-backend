@@ -1,8 +1,5 @@
 <?php 
-
-namespace App\Controller;
-
-use App\Model\Amenity;
+require_once __DIR__ . '/../model/Amenity.php';
 
 class AmenityController{
     private $amenity;

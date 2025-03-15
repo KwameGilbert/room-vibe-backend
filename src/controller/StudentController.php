@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller;
-
-use App\Model\Student;
+require_once __DIR__ . '/../model/Student.php';
 
 class StudentController
 {

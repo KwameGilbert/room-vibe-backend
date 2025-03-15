@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Route;
-
-use App\Controller\BookingController;
+require_once __DIR__ . '/../../controller/BookingController.php';
 
 return function ($app) {
     $bookingController = new BookingController();

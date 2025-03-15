@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller;
-
-use App\Model\Booking;
+require_once __DIR__ . '/../model/Booking.php';
 
 class BookingController{
     private $booking;

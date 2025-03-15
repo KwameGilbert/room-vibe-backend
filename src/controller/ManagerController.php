@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller;
-
-use App\Model\Manager;
+require_once __DIR__ . '/../model/Manager.php';
 
 class ManagerController
 {

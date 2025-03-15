@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Model;
-
-use App\Config\Database;
+require_once __DIR__ . '/../config/Database.php';
 
 class Student
 {
@@ -100,5 +98,3 @@ class Student
     }
 
 }
-
-

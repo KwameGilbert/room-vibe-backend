@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Route;
-
-use App\Controller\ManagerController;
+require_once __DIR__ . '/../../controller/ManagerController.php';
 
 return function ($app) {
     $managerController = new ManagerController();

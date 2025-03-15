@@ -1,20 +1,15 @@
 <?php
 
-namespace App\Model;
-
-use App\Config\Database;
-use App\Helpers\LoggerFactory;
+require_once __DIR__ . '/../config/Database.php';
 
 class Amenity
 {
     private $conn;
     private $table_name = "amenity";
-    private $logger;
     public function __construct()
     {
         $database = new Database();
         $this->conn = $database->getConnection();
-        $this->logger = LoggerFactory::getLogger('Amenity');
     }
 
     public function addHostelAmenity($hostel_id, array $amenity)

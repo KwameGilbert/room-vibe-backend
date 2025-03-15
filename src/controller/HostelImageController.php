@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller;
-
-use App\Model\HostelImage;
+require_once __DIR__ . '/../model/HostelImage.php';
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 

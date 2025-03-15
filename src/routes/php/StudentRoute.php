@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Route;
-
-use App\Controller\StudentController;
+require_once __DIR__ . '/../../controller/StudentController.php';
 
 return function ($app) {
     $studentController = new StudentController();

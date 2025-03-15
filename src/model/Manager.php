@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Model;
-
-use App\Config\Database;
-use PDO;
-use PDOException;
+require_once __DIR__ . '/../config/Database.php';
 
 class Manager
 {

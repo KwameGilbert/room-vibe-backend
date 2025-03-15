@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Route;
-
-use App\Controller\ReviewController;
+require_once __DIR__ . '/../../controller/ReviewController.php';
 
 return function ($app) {
     $reviewController = new ReviewController();

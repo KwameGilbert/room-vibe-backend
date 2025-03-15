@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller;
-
-use App\Model\Hostel;
+require_once __DIR__ . '/../model/Hostel.php';
 
 class HostelController
 {

@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Route;
-
-use App\Controller\HostelImageController;
+require_once __DIR__ . '/../../controller/HostelImageController.php';
 
 return function ($app) {
     $hostelImageController = new HostelImageController();
