@@ -1,4 +1,4 @@
-# Use an official PHP Apache image with the latest PHP version (adjust tag as needed)
+# Use an official PHP Apache image with PHP 8.1
 FROM php:8.1-apache
 
 # Install system dependencies and PHP extensions
@@ -21,26 +21,33 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy composer files first for better caching if you are using Composer
-COPY composer.json composer.lock ./
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./ 
 
 # Install composer dependencies (if composer.json exists)
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
 
-# Copy the rest of the application code.
-# Here, we assume your public files are in the "public" folder.
+# Copy application files
 COPY public/ ./public/
 COPY src/ ./src/
 COPY .env ./.env
 
-# Update Apache configuration to use the public folder as DocumentRoot.
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
+# Ensure logs directory exists and has correct permissions
+RUN chown -R www-data:www-data /var/www/html/src/logs && \
+    chmod -R 775 /var/www/html/src/logs
+
+# Ensure .env file is readable
+RUN chmod 644 /var/www/html/.env
+
+# Update Apache configuration to use the public folder as DocumentRoot
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
 
 # Expose port 80 for Apache
 EXPOSE 80
 
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
-
 # Run composer dump-autoload after everything is set up
 RUN composer dump-autoload --optimize
+
+# Start Apache in the foreground
+CMD ["apache2-foreground"]
