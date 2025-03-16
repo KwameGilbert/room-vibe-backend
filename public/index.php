@@ -11,7 +11,7 @@ use Slim\Middleware\ContentLengthMiddleware;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-require_once __DIR__ . '/../src/helpers/LoggerFactory.php';
+// require_once __DIR__ . '/../src/helpers/LoggerFactory.php';
 
 // Create Container using PHP-DI
 $container = new Container();
@@ -27,7 +27,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Set Base Path from environment variable (if not set, default to an empty string)
-$app->setBasePath($_ENV['BASE_PATH'] ?? "");
+// $app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
 // In production, consider setting displayErrorDetails to false.
 $app->addErrorMiddleware(

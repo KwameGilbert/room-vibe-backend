@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../helpers/LoggerFactory.php';
+// require_once __DIR__ . '/../helpers/LoggerFactory.php';
 
 class Database
 {
@@ -11,7 +11,7 @@ class Database
     private $username;
     private $password;
     public $conn;
-    private $logger;
+    // private $logger;
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Database
         $this->password = $_ENV['DB_PASSWORD'];
 
         // Initialize the Monolog logger
-        $this->logger = new LoggerFactory('Database');
+        // $this->logger = new LoggerFactory('Database');
     }
 
     public function getConnection()
@@ -37,12 +37,12 @@ class Database
             $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
             // Log successful connection
-            $this->logger->getLogger()->info(date('Y-m-d H:i:s') . " : Database connection established successfully. \n \n");
+            // $this->logger->getLogger()->info(date('Y-m-d H:i:s') . " : Database connection established successfully. \n \n");
         } catch (\PDOException $exception) {
             // Log connection error using Monolog
-            $this->logger->getLogger()->error("\n Connection error: " . $exception->getMessage() .
-                "\n in " . $exception->getFile() . "\n on line " . $exception->getLine() .
-                "\n with code " . $exception->getCode() . "\n at " . date('Y-m-d H:i:s') . "\n \n");
+            // $this->logger->getLogger()->error("\n Connection error: " . $exception->getMessage() .
+            //     "\n in " . $exception->getFile() . "\n on line " . $exception->getLine() .
+            //     "\n with code " . $exception->getCode() . "\n at " . date('Y-m-d H:i:s') . "\n \n");
 
             // Optionally, you can display the error or handle it differently
             echo "Connection error: " . $exception->getMessage();
