@@ -44,7 +44,7 @@ RUN chown -R www-data:www-data /var/www/html/src/logs && \
 RUN chmod 644 /var/www/html/.env
 
 # Set the correct DocumentRoot
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
 
 # Expose port 80 for Apache
 EXPOSE 80
