@@ -42,7 +42,7 @@ RUN chown -R www-data:www-data /var/www/html/public && \
     chown -R www-data:www-data /var/www/html/src && \
     chmod -R 775 /var/www/html/src && \
     chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 /var/www/html
+    chmod -R 775 /var/www/html && \
     chown -R www-data:www-data /var/www/html/.htaccess && \
     chmod -R 775 /var/www/html/.htaccess
     
