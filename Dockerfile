@@ -30,7 +30,6 @@ RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloade
 # Copy application files (public and src)
 COPY public/ ./public/
 COPY src/ ./src/
-COPY .htaccess ./.htaccess
 
 # Create a .env file from .env.example if it exists
 COPY .env.example ./.env.example
@@ -40,10 +39,7 @@ RUN if [ -f .env.example ]; then cp .env.example .env; fi
 RUN chown -R www-data:www-data /var/www/html/public && \
     chmod -R 775 /var/www/html/public && \
     chown -R www-data:www-data /var/www/html/src && \
-    chmod -R 775 /var/www/html/src && \
-    chown -R www-data:www-data /var/www/html/.htaccess && \
-    chmod -R 775 /var/www/html/.htaccess
-
+    chmod -R 775 /var/www/html/src
 
 # Ensure .env file is readable
 RUN if [ -f .env ]; then chmod 644 /var/www/html/.env && chown www-data:www-data /var/www/html/.env; fi && \
