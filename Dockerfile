@@ -30,7 +30,6 @@ RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloade
 # Copy application files (public and src)
 COPY public/ ./public/
 COPY src/ ./src/
-COPY .htaccess ./.htaccess
 
 # Create a .env file from .env.example if it exists
 COPY .env.example ./.env.example
@@ -46,11 +45,15 @@ RUN chown -R www-data:www-data /var/www/html/public && \
 RUN if [ -f .env ]; then chmod 644 /var/www/html/.env && chown www-data:www-data /var/www/html/.env; fi && \
   chmod 755 /var/www/html
 
-# Set the correct DocumentRoot
 # Update Apache configuration to use the public folder as DocumentRoot
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
+RUN if [ -d /etc/apache2/sites-available ]; then \
+        sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf; \
+    fi \
+    && if [ -f /etc/apache2/apache2.conf ]; then \
+        sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf; \
+    fi
 
+    
 # Expose port 80 for Apache
 EXPOSE 80
 
