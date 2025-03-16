@@ -30,7 +30,7 @@ RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloade
 # Copy application files (public and src)
 COPY public/ ./public/
 COPY src/ ./src/
-COPY .htaccess ./.htaccess
+# COPY .htaccess ./.htaccess
 
 # Create a .env file from .env.example if it exists
 COPY .env.example ./.env.example
