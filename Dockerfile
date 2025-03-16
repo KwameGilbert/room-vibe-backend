@@ -42,7 +42,8 @@ RUN chown -R www-data:www-data /var/www/html/public && \
     chmod -R 775 /var/www/html/src
 
 # Ensure .env file is readable
-RUN chmod 644 /var/www/html/.env
+RUN if [ -f .env ]; then chmod 644 /var/www/html/.env && chown www-data:www-data /var/www/html/.env; fi && \
+  chmod 755 /var/www/html
 
 # Set the correct DocumentRoot
 # Update Apache configuration to use the public folder as DocumentRoot

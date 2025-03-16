@@ -58,7 +58,7 @@ $app->get('/', function ($request, $response, $args) {
 });
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
-(require_once __DIR__ . '/../src/routes/api.php')($app);
+// (require_once __DIR__ . '/../src/routes/api.php')($app);
 
 // Run the application
 $app->run();
