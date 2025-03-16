@@ -29,13 +29,41 @@ $app = AppFactory::create();
 // Set Base Path from environment variable (if not set, default to an empty string)
 $app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
-// In production, consider setting displayErrorDetails to false.
-$app->addErrorMiddleware(
-    true,
-    true,
-    true,
-    $container->get('logger')
-);
+// Configure error middleware based on environment
+$environment = $_ENV['ENVIRONMENT'] ?? 'production';
+
+switch ($environment) {
+    case 'development':
+        // Show all errors in development
+        $app->addErrorMiddleware(
+            displayErrorDetails: true,
+            logErrors: true,
+            logErrorDetails: true,
+            logger: $container->get('logger')
+        );
+        break;
+    
+    case 'staging':
+        // Log errors but don't display details
+        $app->addErrorMiddleware(
+            displayErrorDetails: false,
+            logErrors: true,
+            logErrorDetails: true,
+            logger: $container->get('logger')
+        );
+        break;
+    
+    case 'production':
+    default:
+        // Production: Don't display errors, minimal logging
+        $app->addErrorMiddleware(
+            displayErrorDetails: false,
+            logErrors: true,
+            logErrorDetails: false,
+            logger: $container->get('logger')
+        );
+        break;
+}
 
 // Add middleware for security headers
 $app->add(function ($request, $handler) {
@@ -47,7 +75,7 @@ $app->add(function ($request, $handler) {
 });
 
 // Optional: Middleware to enforce content length limits
-$app->add(new ContentLengthMiddleware());
+$app->add(middleware: new ContentLengthMiddleware());
 
 // Default route
 $app->get('/', function ($request, $response, $args) {
