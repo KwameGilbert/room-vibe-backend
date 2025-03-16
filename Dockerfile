@@ -43,7 +43,9 @@ RUN chown -R www-data:www-data /var/www/html/public && \
 RUN chmod 644 /var/www/html/.env
 
 # Set the correct DocumentRoot
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
+# Update Apache configuration to use the public folder as DocumentRoot
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
 
 # Expose port 80 for Apache
 EXPOSE 80
