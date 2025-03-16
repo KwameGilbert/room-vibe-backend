@@ -47,8 +47,8 @@ RUN if [ -f .env ]; then chmod 644 /var/www/html/.env && chown www-data:www-data
 
 # Set the correct DocumentRoot
 # Update Apache configuration to use the html folder as DocumentRoot
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/apache2.conf
+RUN sed -ri -e 's!/var/www/html!/var/www/html!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/html!/var/www/html!g' /etc/apache2/apache2.conf
 
 # Expose port 80 for Apache
 EXPOSE 80
