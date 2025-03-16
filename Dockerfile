@@ -27,17 +27,19 @@ COPY composer.json composer.lock ./
 # Install composer dependencies (if composer.json exists)
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader; fi
 
-# Copy application files
+# Copy application files (public and src)
 COPY public/ ./public/
 COPY src/ ./src/
-COPY .env ./.env
+
+# Create a .env file from .env.example if it exists
+COPY .env.example ./.env.example
+RUN if [ -f .env.example ]; then cp .env.example .env; fi
 
 # Ensure permissions to the root and public directories
 RUN chown -R www-data:www-data /var/www/html/public && \
     chmod -R 775 /var/www/html/public && \
     chown -R www-data:www-data /var/www/html/src && \
     chmod -R 775 /var/www/html/src
-
 
 # Ensure .env file is readable
 RUN chmod 644 /var/www/html/.env
