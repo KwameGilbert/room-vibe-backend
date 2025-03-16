@@ -31,7 +31,7 @@ $app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
 // In production, consider setting displayErrorDetails to false.
 $app->addErrorMiddleware(
-    (bool) ($_ENV['DISPLAY_ERROR_DETAILS'] ?? false),
+    true,
     true,
     true,
     $container->get('logger')
