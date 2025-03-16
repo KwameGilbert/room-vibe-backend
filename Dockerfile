@@ -33,14 +33,11 @@ COPY src/ ./src/
 COPY .env ./.env
 
 # Ensure permissions to the root and public directories
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 /var/www/html
-    chmod -R 775 /var/www/html/public
+RUN chown -R www-data:www-data /var/www/html/public && \
+    chmod -R 775 /var/www/html/public && \
+    chown -R www-data:www-data /var/www/html/src && \
     chmod -R 775 /var/www/html/src
 
-# Ensure logs directory exists and has correct permissions
-RUN chown -R www-data:www-data /var/www/html/src/logs && \
-    chmod -R 775 /var/www/html/src/logs
 
 # Ensure .env file is readable
 RUN chmod 644 /var/www/html/.env
