@@ -17,8 +17,8 @@ $dotenv->load();
 $container = new Container();
 
 // Instantiate LoggerFactory and set up the logger service
-$loggerFactory = new LoggerFactory('App');
-$container->set('logger', $loggerFactory->getLogger());
+// $loggerFactory = new LoggerFactory('App');
+// $container->set('logger', $loggerFactory->getLogger());
 
 // Set the container on AppFactory
 AppFactory::setContainer($container);
@@ -33,8 +33,8 @@ $app = AppFactory::create();
 $app->addErrorMiddleware(
     true,
     true,
-    true,
-    $container->get('logger')
+    true
+    // $container->get('logger')
 );
 
 // Add middleware for security headers
