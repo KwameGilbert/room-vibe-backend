@@ -65,25 +65,28 @@ switch ($environment) {
         break;
 }
 
-// Add middleware for security headers
+// Add middleware for security headers and CORS
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
         ->withHeader('X-Frame-Options', 'DENY')
         ->withHeader('X-Content-Type-Options', 'nosniff')
         ->withHeader('X-XSS-Protection', '1; mode=block');
 });
 
 // Optional: Middleware to enforce content length limits
-$app->add(middleware: new ContentLengthMiddleware());
-
-// Default route
-$app->get('/', function ($request, $response, $args) {
+$app->get('/', function ($_, $response) {
     $data = ['message' => 'Welcome to my Slim App'];
     $payload = json_encode($data);
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+// Load API routes (assuming routes/api.php returns a callable that accepts the app)
+require_once __DIR__ . '/../src/routes/api.php'($app);
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
 (require_once __DIR__ . '/../src/routes/api.php')($app);
