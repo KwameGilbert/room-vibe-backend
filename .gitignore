@@ -1,5 +1,4 @@
 vendor
 .env
 data.sql
-.env.example
 .env
