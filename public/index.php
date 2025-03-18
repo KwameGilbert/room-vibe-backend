@@ -27,7 +27,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Set Base Path from environment variable (if not set, default to an empty string)
-$app->setBasePath($_ENV['BASE_PATH'] ?? '');
+// $app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
 // Configure error middleware based on environment
 $environment = $_ENV['ENVIRONMENT'] ?? 'production';
