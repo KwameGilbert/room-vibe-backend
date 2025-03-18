@@ -69,13 +69,13 @@ switch ($environment) {
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
     return $response
+    ->withHeader('Access-Control-Allow-Origin', '*')
+    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
     ->withHeader('X-Frame-Options', 'DENY')
     ->withHeader('X-Content-Type-Options', 'nosniff')
     ->withHeader('X-XSS-Protection', '1; mode=block');
 });
-// ->withHeader('Access-Control-Allow-Origin', '*')
-// ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-// ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
 
 // Optional: Middleware to enforce content length limits
 $app->get('/', function ($_, $response) {
