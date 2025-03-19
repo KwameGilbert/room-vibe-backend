@@ -27,7 +27,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 
 // Set Base Path from environment variable (if not set, default to an empty string)
-// $app->setBasePath($_ENV['BASE_PATH'] ?? '');
+$app->setBasePath($_ENV['BASE_PATH'] ?? '');
 
 // Configure error middleware based on environment
 $environment = $_ENV['ENVIRONMENT'] ?? 'production';
@@ -86,7 +86,7 @@ $app->get('/', function ($_, $response) {
 });
 
 // Load API routes (assuming routes/api.php returns a callable that accepts the app)
-// (require_once __DIR__ . '/../src/routes/api.php')($app);
+(require_once __DIR__ . '/../src/routes/api.php')($app);
 
 // Run the application
 $app->run();
