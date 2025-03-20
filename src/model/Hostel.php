@@ -2,7 +2,8 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-class Hostel{
+class Hostel
+{
     private $conn;
     private $table_name = "hostel";
 
@@ -65,7 +66,7 @@ class Hostel{
     {
         // Get all hostels
         $stmt = $this->conn->query("SELECT * FROM " . $this->table_name);
-        $hostels = $stmt->fetchAll( \PDO::FETCH_ASSOC);
+        $hostels = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($hostels as $hostel) {
@@ -75,6 +76,11 @@ class Hostel{
             $stmtImages = $this->conn->prepare("SELECT public_id, url FROM hostel_image WHERE hostel_id = ?");
             $stmtImages->execute([$hostelId]);
             $images = $stmtImages->fetchAll(\PDO::FETCH_COLUMN);
+
+            // Get school record of the hostel
+            $stmtSchool = $this->conn->prepare("SELECT * FROM school WHERE id = ?");
+            $stmtSchool->execute([$hostelId]);
+            $school = $stmtSchool->fetchAll(\PDO::FETCH_ASSOC);
 
             // Get manager record (assuming one manager per hostel)
             $stmtManager = $this->conn->prepare("SELECT id, name, email, phone FROM manager WHERE id = ? LIMIT 1");
@@ -124,10 +130,11 @@ class Hostel{
                 'location'    => $hostel['location'],
                 'distance'    => $hostel['distance'],
                 'image'       => $images,
-                'school_id'   => (int)$hostel['school_id'],
+                'school'   => $school,
                 'manager'     => $manager,
                 'amenities'   => $amenities,
                 'room_type'   => $roomTypes,
+                'accomodation_status' => $hostel['accomodation_status'],
                 'price_range' => [$hostel['price_min'], $hostel['price_max']],
                 'rating'      => $hostel['rating'],
                 'description' => $hostel['description'],
@@ -135,7 +142,7 @@ class Hostel{
                 'reviews'     => $reviews
             ];
         }
-        
+
         return $result;
     }
 
@@ -274,6 +281,4 @@ class Hostel{
 
         return $hostels;
     }
-
-
 }
