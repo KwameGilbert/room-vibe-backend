@@ -11,12 +11,7 @@
 
 <body class="bg-gray-100">
     <!-- Header -->
-    <header class="bg-white shadow p-4">
-        <h1 class="text-2xl font-bold text-center">Room Vibe</h1>
-        <div class="mt-2">
-            <input type="text" id="search" placeholder="Search hostels..." class="w-full p-2 border rounded">
-        </div>
-    </header>
+    <?php include './components/header.php'; ?>
 
     <!-- Filters -->
     <?php include './components/filters.php'; ?>
@@ -27,8 +22,11 @@
     </main>
 
     <!-- Navbar -->
-    <?php 
-    $currentPage = 'explore';
+    <script>
+        // Set the current page name. You can derive this from window.location.pathname if needed.
+        const currentPage = "explore"; // Example: "explore", "wishlist", "map", "booking", "profile"
+    </script>
+    <?php
     include './components/navbar.php';
     ?>
 
