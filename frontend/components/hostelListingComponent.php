@@ -22,7 +22,7 @@ $stmt->execute(); // Execute the statement
 $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div id="hostel-list" class="grid grid-cols-1 px-3">
+<div id="hostel-list" class="grid grid-cols-1 px-3 mb-20">
     <?php foreach ($hostels as $hostel):
         // Determine the status details.
         $isAvailable = ($hostel['accomodation_status'] == 1);
