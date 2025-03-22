@@ -26,11 +26,7 @@
 
     <script src="./js/index.js"></script>
 
-    <script type='text/javascript'>
-    document.addEventListener('DOMContentLoaded', function() {
-        window.setTimeout(document.querySelector('#storyset').classList.add('animated'), 1000);
-    })
-    </script>
+
 </body>
 
 </html>

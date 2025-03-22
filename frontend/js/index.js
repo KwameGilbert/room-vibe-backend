@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Function to display loading indicator
     function showLoading() {
-        return '<div class="text-center py-4 h-screen flex items-center justify-center"><i class="fas fa-spinner fa-spin fa-3x"></i><p class="ml-3">Loading...</p></div>';
+        return '<div class="text-center text-yellow-500 py-4 h-screen flex items-center justify-center"><i class="fas fa-spinner fa-spin fa-3x"></i><p class="ml-3">Loading...</p></div>';
     }
     
     // Function to display error message
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const minLoadingTime = 500; // Minimum loading time in milliseconds
         
         // Fetch page content
-        fetch(`./${page}`)
+        fetch(`./${page}/index.php`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

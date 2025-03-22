@@ -35,12 +35,12 @@ if (count($wishlistedHostels) > 0) {
     }
 } else {
     ?>
-    
+
 <div class="mt-36">
     <img id="storyset" src="./images/storyset/online-wishes-list-animate.svg">
-<p class='text-center text-gray-500'>
-Your wishlist is empty.
-</p>
+    <p class='text-center text-gray-500'>
+        Your wishlist is empty.
+    </p>
 </div>
 <?php } ?>
 
