@@ -4,11 +4,12 @@ require_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();
 
-$studentId = $_SESSION['student_id'];
+$studentId = isset($_SESSION['student_id']) ? $_SESSION['student_id'] : 1;
 
-$query = "SELECT h.id, h.name, h.location, h.price, h.image, h.rating
+$query = "SELECT h.*, s.name AS school_name
           FROM wishlist w
-          JOIN hostels h ON w.hostel_id = h.id
+          JOIN hostel h ON w.hostel_id = h.id
+          LEFT JOIN school s ON h.school_id = s.id
           WHERE w.student_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->execute([$studentId]);
@@ -28,14 +29,21 @@ if (count($wishlistedHostels) > 0) {
         </div>
         <button class="remove-wishlist-btn bg-red-500 text-white px-3 py-1 rounded mt-2"
             data-hostel-id="<?php echo $row['id']; ?>">Remove</button>
-    </div>
+    </div>0
 </div>
 <?php
     }
 } else {
-    echo "<p class='text-center text-gray-500'>Your wishlist is empty.</p>";
-}
-?>
+    ?>
+    
+<div class="mt-36">
+    <img id="storyset" src="./images/storyset/online-wishes-list-animate.svg">
+<p class='text-center text-gray-500'>
+Your wishlist is empty.
+</p>
+</div>
+<?php } ?>
+
 <script>
 document.querySelectorAll(".remove-wishlist-btn").forEach(button => {
     button.addEventListener("click", function() {

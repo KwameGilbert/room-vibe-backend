@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
     // Check if email already exists
-    $checkQuery = "SELECT id FROM students WHERE email = ?";
+    $checkQuery = "SELECT id FROM student WHERE email = ?";
     $stmt = $conn->prepare($checkQuery);
     $stmt->execute([$email]);
 
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Email already exists!";
     } else {
         // Insert new student
-        $query = "INSERT INTO students (firstName, lastName, email, phone, gender, password)
+        $query = "INSERT INTO student (firstName, lastName, email, phone, gender, password)
                   VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         if ($stmt->execute([$firstName, $lastName, $email, $phone, $gender, $password])) {
