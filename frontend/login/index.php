@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (isset($_SESSION['student_id'])) {
+    header("Location: ./../");
+    exit();
+}
+
 require_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();

@@ -57,9 +57,9 @@ $wishlistItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="flex">
                         <?php for ($i = 0; $i < 5; $i++): ?>
                         <?php if ($i < $rating): ?>
-                        <i class="fas fa-star text-yellow-500"></i>
+                        <i class="fas fa-star text-yellow-500 text-lg p-0.5"></i>
                         <?php else: ?>
-                        <i class="far fa-star text-yellow-500"></i>
+                        <i class="far fa-star text-yellow-500 text-lg p-0.5"></i>
                         <?php endif; ?>
                         <?php endfor; ?>
                     </div>

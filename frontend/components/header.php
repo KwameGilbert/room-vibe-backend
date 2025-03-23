@@ -4,7 +4,7 @@
     <div class="flex items-center justify-center">
         <!-- Logo Image -->
         <img src="<?php echo './images/room.png'?>" alt="Room Vibe Logo" class="w-10 h-10 mr-2">
-        <h1 class="text-xl font-semibold text-orange-500">Room Vibe</h1> <?php echo $_SESSION['student_id'] ?>
+        <h1 class="text-xl font-semibold text-orange-500">Room Vibe</h1>
     </div>
     <div class="mt-2">
         <input type="text" id="search" placeholder="Search hostels..."

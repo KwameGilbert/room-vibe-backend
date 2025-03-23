@@ -5,7 +5,7 @@ include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();
 
-$student_id = $_SESSION['student_id'] ?? null;
+$student_id = $_SESSION['student_id'] ?? 1;
 $hostel_id = $_POST['hostel_id'] ?? null;
 $in_wishlist = $_POST['in_wishlist'] ?? null;
 

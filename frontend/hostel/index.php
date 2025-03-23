@@ -1,7 +1,7 @@
 <?php
 // hostel_details.php
 
-include_once __DIR__ . '/../config/database.php';
+include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection(); // Get the PDO connection
 

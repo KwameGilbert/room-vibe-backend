@@ -1,12 +1,5 @@
 <?php
-session_start();
-// if (!isset($_SESSION['student_id'])) {
-// Get the current student ID (assumed to be stored in the session)
-// header("Location: ./login/");
-// exit();
-// }
-// index.php
-$_SESSION['student_id'] = 1;
+// include './config/session_check_student.php';
 ?>
 
 <!DOCTYPE html>
