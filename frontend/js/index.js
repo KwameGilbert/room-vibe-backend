@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+
     const pageContent = document.getElementById("page-content");
     const navLinks = document.querySelectorAll(".nav-link");
     const activeColor = "#fd7e14";

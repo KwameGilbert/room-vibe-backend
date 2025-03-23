@@ -1,12 +1,21 @@
 <?php
-// hostelListingComponent.php
-// Include your database connection file and create the connection
-include_once __DIR__ . '/../config/database.php';
+
+include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection(); // Get the PDO connection
 
-// Sample query joining the hostels with the school table.
-// Adjust the table/column names as necessary.
+// Get the logged-in student ID
+$student_id = $_SESSION['student_id'] ?? 1;
+
+// Fetch wishlist items for the student (retrieve only hostel_id)
+$wishlistQuery = "SELECT hostel_id FROM wishlist WHERE student_id = :student_id";
+$stmtWishlist = $conn->prepare($wishlistQuery);
+$stmtWishlist->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+$stmtWishlist->execute();
+$wishlistRows = $stmtWishlist->fetchAll(PDO::FETCH_ASSOC);
+$wishlistHostels = array_column($wishlistRows, 'hostel_id'); // Extract hostel_id values
+
+// Fetch hostels (listing all hostels)
 $query = "
     SELECT 
         hostel.*,
@@ -14,11 +23,8 @@ $query = "
     FROM hostel 
     LEFT JOIN school ON hostel.school_id = school.id
 ";
-
-$stmt = $conn->prepare($query); // Prepare the statement
-$stmt->execute(); // Execute the statement
-
-// Fetch all hostel records as an associative array.
+$stmt = $conn->prepare($query);
+$stmt->execute();
 $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -34,8 +40,10 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $rating = isset($hostel['rating']) ? floor($hostel['rating']) : 0;
         // Distance from campus, assume this field exists.
         $distance = isset($hostel['distance']) ? $hostel['distance'] : 'N/A';
+        // Check if hostel is in wishlist
+        $inWishlist = in_array($hostel['id'], $wishlistHostels);
     ?>
-    <a href="hostel/?hostel_id=<?= htmlspecialchars($hostel['id']) ?>" class="block">
+    <a href="hostel/?hostel_id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
         <div class="w-full flex gap-4 border-b border-t border-slate-300 py-5">
             <img alt="<?= htmlspecialchars($hostel['hostel_name']) ?>" loading="lazy" width="150" height="100"
                 decoding="async" class="rounded-lg" src="<?= htmlspecialchars($image) ?>">
@@ -47,10 +55,14 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <!-- Rating and distance container -->
                 <div class="flex items-center justify-between gap-3 pt-1">
-                    <!-- Display colored stars based on rating -->
+                    <!-- Display filled or outline stars based on rating -->
                     <div class="flex">
-                        <?php for ($i = 0; $i < $rating; $i++): ?>
+                        <?php for ($i = 0; $i < 5; $i++): ?>
+                        <?php if ($i < $rating): ?>
                         <i class="fas fa-star text-yellow-500"></i>
+                        <?php else: ?>
+                        <i class="far fa-star text-yellow-500"></i>
+                        <?php endif; ?>
                         <?php endfor; ?>
                     </div>
                     <!-- Display distance with a map-marker icon -->
@@ -64,20 +76,84 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button class="<?= $statusClass ?> px-2 text-white font-semibold rounded-md">
                         <?= $statusText ?>
                     </button>
-                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="20"
-                        width="20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 
-                        54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 
-                        33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 
-                        46.4-33.7l-25-145.5 105.7-103c19-18.5 
-                        8.5-50.8-17.7-54.6zM388.6 312.3l23.7 
-                        138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 
-                        139-20.2 62.2-126 62.2 126 139 
-                        20.2-100.6 98z"></path>
-                    </svg>
+                    <!-- Wishlist star (clickable) -->
+                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-lg cursor-pointer wishlist-toggle"
+                        data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>">
+                    </i>
                 </div>
             </div>
         </div>
     </a>
     <?php endforeach; ?>
 </div>
+<script>
+// Create the notification modal element and append it to the document body
+const notificationModal = document.createElement('div');
+notificationModal.className =
+    'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
+notificationModal.style.transition = 'transform 0.3s ease-in-out';
+document.body.appendChild(notificationModal);
+
+document.querySelectorAll(".wishlist-toggle").forEach(item => {
+    item.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        let icon = this;
+        let hostelId = icon.getAttribute("data-hostel-id");
+        let inWishlist = icon.getAttribute("data-in-wishlist") === "true";
+
+        fetch("./wishlist/wishlistHandler.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ? 1 : 0}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Toggle star icon state
+                if (data.success) {
+                    icon.classList.toggle("fas");
+                    icon.classList.toggle("far");
+                    icon.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
+
+                    // Show success notification (green background)
+                    notificationModal.innerHTML = `
+                        <div class="bg-green-500 text-white px-4 py-3 text-center shadow-lg">
+                            ${data.message}
+                        </div>
+                    `;
+                    notificationModal.style.transform = 'translateY(0)';
+
+                    // Hide notification after 2 seconds
+                    setTimeout(() => {
+                        notificationModal.style.transform = 'translateY(-100%)';
+                    }, 2000);
+                } else {
+                    // Show error notification (red background)
+                    notificationModal.innerHTML = `
+                        <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
+                            ${data.message || "Operation failed."}
+                        </div>
+                    `;
+                    notificationModal.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        notificationModal.style.transform = 'translateY(-100%)';
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                notificationModal.innerHTML = `
+                    <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
+                        Operation failed.
+                    </div>
+                `;
+                notificationModal.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                    notificationModal.style.transform = 'translateY(-100%)';
+                }, 2000);
+            });
+    });
+});
+</script>

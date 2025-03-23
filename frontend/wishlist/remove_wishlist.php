@@ -1,20 +1,25 @@
 <?php
-require_once __DIR__ . '/../config/Database.php';
+// remove_room_wishlist.php
+session_start();
+include_once __DIR__ .'/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();
-session_start();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['hostel_id'])) {
-    $userId = $_SESSION['user_id'];
-    $hostelId = $_POST['hostel_id'];
+$data = json_decode(file_get_contents('php://input'), true);
+$wishlist_id = $data['wishlist_id'];
 
-    $query = "DELETE FROM wishlist WHERE user_id = ? AND hostel_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$userId, $hostelId]);
+// Ensure the wishlist item belongs to the logged-in user
+$student_id = $_SESSION['student_id'] ?? 1;
 
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false]);
-    }
+$query = "DELETE FROM wishlist WHERE id = :wishlist_id AND student_id = :student_id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':wishlist_id', $wishlist_id, PDO::PARAM_INT);
+$stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+
+$response = ['success' => false];
+
+if ($stmt->execute()) {
+    $response['success'] = true;
 }
+
+echo json_encode($response);

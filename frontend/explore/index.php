@@ -5,6 +5,4 @@
  <?php include __DIR__ . '/../components/filters.php'; ?>
 
  <!-- Main Content -->
- <main>
-     <?php include __DIR__ . '/../components/hostelListingComponent.php'; ?>
- </main>
+ <?php include __DIR__ . '/../components/hostelListingComponent.php'; ?>
