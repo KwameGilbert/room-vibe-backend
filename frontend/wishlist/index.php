@@ -9,8 +9,7 @@ $conn = $database->getConnection();
 $student_id = $_SESSION['student_id'] ?? 1;
 
 // Query to fetch wishlist items for the student
-$query = "
-    SELECT 
+$query = "SELECT 
         wishlist.id AS wishlist_id,
         hostel.*,
         school.name AS school_name
