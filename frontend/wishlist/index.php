@@ -117,7 +117,7 @@ document.querySelectorAll('.wishlist-item').forEach(card => {
         // If the clicked element is the wishlist toggle, do nothing.
         if (event.target.closest('.wishlist-toggle')) return;
         const hostelId = this.getAttribute('data-hostel-id');
-        window.location.href = './hostel/?hostel_id=' + hostelId;
+        window.location.href = './hostel/?id=' + hostelId;
     });
 });
 

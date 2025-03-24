@@ -12,6 +12,6 @@
 window.onload = function() {
     setTimeout(function() {
         document.querySelector('#storyset').classList.add('animated');
-    }, 3000);
+    }, 2000);
 }
     </script>

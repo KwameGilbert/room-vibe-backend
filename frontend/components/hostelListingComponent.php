@@ -43,7 +43,7 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Check if hostel is in wishlist
         $inWishlist = in_array($hostel['id'], $wishlistHostels);
     ?>
-    <a href="hostel/?hostel_id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
+    <a href="hostel/?id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
         <div class="w-full flex gap-4 border-b border-t border-slate-300 py-5">
             <img alt="<?= htmlspecialchars($hostel['hostel_name']) ?>" loading="lazy" width="150" height="100"
                 decoding="async" class="rounded-lg" src="<?= htmlspecialchars($image) ?>">
@@ -77,7 +77,7 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?= $statusText ?>
                     </button>
                     <!-- Wishlist star (clickable) -->
-                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-lg cursor-pointer wishlist-toggle"
+                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-xl cursor-pointer wishlist-toggle"
                         data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>">
                     </i>
                 </div>

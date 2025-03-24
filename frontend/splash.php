@@ -44,10 +44,10 @@
         <!-- Call-to-Action Buttons at bottom -->
         <div class="w-full text-center">
             <div class="flex flex-col gap-4">
-                <a href="./" class="bg-[#fd7e14] hover:bg-orange-600 text-white py-3 rounded-lg font-semibold">
+                <a href="./signup/" class="bg-[#fd7e14] hover:bg-orange-600 text-white py-3 rounded-lg font-semibold">
                     Sign Up Now
                 </a>
-                <a href="./" class="bg-white hover:bg-gray-200 text-[#fd7e14] py-3 rounded-lg font-semibold">
+                <a href="./login/" class="bg-white hover:bg-gray-200 text-[#fd7e14] py-3 rounded-lg font-semibold">
                     Login
                 </a>
             </div>

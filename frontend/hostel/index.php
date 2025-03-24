@@ -3,13 +3,13 @@
 
 include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
-$conn = $database->getConnection(); // Get the PDO connection
+$conn = $database->getConnection();
 
-// Get the hostel_id from URL query parameter
-if (!isset($_GET['hostel_id'])) {
+// Get hostel_id from URL query parameter
+if (!isset($_GET['id'])) {
     die("Hostel ID not specified.");
 }
-$hostel_id = $_GET['hostel_id'];
+$hostel_id = $_GET['id'];
 
 // Fetch hostel details
 $stmt = $conn->prepare("SELECT * FROM hostel WHERE id = ?");
@@ -24,24 +24,21 @@ $stmt = $conn->prepare("SELECT * FROM hostel_image WHERE hostel_id = ?");
 $stmt->execute([$hostel_id]);
 $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch distinct room types (with description/specification and price)
-$stmt = $conn->prepare("SELECT DISTINCT room_type, price, specification FROM room WHERE hostel_id = ?");
+// Fetch amenities from the amenity table
+$stmt = $conn->prepare("SELECT * FROM amenity WHERE hostel_id = ?");
+$stmt->execute([$hostel_id]);
+$amenities = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch rooms joined with room_type
+$stmt = $conn->prepare("SELECT r.*, rt.type_name, rt.capacity FROM room r JOIN room_types rt ON r.room_type_id = rt.room_type_id WHERE r.hostel_id = ?");
 $stmt->execute([$hostel_id]);
 $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch manager details (optional)
-$stmt = $conn->prepare("SELECT * FROM manager WHERE id = ?");
-$stmt->execute([$hostel['manager_id']]);
-$manager = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Static amenities (or fetch from a table if available)
-$amenities = [
-    "Free Wi-Fi",
-    "24/7 Security",
-    "Laundry Service",
-    "Common Lounge",
-    "Cafeteria"
-];
+// Group rooms by type_name
+$groupedRooms = [];
+foreach ($rooms as $room) {
+    $groupedRooms[$room['type_name']][] = $room;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,25 +49,46 @@ $amenities = [
     <title><?php echo htmlspecialchars($hostel['hostel_name']); ?> - Details</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    // Extend Tailwind theme with room vibe colors
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#fd7e14',
+                    /* vibrant orange */
+                    dark: '#000000',
+                    graycustom: '#4a4a4a'
+                }
+            }
+        }
+    }
+    </script>
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+    body {
+        background-color: #ffffff;
+    }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="font-sans text-gray-800">
+    <!-- Header: Back button and Hostel Name -->
+    <header class="px-4 py-3 bg-white shadow mt-4 rounded">
+        <div class="flex items-center">
+            <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
+        </div>
+    </header>
 
-    <!-- Back Button (WhatsApp style) -->
-    <div class="px-4 py-3 bg-white shadow flex items-center">
-        <button onclick="window.history.back()" class="text-[#fd7e14] text-2xl mr-3">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        <h1 class="text-lg font-semibold text-black">Hostel Details</h1>
-    </div>
-
-    <!-- Hostel Gallery Slider -->
-    <section class="max-w-4xl mx-auto px-4 mt-4">
+    <!-- Gallery Slider -->
+    <section class="mt-4">
         <?php if (count($images) > 0): ?>
         <div class="relative" id="slider">
-            <div id="slides" class="overflow-hidden relative">
+            <div id="slides" class="overflow-hidden relative rounded">
                 <?php foreach ($images as $index => $img): ?>
                 <img src="<?php echo htmlspecialchars($img['url']); ?>" alt="Hostel Image"
                     class="w-full h-64 object-cover <?php echo $index === 0 ? '' : 'hidden'; ?>"
@@ -79,108 +97,138 @@ $amenities = [
             </div>
             <!-- Slider Controls -->
             <button id="prev"
-                class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-[#fd7e14]">
+                class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-primary focus:outline-none">
                 <i class="fas fa-chevron-left"></i>
             </button>
             <button id="next"
-                class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-[#fd7e14]">
+                class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-primary focus:outline-none">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
         <?php else: ?>
-        <img src="https://via.placeholder.com/800x400?text=No+Image+Available" alt="No Image"
-            class="w-full h-64 object-cover">
+        <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
         <?php endif; ?>
     </section>
 
-    <!-- Hostel Details Section -->
-    <section class="max-w-4xl mx-auto px-4 mt-6 bg-white p-4 shadow rounded-lg">
-        <!-- Hostel Name and Location -->
-        <h2 class="text-2xl font-bold text-black"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
-        <p class="text-gray-600 mt-1">
-            <i class="fas fa-map-marker-alt text-[#fd7e14]"></i> <?php echo htmlspecialchars($hostel['location']); ?>
+    <!-- Hostel Info Section -->
+    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
+        <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
+        <p class="flex items-center mt-2 text-gray-600">
+            <i class="fas fa-map-marker-alt text-primary mr-1"></i>
+            <?php echo htmlspecialchars($hostel['location']); ?>
         </p>
+        <?php if (!empty($hostel['distance'])): ?>
+        <p class="flex items-center mt-1 text-gray-600">
+            <i class="fas fa-road text-primary mr-1"></i>
+            <?php echo htmlspecialchars($hostel['distance']); ?> km away
+        </p>
+        <?php endif; ?>
+        <?php if (!empty($hostel['rating'])): ?>
+        <p class="flex items-center mt-1 text-gray-600">
+            <i class="fas fa-star text-primary mr-1"></i>
+            <?php echo htmlspecialchars($hostel['rating']); ?>
+        </p>
+        <?php endif; ?>
+        <?php if (!empty($hostel['accomodation_status'])): ?>
+        <p class="mt-1 text-gray-600">
+            <i class="fas fa-info-circle text-primary mr-1"></i>
+            <?php echo htmlspecialchars($hostel['accomodation_status']); ?>
+        </p>
+        <?php endif; ?>
         <?php if (!empty($hostel['address'])): ?>
-        <p class="text-gray-600 mt-1">
-            <i class="fas fa-home text-[#fd7e14]"></i> <?php echo htmlspecialchars($hostel['address']); ?>
+        <p class="flex items-center mt-1 text-gray-600">
+            <i class="fas fa-home text-primary mr-1"></i>
+            <?php echo htmlspecialchars($hostel['address']); ?>
         </p>
         <?php endif; ?>
-        <!-- Description -->
-        <p class="mt-4 text-gray-700"><?php echo nl2br(htmlspecialchars($hostel['description'])); ?></p>
-
-        <!-- Room Types and Prices -->
-        <?php if (count($rooms) > 0): ?>
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-black">Room Options</h3>
-            <div class="mt-2 space-y-4">
-                <?php foreach ($rooms as $room): ?>
-                <div class="p-4 border rounded-lg">
-                    <h4 class="text-lg font-medium text-[#fd7e14]"><?php echo htmlspecialchars($room['room_type']); ?>
-                    </h4>
-                    <p class="text-gray-600 text-sm mt-1"><?php echo htmlspecialchars($room['specification']); ?></p>
-                    <p class="text-black font-bold mt-2">$<?php echo number_format($room['price'], 2); ?></p>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-
-        <!-- Amenities -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold text-black">Amenities</h3>
-            <ul class="mt-2 list-disc list-inside text-gray-700">
-                <?php foreach ($amenities as $amenity): ?>
-                <li><?php echo htmlspecialchars($amenity); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-
-        <!-- Additional Information: Manager contact, rating, distance, etc. -->
-        <div class="mt-6">
-            <?php if (isset($manager)): ?>
-            <p class="text-gray-600 text-sm">
-                <i class="fas fa-user text-[#fd7e14]"></i> Managed by <?php echo htmlspecialchars($manager['name']); ?>
-                (<?php echo htmlspecialchars($manager['phone']); ?>)
-            </p>
-            <?php endif; ?>
-            <?php if (!empty($hostel['distance'])): ?>
-            <p class="text-gray-600 text-sm mt-1">
-                <i class="fas fa-road text-[#fd7e14]"></i> <?php echo htmlspecialchars($hostel['distance']); ?> km from
-                campus
-            </p>
-            <?php endif; ?>
-            <?php if (!empty($hostel['rating'])): ?>
-            <p class="text-gray-600 text-sm mt-1">
-                <i class="fas fa-star text-[#fd7e14]"></i> Rating: <?php echo htmlspecialchars($hostel['rating']); ?>
-            </p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Book Now Button -->
-        <div class="mt-6 text-center">
-            <a href="booking.php?hostel_id=<?php echo $hostel_id; ?>"
-                class="inline-block bg-[#fd7e14] hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition duration-200 shadow">
-                Book Now
-            </a>
-        </div>
     </section>
 
-    <!-- JavaScript for slider functionality -->
+    <!-- Description Section with "Read More" -->
+    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
+        <h3 class="text-xl font-bold mb-2">Description</h3>
+        <div id="descriptionText" class="text-gray-700 line-clamp-4">
+            <?php echo nl2br(htmlspecialchars($hostel['description'])); ?>
+        </div>
+        <a href="javascript:void(0);" id="readMore" class="text-primary mt-2 inline-block">... Read more</a>
+    </section>
+
+    <!-- Amenities Section -->
+    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
+        <h3 class="text-xl font-bold mb-3">Amenities</h3>
+        <?php if (count($amenities) > 0): ?>
+        <div class="grid grid-cols-3 gap-4">
+            <?php foreach ($amenities as $amenity): ?>
+            <div class="flex flex-col items-center justify-center border rounded p-3">
+                <i class="fas fa-check-circle text-2xl text-primary"></i>
+                <span
+                    class="mt-2 text-gray-700 text-center text-sm"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <p class="text-gray-600">No amenities available.</p>
+        <?php endif; ?>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4 mb-6">
+        <h3 class="text-xl font-bold mb-3">Rooms</h3>
+        <?php if (count($groupedRooms) > 0): ?>
+        <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
+        <div class="mb-5">
+            <h4 class="flex items-center text-lg font-semibold text-primary mb-2">
+                <i class="fas fa-bed mr-2"></i>
+                <?php echo htmlspecialchars($roomType); ?>
+            </h4>
+            <?php foreach ($roomsArray as $room): ?>
+            <div class="flex justify-between items-center p-3 border rounded mb-2">
+                <div>
+                    <?php if(!empty($room['specification'])): ?>
+                    <p class="text-gray-600 text-sm"><?php echo htmlspecialchars($room['specification']); ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="text-gray-800 font-bold">
+                    $<?php echo number_format($room['price'], 2); ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <p class="text-gray-600">No room information available.</p>
+        <?php endif; ?>
+    </section>
+
+    <!-- JavaScript for slider and "Read More" toggle -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Slider functionality
         const slides = document.querySelectorAll("#slides img");
         let currentIndex = 0;
-
         document.getElementById("next").addEventListener("click", function() {
             slides[currentIndex].classList.add("hidden");
             currentIndex = (currentIndex + 1) % slides.length;
             slides[currentIndex].classList.remove("hidden");
         });
-
         document.getElementById("prev").addEventListener("click", function() {
             slides[currentIndex].classList.add("hidden");
             currentIndex = (currentIndex - 1 + slides.length) % slides.length;
             slides[currentIndex].classList.remove("hidden");
+        });
+
+        // Read More toggle for description
+        const readMore = document.getElementById("readMore");
+        const descriptionText = document.getElementById("descriptionText");
+        let expanded = false;
+        readMore.addEventListener("click", function() {
+            if (!expanded) {
+                descriptionText.classList.remove("line-clamp-4");
+                readMore.textContent = "Show less";
+            } else {
+                descriptionText.classList.add("line-clamp-4");
+                readMore.textContent = "... Read more";
+            }
+            expanded = !expanded;
         });
     });
     </script>

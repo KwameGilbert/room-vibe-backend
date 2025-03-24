@@ -1,5 +1,5 @@
 <?php
-// include './config/session_check_student.php';
+include './config/session_check_student.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,16 +21,16 @@
 
     <script src="./js/index.min.js"></script>
     <script>
-    // // Check if Service Workers are supported
-    // if ('serviceWorker' in navigator) {
-    //     window.addEventListener('load', () => {
-    //         navigator.serviceWorker.register('./service-worker.min.js').then((registration) => {
-    //             console.log('Service Worker registered successfully with scope: ', registration.scope);
-    //         }).catch((error) => {
-    //             console.log('Service Worker registration failed: ', error);
-    //         });
-    //     });
-    // }
+    // Check if Service Workers are supported
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.min.js').then((registration) => {
+                console.log('Service Worker registered successfully with scope: ', registration.scope);
+            }).catch((error) => {
+                console.log('Service Worker registration failed: ', error);
+            });
+        });
+    }
     </script>
 </body>
 
