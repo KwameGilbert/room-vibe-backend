@@ -28,6 +28,7 @@
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">
+    
     <!-- Notification Container -->
     <div id="notification"
         class="fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50">

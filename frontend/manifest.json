@@ -1,0 +1,36 @@
+{
+  "name": "RoomVibe",
+  "short_name": "RoomVibe",
+  "description": "RoomVibe is a mobile app that simplifies hostel bookings and accommodation management for students. It features dynamic profile management, booking history, payment methods, and more – all wrapped in a modern, mobile-friendly interface with a warm RoomVibe aesthetic.",
+  "version": "1.0.0",
+  "start_url": "/splash.php",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#fd7e14",
+  "icons": [
+    {
+      "src": "/images/ams_app_icon.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "features": {
+    "profile_management": "View and update your student profile, including verification status.",
+    "hostel_info": "Access detailed information on hostels, including amenities and room options.",
+    "booking_history": "Review your past bookings and manage upcoming reservations.",
+    "payment_methods": "Securely manage your payment options and transactions.",
+    "referral_program": "Invite friends and earn rewards with our referral program.",
+    "help_support": "Easily contact support for any inquiries or issues."
+  },
+  "how_to_use": [
+    "Sign in to your RoomVibe account.",
+    "Update your personal profile details and verify your account.",
+    "Browse available hostels and check their room types, amenities, and ratings.",
+    "View your booking history and manage future reservations.",
+    "Access and manage payment methods.",
+    "Participate in the referral program to invite friends and earn rewards.",
+    "Contact support if you need help."
+  ]
+}
