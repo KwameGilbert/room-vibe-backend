@@ -77,7 +77,7 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?= $statusText ?>
                     </button>
                     <!-- Wishlist star (clickable) -->
-                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-xl cursor-pointer wishlist-toggle"
+                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-2xl cursor-pointer wishlist-toggle"
                         data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>"
                         onclick=" toggleWishlist(event, this)">
                     </i>
