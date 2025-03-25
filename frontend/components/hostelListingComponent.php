@@ -87,67 +87,35 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </a>
     <?php endforeach; ?>
 </div>
-
-<script>
-function toggleWishlist(event, element) {
-    event.preventDefault();
-    // Create the notification modal element and append it to the document body
-    if (typeof notificationModalListing === 'undefined') {
-        const notificationModalListing = document.createElement('div');
-    }
-    notificationModalListing.className =
-        'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
-    notificationModalListing.style.transition = 'transform 0.3s ease-in-out';
-    document.body.appendChild(notificationModalListing);
-
-
-    let hostelId = element.getAttribute(" data-hostel-id");
-    let
-        inWishlist = element.getAttribute("data-in-wishlist") === "true";
-    fetch("./wishlist/wishlistHandler.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ?
-                        1 : 0}`
-        }).then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                element.classList.toggle("fas");
-                element.classList.toggle("far");
-                element.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
-
-                notificationModalListing.innerHTML = `
-                        <div class="bg-green-500 text-white px-4 py-3 text-center shadow-lg">
-                            <i class="fas fa-check-circle mr-3"></i>
-                            ${data.message}
-                        </div>
-                        `;
-            } else {
-                notificationModalListing.innerHTML = `
-                        <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
-                            <i class="fas fa-exclamation-circle mr-3"></i>
-                            ${data.message || "Operation failed."}
-                        </div>
-                        `;
-            }
-            notificationModalListing.style.transform = 'translateY(0)';
-            setTimeout(() => {
-                notificationModalListing.style.transform = 'translateY(-100%)';
-            }, 2000);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            notificationModalListing.innerHTML = `
-                        <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
-                            Operation failed.
-                        </div>
-                        `;
-            notificationModalListing.style.transform = 'translateY(0)';
-            setTimeout(() => {
-                notificationModalListing.style.transform = 'translateY(-100%)';
-            }, 2000);
-        });
+ease-in-out';
+document.body.appendChild(notificationModalListing);
 }
-</script>
+on failed."}
+</div>
+`;
+}
+notificationModalListing.style.transform = 'translateY(0)';
+setTimeout(() => {
+notificationModalListing.style.transform = 'translateY(-100%)';
+}, 2000);
+})
+.catch(error => {
+console.error("Error:", error);
+notificationModalListing.innerHTML = `
+<div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
+    Operation failed.
+</div>
+`;
+notificationModalListing.style.transform = 'translateY(0)';
+setTimeout(() => {
+notificationModalListing.style.transform = 'translateY(-100%)';
+}, 2000);
+});
+}
+
+// Attach the event listener only if one isn't already attached.
+const wishlistToggles = document.querySelectorAll('.wishlist-toggle');
+wishlistToggles.forEach(el => {
+if (!el.dataset.listenerAttached) {
+el.addEventListener('click', toggleWishlistHandler);
+el.dataset.listenerAttached = 'true'
