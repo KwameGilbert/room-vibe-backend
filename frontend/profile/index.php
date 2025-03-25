@@ -4,6 +4,10 @@ include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();
 
+if (!isset($_SESSION['student_id'])) {
+    header("Location: " . __DIR__ . "/../splash.php");
+    exit();
+}
 
 $student_id = $_SESSION['student_id'];
 
@@ -15,16 +19,13 @@ if (!$student) {
     die("Student not found.");
 }
 
-// For demo: assume the student record has a 'hostel_id'
-$hostel_id = $student['hostel_id'] ?? 1;
-
 // Fetch statistics (adjust table names and queries to your actual schema)
 $stmt = $conn->prepare("SELECT COUNT(*) as bookings FROM booking WHERE student_id = ?");
 $stmt->execute([$student_id]);
 $bookings = $stmt->fetch(PDO::FETCH_ASSOC)['bookings'] ?? 0;
 
-$stmt = $conn->prepare("SELECT COUNT(*) as reviews FROM review WHERE hostel_id = ?");
-$stmt->execute([$hostel_id]);
+$stmt = $conn->prepare("SELECT COUNT(*) as reviews FROM review WHERE student_id = ?");
+$stmt->execute([$student_id]);
 $reviews = $stmt->fetch(PDO::FETCH_ASSOC)['reviews'] ?? 0;
 
 $stmt = $conn->prepare("SELECT COUNT(*) as wishlist FROM wishlist WHERE student_id = ?");
@@ -46,8 +47,8 @@ $verified = $student['verified'] ?? 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Profile</title>
-
-
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tailwind CSS -->
 
     <script>
@@ -87,7 +88,7 @@ $verified = $student['verified'] ?? 0;
             <!-- Name and Email -->
             <div class="ml-4">
                 <h2 class="text-xl font-bold text-gray-800">
-                    <?php echo htmlspecialchars($student['firstName']) , " " , htmlspecialchars($student['lastName']) ; ?>
+                    <?php echo htmlspecialchars($student['firstName']), " ", htmlspecialchars($student['lastName']); ?>
                 </h2>
                 <p class="text-gray-600 text-sm"><?php echo htmlspecialchars($student['email']); ?></p>
                 <?php if (!empty($student['verified']) && $student['verified'] == 1): ?>
@@ -214,33 +215,64 @@ $verified = $student['verified'] ?? 0;
         </ul>
     </nav>
 
-    <script>
-    // Logout functionality and loadPage placeholder function
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = './login/';
-            }
-        });
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-sm">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Logout</h2>
+            <p class="text-gray-600 mb-6">Are you sure you want to logout?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="cancelLogout"
+                    class="px-4 py-2 rounded-lg text-gray-800 bg-gray-200 hover:bg-gray-300 transition">Cancel</button>
+                <button id="confirmLogout"
+                    class="px-4 py-2 rounded-lg text-white bg-[#fbbf24] hover:bg-primary-dark transition">Logout</button>
+            </div>
+        </div>
+    </div>
 
-        // Placeholder for page load function
-        window.loadPage = function(page) {
-            console.log('Load page: ' + page);
-            // Implement your page loading logic here
-        };
+
+
+    <script>
+    // Replace the old logout listener with this new modal-based approach
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        // Show the logout confirmation modal
+        document.getElementById('logoutModal').classList.remove('hidden');
     });
-    </script>
 
-    <!-- Notification Slide Script (same as before) -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function showNotification(message, type) {
-            const notificationContainer = document.getElementById('notification');
-            const notification = document.createElement('div');
-            notification.className = type === 'success' ?
-                'bg-green-500 text-white p-4 shadow-lg' :
-                'bg-red-500 text-white p-4 shadow-lg';
-            notification.innerHTML = `
+    // Handle cancel action
+    document.getElementById('cancelLogout').addEventListener('click', function() {
+        document.getElementById('logoutModal').classList.add('hidden');
+    });
+
+    // Handle confirm logout action
+    document.getElementById('confirmLogout').addEventListener('click', function() {
+        // Use AJAX to call logout.php
+        fetch('./login/logout.php', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Logged out successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = './splash.php';
+                    }, 1500);
+                } else {
+                    showNotification(data.message || 'Logout failed. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                showNotification('Connection error. Please check your internet connection.', 'error');
+            });
+    });
+
+    function showNotification(message, type) {
+        const notificationContainer = document.getElementById('notification');
+        const notification = document.createElement('div');
+        notification.className = type === 'success' ?
+            'bg-green-500 text-white p-4 shadow-lg z-100' :
+            'bg-red-500 text-white p-4 shadow-lg z-100';
+        notification.innerHTML = `
                 <div class="max-w-md mx-auto flex items-center justify-between">
                     <div class="flex items-center">
                         <i class="${type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'} mr-3"></i>
@@ -251,20 +283,20 @@ $verified = $student['verified'] ?? 0;
                     </button>
                 </div>
             `;
-            notificationContainer.innerHTML = '';
-            notificationContainer.appendChild(notification);
+        notificationContainer.innerHTML = '';
+        notificationContainer.appendChild(notification);
+        setTimeout(() => {
+            notificationContainer.classList.add('translate-y-0');
+            notificationContainer.classList.remove('-translate-y-full');
+        }, 100);
+        setTimeout(() => {
+            notificationContainer.classList.remove('translate-y-0');
+            notificationContainer.classList.add('-translate-y-full');
             setTimeout(() => {
-                notificationContainer.classList.add('translate-y-0');
-                notificationContainer.classList.remove('-translate-y-full');
-            }, 100);
-            setTimeout(() => {
-                notificationContainer.classList.remove('translate-y-0');
-                notificationContainer.classList.add('-translate-y-full');
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 5000);
-        }
-        // Example: showNotification('Profile loaded successfully!', 'success');
-    });
+                notification.remove();
+            }, 300);
+        }, 5000);
+    }
+
+    // showNotification('Profile loaded successfully!', 'success');
     </script>

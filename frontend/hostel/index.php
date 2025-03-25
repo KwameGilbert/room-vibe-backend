@@ -111,7 +111,7 @@ foreach ($rooms as $room) {
     </section>
 
     <!-- Hostel Info Section -->
-    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
+    <section class="bg-white shadow rounded px-4 py-4 mx-4">
         <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
         <p class="flex items-center mt-2 text-gray-600">
             <i class="fas fa-map-marker-alt text-primary mr-1"></i>

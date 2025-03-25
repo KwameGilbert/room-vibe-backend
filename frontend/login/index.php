@@ -107,7 +107,7 @@
             </div>
 
             <div class="text-center mt-0 text-gray-500 text-sm">
-                Don't have an account? <a href="register.php"
+                Don't have an account? <a href="./../signup/"
                     class="text-primary font-semibold hover:underline">Register now</a>
             </div>
         </div>

@@ -78,7 +78,8 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                     <!-- Wishlist star (clickable) -->
                     <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-xl cursor-pointer wishlist-toggle"
-                        data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>">
+                        data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>"
+                        onclick=" toggleWishlist(event, this)">
                     </i>
                 </div>
             </div>
@@ -86,74 +87,67 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </a>
     <?php endforeach; ?>
 </div>
+
 <script>
-// Create the notification modal element and append it to the document body
-const notificationModal = document.createElement('div');
-notificationModal.className =
-    'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
-notificationModal.style.transition = 'transform 0.3s ease-in-out';
-document.body.appendChild(notificationModal);
+function toggleWishlist(event, element) {
+    event.preventDefault();
+    // Create the notification modal element and append it to the document body
+    if (typeof notificationModalListing === 'undefined') {
+        const notificationModalListing = document.createElement('div');
+    }
+    notificationModalListing.className =
+        'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
+    notificationModalListing.style.transition = 'transform 0.3s ease-in-out';
+    document.body.appendChild(notificationModalListing);
 
-document.querySelectorAll(".wishlist-toggle").forEach(item => {
-    item.addEventListener("click", function(event) {
-        event.preventDefault();
 
-        let icon = this;
-        let hostelId = icon.getAttribute("data-hostel-id");
-        let inWishlist = icon.getAttribute("data-in-wishlist") === "true";
+    let hostelId = element.getAttribute(" data-hostel-id");
+    let
+        inWishlist = element.getAttribute("data-in-wishlist") === "true";
+    fetch("./wishlist/wishlistHandler.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ?
+                        1 : 0}`
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                element.classList.toggle("fas");
+                element.classList.toggle("far");
+                element.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
 
-        fetch("./wishlist/wishlistHandler.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ? 1 : 0}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Toggle star icon state
-                if (data.success) {
-                    icon.classList.toggle("fas");
-                    icon.classList.toggle("far");
-                    icon.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
-
-                    // Show success notification (green background)
-                    notificationModal.innerHTML = `
+                notificationModalListing.innerHTML = `
                         <div class="bg-green-500 text-white px-4 py-3 text-center shadow-lg">
+                            <i class="fas fa-check-circle mr-3"></i>
                             ${data.message}
                         </div>
-                    `;
-                    notificationModal.style.transform = 'translateY(0)';
-
-                    // Hide notification after 2 seconds
-                    setTimeout(() => {
-                        notificationModal.style.transform = 'translateY(-100%)';
-                    }, 2000);
-                } else {
-                    // Show error notification (red background)
-                    notificationModal.innerHTML = `
+                        `;
+            } else {
+                notificationModalListing.innerHTML = `
                         <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
+                            <i class="fas fa-exclamation-circle mr-3"></i>
                             ${data.message || "Operation failed."}
                         </div>
-                    `;
-                    notificationModal.style.transform = 'translateY(0)';
-                    setTimeout(() => {
-                        notificationModal.style.transform = 'translateY(-100%)';
-                    }, 2000);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                notificationModal.innerHTML = `
-                    <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
-                        Operation failed.
-                    </div>
-                `;
-                notificationModal.style.transform = 'translateY(0)';
-                setTimeout(() => {
-                    notificationModal.style.transform = 'translateY(-100%)';
-                }, 2000);
-            });
-    });
-});
+                        `;
+            }
+            notificationModalListing.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                notificationModalListing.style.transform = 'translateY(-100%)';
+            }, 2000);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            notificationModalListing.innerHTML = `
+                        <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
+                            Operation failed.
+                        </div>
+                        `;
+            notificationModalListing.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                notificationModalListing.style.transform = 'translateY(-100%)';
+            }, 2000);
+        });
+}
 </script>

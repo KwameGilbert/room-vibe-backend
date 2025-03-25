@@ -42,7 +42,7 @@
 </div>
 
 <!-- JavaScript to handle modal and filter logic -->
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
     // All filter buttons
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -115,4 +115,4 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('hidden');
     });
 });
-</script>
+</script> -->

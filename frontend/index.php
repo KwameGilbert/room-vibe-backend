@@ -20,6 +20,7 @@ include './config/session_check_student.php';
     <?php include './components/navbar.php' ?>
 
     <script src="./js/index.min.js"></script>
+
     <script>
     // Check if Service Workers are supported
     if ('serviceWorker' in navigator) {
@@ -30,7 +31,7 @@ include './config/session_check_student.php';
                 console.log('Service Worker registration failed: ', error);
             });
         });
-    }
+    };
     </script>
 </body>
 
