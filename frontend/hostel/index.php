@@ -134,6 +134,8 @@ foreach ($rooms as $room) {
         <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
 
         <?php endif; ?>
+        //Swipe to load images
+
     </section>
 
     <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
