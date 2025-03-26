@@ -136,65 +136,7 @@ foreach ($rooms as $room) {
         <?php endif; ?>
     </section>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const slides = document.querySelectorAll("#slides img");
-        const indicators = document.querySelectorAll("#slide-indicators button");
-        let currentIndex = 0;
 
-        function updateSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.add("hidden");
-                if (i === index) {
-                    slide.classList.remove("hidden");
-                }
-            });
-            indicators.forEach((indicator, i) => {
-                if (i === index) {
-                    indicator.classList.add("bg-primary");
-                    indicator.classList.remove("bg-gray-300");
-                } else {
-                    indicator.classList.remove("bg-primary");
-                    indicator.classList.add("bg-gray-300");
-                }
-            });
-        }
-
-        updateSlide(currentIndex);
-
-        document.getElementById("next").addEventListener("click", function() {
-            currentIndex = (currentIndex + 1) % slides.length;
-            updateSlide(currentIndex);
-        });
-
-        document.getElementById("prev").addEventListener("click", function() {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            updateSlide(currentIndex);
-        });
-
-        indicators.forEach(indicator => {
-            indicator.addEventListener("click", function() {
-                const index = parseInt(this.dataset.slideIndex);
-                currentIndex = index;
-                updateSlide(currentIndex);
-            });
-        });
-
-        const readMore = document.getElementById("readMore");
-        const descriptionText = document.getElementById("descriptionText");
-        let expanded = false;
-        readMore.addEventListener("click", function() {
-            if (!expanded) {
-                descriptionText.classList.remove("line-clamp-4");
-                readMore.textContent = "Show less";
-            } else {
-                descriptionText.classList.add("line-clamp-4");
-                readMore.textContent = "... Read more";
-            }
-            expanded = !expanded;
-        });
-    });
-    </script>
 
     <section class="bg-white shadow-sm rounded px-4 py-4">
         <h2 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
@@ -284,16 +226,45 @@ foreach ($rooms as $room) {
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const slides = document.querySelectorAll("#slides img");
+        const indicators = document.querySelectorAll("#slide-indicators button");
         let currentIndex = 0;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.add("hidden");
+                if (i === index) {
+                    slide.classList.remove("hidden");
+                }
+            });
+            indicators.forEach((indicator, i) => {
+                if (i === index) {
+                    indicator.classList.add("bg-primary");
+                    indicator.classList.remove("bg-gray-300");
+                } else {
+                    indicator.classList.remove("bg-primary");
+                    indicator.classList.add("bg-gray-300");
+                }
+            });
+        }
+
+        updateSlide(currentIndex);
+
         document.getElementById("next").addEventListener("click", function() {
-            slides[currentIndex].classList.add("hidden");
             currentIndex = (currentIndex + 1) % slides.length;
-            slides[currentIndex].classList.remove("hidden");
+            updateSlide(currentIndex);
         });
+
         document.getElementById("prev").addEventListener("click", function() {
-            slides[currentIndex].classList.add("hidden");
             currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            slides[currentIndex].classList.remove("hidden");
+            updateSlide(currentIndex);
+        });
+
+        indicators.forEach(indicator => {
+            indicator.addEventListener("click", function() {
+                const index = parseInt(this.dataset.slideIndex);
+                currentIndex = index;
+                updateSlide(currentIndex);
+            });
         });
 
         const readMore = document.getElementById("readMore");
