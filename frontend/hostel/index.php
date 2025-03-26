@@ -128,6 +128,8 @@ foreach ($rooms as $room) {
         </div>
         <?php else: ?>
         <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
+        <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
+        <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
         <?php endif; ?>
     </section>
 
