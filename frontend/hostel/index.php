@@ -109,7 +109,7 @@ foreach ($rooms as $room) {
     </script>
 
     <!-- Gallery Slider -->
-    <section class="mt-4">
+    <section class="">
         <?php if (count($images) > 0): ?>
         <div class="relative" id="slider">
             <div id="slides" class="overflow-hidden relative rounded">
