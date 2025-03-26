@@ -83,8 +83,10 @@ foreach ($rooms as $room) {
                 </button>
                 <h1 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
             </div>
-            <button onclick="shareHostel()" class="text-primary text-2xl focus:outline-none">
-                <i class="fas fa-share-alt"></i>
+            <button onclick="shareHostel()"
+                class="flex items-center bg-primary text-white px-4 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none">
+                <i class="fas fa-share-alt mr-2"></i>
+                <span>Share</span>
             </button>
         </div>
     </header>
