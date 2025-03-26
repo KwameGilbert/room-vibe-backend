@@ -107,7 +107,7 @@ foreach ($rooms as $room) {
     }
     </script>
 
-    <section id="">
+    <section id="image_slide">
         <?php if (count($images) > 0): ?>
         <div class="relative" id="slider">
             <div id="slides" class="overflow-hidden relative rounded">
@@ -138,7 +138,7 @@ foreach ($rooms as $room) {
 
     </section>
 
-    <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
+    <section class="bg-white shadow-sm rounded px-4 py-4">
         <h2 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
         <p class="flex items-center mt-2 text-gray-600 text-sm">
             <i class="fas fa-map-marker-alt text-primary mr-1"></i>
