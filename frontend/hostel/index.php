@@ -176,21 +176,22 @@ foreach ($rooms as $room) {
             <?php echo nl2br(htmlspecialchars($hostel['description'])); ?>
         </div>
         <a href="javascript:void(0);" id="readMore" class="text-primary mt-2 inline-block text-sm">... Read more</a>
-    </section <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
-    <h3 class="text-lg font-semibold mb-3">Amenities</h3>
-    <?php if (count($amenities) > 0): ?>
-    <div class="grid grid-cols-3 gap-2">
-        <?php foreach ($amenities as $amenity): ?>
-        <div class="flex flex-col items-center justify-center border rounded p-2">
-            <i class="fas fa-check-circle text-xl text-primary"></i>
-            <span
-                class="mt-1 text-gray-700 text-center text-xs"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
+    </section>
+    <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
+        <h3 class="text-lg font-semibold mb-3">Amenities</h3>
+        <?php if (count($amenities) > 0): ?>
+        <div class="grid grid-cols-3 gap-2">
+            <?php foreach ($amenities as $amenity): ?>
+            <div class="flex flex-col items-center justify-center border rounded p-2">
+                <i class="fas fa-check-circle text-xl text-primary"></i>
+                <span
+                    class="mt-1 text-gray-700 text-center text-xs"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
+            </div>
+            <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
-    </div>
-    <?php else: ?>
-    <p class="text-gray-600 text-sm">No amenities available.</p>
-    <?php endif; ?>
+        <?php else: ?>
+        <p class="text-gray-600 text-sm">No amenities available.</p>
+        <?php endif; ?>
     </section>
 
     <section class="bg-white shadow-sm rounded px-4 py-4 mt-2 mb-6">
