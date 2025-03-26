@@ -115,10 +115,6 @@ foreach ($rooms as $room) {
                 <img src="<?php echo htmlspecialchars($img['url']); ?>" alt="Hostel Image"
                     class="w-full h-64 object-cover <?php echo $index === 0 ? '' : 'hidden'; ?>"
                     data-index="<?php echo $index; ?>">
-                <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded hidden"
-                    data-index="1">
-                <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded"
-                    data-index="2">
                 <?php endforeach; ?>
             </div>
             <button id="prev"
@@ -129,14 +125,76 @@ foreach ($rooms as $room) {
                 class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-primary focus:outline-none">
                 <i class="fas fa-chevron-right"></i>
             </button>
+            <div id="slide-indicators" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <?php foreach ($images as $index => $img): ?>
+                <button class="h-2 w-2 rounded-full bg-gray-300" data-slide-index="<?php echo $index; ?>"></button>
+                <?php endforeach; ?>
+            </div>
         </div>
         <?php else: ?>
         <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
-
         <?php endif; ?>
-        //Swipe to load images
-
     </section>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const slides = document.querySelectorAll("#slides img");
+        const indicators = document.querySelectorAll("#slide-indicators button");
+        let currentIndex = 0;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.add("hidden");
+                if (i === index) {
+                    slide.classList.remove("hidden");
+                }
+            });
+            indicators.forEach((indicator, i) => {
+                if (i === index) {
+                    indicator.classList.add("bg-primary");
+                    indicator.classList.remove("bg-gray-300");
+                } else {
+                    indicator.classList.remove("bg-primary");
+                    indicator.classList.add("bg-gray-300");
+                }
+            });
+        }
+
+        updateSlide(currentIndex);
+
+        document.getElementById("next").addEventListener("click", function() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlide(currentIndex);
+        });
+
+        document.getElementById("prev").addEventListener("click", function() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlide(currentIndex);
+        });
+
+        indicators.forEach(indicator => {
+            indicator.addEventListener("click", function() {
+                const index = parseInt(this.dataset.slideIndex);
+                currentIndex = index;
+                updateSlide(currentIndex);
+            });
+        });
+
+        const readMore = document.getElementById("readMore");
+        const descriptionText = document.getElementById("descriptionText");
+        let expanded = false;
+        readMore.addEventListener("click", function() {
+            if (!expanded) {
+                descriptionText.classList.remove("line-clamp-4");
+                readMore.textContent = "Show less";
+            } else {
+                descriptionText.classList.add("line-clamp-4");
+                readMore.textContent = "... Read more";
+            }
+            expanded = !expanded;
+        });
+    });
+    </script>
 
     <section class="bg-white shadow-sm rounded px-4 py-4">
         <h2 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
@@ -177,6 +235,7 @@ foreach ($rooms as $room) {
         </div>
         <a href="javascript:void(0);" id="readMore" class="text-primary mt-2 inline-block text-sm">... Read more</a>
     </section>
+
     <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
         <h3 class="text-lg font-semibold mb-3">Amenities</h3>
         <?php if (count($amenities) > 0): ?>
