@@ -68,21 +68,43 @@ foreach ($rooms as $room) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
     body {
-        background-color: #ffffff;
+        background-color: rgb(98, 95, 95);
     }
     </style>
 </head>
 
 <body class="font-sans text-gray-800">
-    <!-- Header: Back button and Hostel Name -->
-    <header class="px-4 py-3 bg-white shadow mt-4 rounded">
-        <div class="flex items-center">
-            <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
-                <i class="fas fa-arrow-left"></i>
+    <!-- Header: Back button, Hostel Name, and Share button -->
+    <header class="px-4 py-5 pt-3 bg-white shadow rounded">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
+            </div>
+            <button onclick="shareHostel()" class="text-primary text-2xl focus:outline-none">
+                <i class="fas fa-share-alt"></i>
             </button>
-            <h1 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
         </div>
     </header>
+
+    <script>
+    function shareHostel() {
+        if (navigator.share) {
+            navigator.share({
+                    title: '<?php echo htmlspecialchars($hostel['hostel_name']); ?>',
+                    url: window.location.href
+                })
+                .catch(console.error);
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(window.location.href)
+                .then(() => alert('Link copied to clipboard!'))
+                .catch(console.error);
+        }
+    }
+    </script>
 
     <!-- Gallery Slider -->
     <section class="mt-4">

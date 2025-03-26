@@ -3,7 +3,7 @@ const CACHE_NAME = 'roomvibe-cache-v1';
 const baseURL = 'http://localhost/room-vibe-backend/frontend';
 const urlsToCache = [
     // `${baseURL}/`,
-    // `${baseURL}/index.php`, // Your homepage
+    `${baseURL}/splash.php`, 
     // `${baseURL}/styles.css`, // Optional CSS (if you have custom styles)
     //add the imgages dirctory
     `${baseURL}/images/`, // Optional images

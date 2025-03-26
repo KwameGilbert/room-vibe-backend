@@ -94,8 +94,8 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script>
 (function() {
     // Create (or get) the notification modal element only once.
+    let notificationModalListing = document.getElementById('notification-modal');
     if (!notificationModalListing) {
-        let notificationModalListing = document.getElementById('notification-modal');
         notificationModalListing = document.createElement('div');
         notificationModalListing.id = 'notification-modal';
         notificationModalListing.className =
