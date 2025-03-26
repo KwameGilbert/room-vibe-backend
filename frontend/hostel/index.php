@@ -115,6 +115,10 @@ foreach ($rooms as $room) {
                 <img src="<?php echo htmlspecialchars($img['url']); ?>" alt="Hostel Image"
                     class="w-full h-64 object-cover <?php echo $index === 0 ? '' : 'hidden'; ?>"
                     data-index="<?php echo $index; ?>">
+                <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded hidden"
+                    data-index="1">
+                <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded"
+                    data-index="1">
                 <?php endforeach; ?>
             </div>
             <button id="prev"
@@ -128,8 +132,7 @@ foreach ($rooms as $room) {
         </div>
         <?php else: ?>
         <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
-        <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
-        <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
+
         <?php endif; ?>
     </section>
 
