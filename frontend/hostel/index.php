@@ -40,6 +40,7 @@ foreach ($rooms as $room) {
     $groupedRooms[$room['type_name']][] = $room;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,6 +74,7 @@ foreach ($rooms as $room) {
 </head>
 
 <body class="font-sans text-gray-800">
+
     <header class="px-4 py-3 bg-white shadow-sm sticky top-0 z-50">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
@@ -108,11 +110,30 @@ foreach ($rooms as $room) {
     </script>
 
     <section id="image_slide">
-        <?php if (count($images) > 0): ?>
+        <?php
+    $image_dir = __DIR__ . "/images/hostels/{$hostel_id}";
+    $hostel_images = [];
+
+    if (is_dir($image_dir)) {
+        $files = scandir($image_dir);
+        if ($files) {
+            foreach ($files as $file) {
+                if ($file !== "." && $file !== "..") {
+                    $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                        $hostel_images[] = "./images/hostels/{$hostel_id}/{$file}";
+                    }
+                }
+            }
+        }
+    }
+    ?>
+
+        <?php if (count($hostel_images) > 0): ?>
         <div class="relative" id="slider">
             <div id="slides" class="overflow-hidden relative rounded">
-                <?php foreach ($images as $index => $img): ?>
-                <img src="<?php echo htmlspecialchars($img['url']); ?>" alt="Hostel Image"
+                <?php foreach ($hostel_images as $index => $image): ?>
+                <img src="<?php echo htmlspecialchars($image); ?>" alt="Hostel Image"
                     class="w-full h-64 object-cover <?php echo $index === 0 ? '' : 'hidden'; ?>"
                     data-index="<?php echo $index; ?>">
                 <?php endforeach; ?>
@@ -126,17 +147,16 @@ foreach ($rooms as $room) {
                 <i class="fas fa-chevron-right"></i>
             </button>
             <div id="slide-indicators" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                <?php foreach ($images as $index => $img): ?>
+                <?php foreach ($hostel_images as $index => $image): ?>
                 <button class="h-2 w-2 rounded-full bg-gray-300" data-slide-index="<?php echo $index; ?>"></button>
                 <?php endforeach; ?>
             </div>
         </div>
+
         <?php else: ?>
         <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded">
         <?php endif; ?>
     </section>
-
-
 
     <section class="bg-white shadow-sm rounded px-4 py-4">
         <h2 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
@@ -280,6 +300,7 @@ foreach ($rooms as $room) {
         expanded = !expanded;
     });
     </script>
+
 </body>
 
 </html>
