@@ -118,7 +118,7 @@ foreach ($rooms as $room) {
                 <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded hidden"
                     data-index="1">
                 <img src="./../images/default-image.jpg" alt="No Image" class="w-full h-64 object-cover rounded"
-                    data-index="1">
+                    data-index="2">
                 <?php endforeach; ?>
             </div>
             <button id="prev"
