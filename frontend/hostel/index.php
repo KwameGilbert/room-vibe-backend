@@ -47,7 +47,6 @@ foreach ($rooms as $room) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php echo htmlspecialchars($hostel['hostel_name']); ?> - Details</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
     // Extend Tailwind theme with room vibe colors
@@ -64,27 +63,27 @@ foreach ($rooms as $room) {
         }
     }
     </script>
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
     body {
-        background-color: rgb(98, 95, 95);
+        background-color: rgb(240, 240, 240);
+        /* Light gray background for mobile */
     }
     </style>
 </head>
 
 <body class="font-sans text-gray-800">
-    <!-- Header: Back button, Hostel Name, and Share button -->
-    <header class="px-4 py-5 pt-3 bg-white shadow rounded">
+    <header class="px-4 py-3 bg-white shadow-sm sticky top-0 z-50">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
                     <i class="fas fa-arrow-left"></i>
                 </button>
-                <h1 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
+                <h1 class="text-lg font-semibold truncate max-w-[60%]">
+                    <?php echo htmlspecialchars($hostel['hostel_name']); ?></h1>
             </div>
             <button onclick="shareHostel()"
-                class="flex items-center bg-primary text-white px-4 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none">
+                class="flex items-center bg-primary text-white px-3 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none text-sm">
                 <i class="fas fa-share-alt mr-2"></i>
                 <span>Share</span>
             </button>
@@ -108,8 +107,7 @@ foreach ($rooms as $room) {
     }
     </script>
 
-    <!-- Gallery Slider -->
-    <section class="">
+    <section class="mt-2">
         <?php if (count($images) > 0): ?>
         <div class="relative" id="slider">
             <div id="slides" class="overflow-hidden relative rounded">
@@ -119,7 +117,6 @@ foreach ($rooms as $room) {
                     data-index="<?php echo $index; ?>">
                 <?php endforeach; ?>
             </div>
-            <!-- Slider Controls -->
             <button id="prev"
                 class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow text-primary focus:outline-none">
                 <i class="fas fa-chevron-left"></i>
@@ -134,84 +131,78 @@ foreach ($rooms as $room) {
         <?php endif; ?>
     </section>
 
-    <!-- Hostel Info Section -->
-    <section class="bg-white shadow rounded px-4 py-4 mx-4">
-        <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
-        <p class="flex items-center mt-2 text-gray-600">
+    <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
+        <h2 class="text-xl font-bold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
+        <p class="flex items-center mt-2 text-gray-600 text-sm">
             <i class="fas fa-map-marker-alt text-primary mr-1"></i>
             <?php echo htmlspecialchars($hostel['location']); ?>
         </p>
         <?php if (!empty($hostel['distance'])): ?>
-        <p class="flex items-center mt-1 text-gray-600">
+        <p class="flex items-center mt-1 text-gray-600 text-sm">
             <i class="fas fa-road text-primary mr-1"></i>
             <?php echo htmlspecialchars($hostel['distance']); ?> km away
         </p>
         <?php endif; ?>
         <?php if (!empty($hostel['rating'])): ?>
-        <p class="flex items-center mt-1 text-gray-600">
+        <p class="flex items-center mt-1 text-gray-600 text-sm">
             <i class="fas fa-star text-primary mr-1"></i>
             <?php echo htmlspecialchars($hostel['rating']); ?>
         </p>
         <?php endif; ?>
         <?php if (!empty($hostel['accomodation_status'])): ?>
-        <p class="mt-1 text-gray-600">
+        <p class="mt-1 text-gray-600 text-sm">
             <i class="fas fa-info-circle text-primary mr-1"></i>
             <?php echo htmlspecialchars($hostel['accomodation_status']); ?>
         </p>
         <?php endif; ?>
         <?php if (!empty($hostel['address'])): ?>
-        <p class="flex items-center mt-1 text-gray-600">
+        <p class="flex items-center mt-1 text-gray-600 text-sm">
             <i class="fas fa-home text-primary mr-1"></i>
             <?php echo htmlspecialchars($hostel['address']); ?>
         </p>
         <?php endif; ?>
     </section>
 
-    <!-- Description Section with "Read More" -->
-    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
-        <h3 class="text-xl font-bold mb-2">Description</h3>
-        <div id="descriptionText" class="text-gray-700 line-clamp-4">
+    <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
+        <h3 class="text-lg font-semibold mb-2">Description</h3>
+        <div id="descriptionText" class="text-gray-700 text-sm line-clamp-4">
             <?php echo nl2br(htmlspecialchars($hostel['description'])); ?>
         </div>
-        <a href="javascript:void(0);" id="readMore" class="text-primary mt-2 inline-block">... Read more</a>
-    </section>
-
-    <!-- Amenities Section -->
-    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4">
-        <h3 class="text-xl font-bold mb-3">Amenities</h3>
-        <?php if (count($amenities) > 0): ?>
-        <div class="grid grid-cols-3 gap-4">
-            <?php foreach ($amenities as $amenity): ?>
-            <div class="flex flex-col items-center justify-center border rounded p-3">
-                <i class="fas fa-check-circle text-2xl text-primary"></i>
-                <span
-                    class="mt-2 text-gray-700 text-center text-sm"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
-            </div>
-            <?php endforeach; ?>
+        <a href="javascript:void(0);" id="readMore" class="text-primary mt-2 inline-block text-sm">... Read more</a>
+    </section <section class="bg-white shadow-sm rounded px-4 py-4 mt-2">
+    <h3 class="text-lg font-semibold mb-3">Amenities</h3>
+    <?php if (count($amenities) > 0): ?>
+    <div class="grid grid-cols-3 gap-2">
+        <?php foreach ($amenities as $amenity): ?>
+        <div class="flex flex-col items-center justify-center border rounded p-2">
+            <i class="fas fa-check-circle text-xl text-primary"></i>
+            <span
+                class="mt-1 text-gray-700 text-center text-xs"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
         </div>
-        <?php else: ?>
-        <p class="text-gray-600">No amenities available.</p>
-        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <?php else: ?>
+    <p class="text-gray-600 text-sm">No amenities available.</p>
+    <?php endif; ?>
     </section>
 
-    <!-- Rooms Section -->
-    <section class="bg-white shadow rounded px-4 py-4 mx-4 mt-4 mb-6">
-        <h3 class="text-xl font-bold mb-3">Rooms</h3>
+    <section class="bg-white shadow-sm rounded px-4 py-4 mt-2 mb-6">
+        <h3 class="text-lg font-semibold mb-3">Rooms</h3>
         <?php if (count($groupedRooms) > 0): ?>
         <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
-        <div class="mb-5">
-            <h4 class="flex items-center text-lg font-semibold text-primary mb-2">
+        <div class="mb-4">
+            <h4 class="flex items-center text-base font-semibold text-primary mb-2">
                 <i class="fas fa-bed mr-2"></i>
                 <?php echo htmlspecialchars($roomType); ?>
             </h4>
             <?php foreach ($roomsArray as $room): ?>
-            <div class="flex justify-between items-center p-3 border rounded mb-2">
+            <div class="flex justify-between items-center p-2 border rounded mb-1">
                 <div>
-                    <?php if(!empty($room['specification'])): ?>
-                    <p class="text-gray-600 text-sm"><?php echo htmlspecialchars($room['specification']); ?></p>
+                    <?php if (!empty($room['specification'])): ?>
+                    <p class="text-gray-600 text-xs"><?php echo htmlspecialchars($room['specification']); ?></p>
                     <?php endif; ?>
                 </div>
-                <div class="text-gray-800 font-bold">
+                <div class="text-gray-800 font-semibold text-sm">
                     $<?php echo number_format($room['price'], 2); ?>
                 </div>
             </div>
@@ -219,14 +210,12 @@ foreach ($rooms as $room) {
         </div>
         <?php endforeach; ?>
         <?php else: ?>
-        <p class="text-gray-600">No room information available.</p>
+        <p class="text-gray-600 text-sm">No room information available.</p>
         <?php endif; ?>
     </section>
 
-    <!-- JavaScript for slider and "Read More" toggle -->
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Slider functionality
         const slides = document.querySelectorAll("#slides img");
         let currentIndex = 0;
         document.getElementById("next").addEventListener("click", function() {
@@ -240,7 +229,6 @@ foreach ($rooms as $room) {
             slides[currentIndex].classList.remove("hidden");
         });
 
-        // Read More toggle for description
         const readMore = document.getElementById("readMore");
         const descriptionText = document.getElementById("descriptionText");
         let expanded = false;
