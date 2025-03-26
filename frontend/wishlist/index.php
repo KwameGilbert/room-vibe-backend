@@ -6,7 +6,7 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // Assuming student ID is stored in session after login
-$student_id = $_SESSION['student_id'] ?? 1;
+$student_id = $_SESSION['student_id'];
 
 // Query to fetch wishlist items for the student
 $query = "SELECT 

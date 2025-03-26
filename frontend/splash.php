@@ -15,7 +15,7 @@
     </style>
 </head>
 
-<body class="relative h-screen overflow-hidden flex items-center justify-center">
+<body class="relative h-full overflow-auto flex items-center justify-center">
     <!-- Black overlay with transparency -->
     <div class="absolute inset-0 bg-black opacity-50"></div>
 

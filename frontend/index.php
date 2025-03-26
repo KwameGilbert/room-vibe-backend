@@ -1,5 +1,6 @@
 <?php
 include './config/session_check_student.php';
+$student_id = $_SESSION['student_id'];
 ?>
 
 <!DOCTYPE html>
