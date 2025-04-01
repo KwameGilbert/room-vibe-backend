@@ -236,7 +236,7 @@ foreach ($rooms as $room) {
                     <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
                     <div>
                         <h3 class="text-primary font-medium mb-3"><?php
-                                                                            $roomType = str_replace("_", " ", $roomType);
+                                                                            $roomType = ucwords(str_replace("_", " ", $roomType));
                                                                             echo htmlspecialchars($roomType);
                                                                             ?></h3>
                         <div class="space-y-2">
