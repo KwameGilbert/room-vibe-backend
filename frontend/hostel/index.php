@@ -108,13 +108,14 @@ foreach ($rooms as $room) {
     <!-- Modern floating header -->
     <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 px-4 py-3">
         <div class="max-w-2xl mx-auto flex items-center justify-between">
-            <button onclick="window.history.back()"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
-                <i class="fas fa-arrow-left text-secondary"></i>
-            </button>
-            <h1 class="text-lg font-semibold text-primary mb-2 max-w-[100%]">
-                <?php echo htmlspecialchars($hostel['hostel_name']); ?>
-            </h1>
+            <div class="lex items-center"> <button onclick="window.history.back()"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-arrow-left text-secondary"></i>
+                </button>
+                <h1 class="text-lg font-semibold text-primary mb-2 max-w-[100%]">
+                    <?php echo htmlspecialchars($hostel['hostel_name']); ?>
+                </h1>
+            </div>
             <button onclick="shareHostel()"
                 class="flex items-center bg-primary text-white px-3 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none text-sm">
                 <i class="fas fa-share-alt mr-2"></i>
