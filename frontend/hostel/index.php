@@ -169,9 +169,9 @@ foreach ($rooms as $room) {
         <!-- Hostel Info Card -->
         <div class="px-4">
             <section class="bg-white rounded-2xl p-6 shadow-soft mb-4">
-                <h1 class="text-2xl font-bold text-secondary mb-2">
+                < class="text-2xl font-bold text-secondary mb-2">
                     <?php echo htmlspecialchars($hostel['hostel_name']); ?>
-                </h1>
+                </>
 
 
 
