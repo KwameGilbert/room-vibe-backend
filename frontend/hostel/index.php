@@ -111,9 +111,9 @@ foreach ($rooms as $room) {
             <div class="flex items-center">
                 <button onclick="window.history.back()"
                     class="w-10 h-10 flex items-center justify-center rounded bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
-                    <i class="fas fa-arrow-left text-secondary"></i>
+                    <i class="fas fa-arrow-left text-primary"></i>
                 </button>
-                <h1 class="text-lg font-semibold text-primary mb-2 max-w-[100%]">
+                <h1 class="text-lg font-semibold text-neutral mb-2 max-w-[100%]">
                     <?php echo htmlspecialchars($hostel['hostel_name']); ?>
                 </h1>
             </div>
