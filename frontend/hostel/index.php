@@ -52,54 +52,54 @@ foreach ($rooms as $room) {
     <title><?php echo htmlspecialchars($hostel['hostel_name']); ?> - Details</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: '#F59E0B', // Same as tailwind text-yellow-500
-                    secondary: '#484848',
-                    neutral: '#767676',
-                    background: '#F7F7F7'
-                },
-                fontFamily: {
-                    sans: ['Inter', 'system-ui', 'sans-serif'],
-                },
-                boxShadow: {
-                    'soft': '0 2px 15px rgba(0, 0, 0, 0.05)',
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F59E0B', // Same as tailwind text-yellow-500
+                        secondary: '#484848',
+                        neutral: '#767676',
+                        background: '#F7F7F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 15px rgba(0, 0, 0, 0.05)',
+                    }
                 }
             }
         }
-    }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    body {
-        background-color: #F7F7F7;
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    .slide-up {
-        animation: slideUp 0.3s ease-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(100%);
+        body {
+            background-color: #F7F7F7;
         }
 
-        to {
-            transform: translateY(0);
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
         }
-    }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -146,32 +146,37 @@ foreach ($rooms as $room) {
             ?>
 
             <?php if (count($hostel_images) > 0): ?>
-            <div class="relative aspect-[4/3] bg-gray-100 rounded-none">
-                <div id="slides" class="h-full overflow-x-auto scrollbar-hide snap-x snap-mandatory flex">
-                    <?php foreach ($hostel_images as $index => $image): ?>
-                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Hostel Image"
-                        class="w-full h-full object-cover flex-shrink-0 snap-center" data-index="<?php echo $index; ?>">
-                    <?php endforeach; ?>
-                </div>
+                <div class="relative aspect-[4/3] bg-gray-100 rounded-none">
+                    <div id="slides" class="h-full overflow-x-auto scrollbar-hide snap-x snap-mandatory flex">
+                        <?php foreach ($hostel_images as $index => $image): ?>
+                            <img src="<?php echo htmlspecialchars($image); ?>" alt="Hostel Image"
+                                class="w-full h-full object-cover flex-shrink-0 snap-center" data-index="<?php echo $index; ?>">
+                        <?php endforeach; ?>
+                    </div>
 
-                <!-- Modern image counter -->
-                <div class="absolute bottom-4 right-4 bg-black/60 rounded-full px-3 py-1 text-white text-sm">
-                    <span id="currentSlide">1</span>/<span><?php echo count($hostel_images); ?></span>
+                    <!-- Modern image counter -->
+                    <div class="absolute bottom-4 right-4 bg-black/60 rounded-full px-3 py-1 text-white text-sm">
+                        <span id="currentSlide">1</span>/<span><?php echo count($hostel_images); ?></span>
+                    </div>
                 </div>
-            </div>
             <?php else: ?>
-            <div class="aspect-[4/3] bg-gray-100 rounded-none flex items-center justify-center">
-                <i class="fas fa-image text-4xl text-gray-400"></i>
-            </div>
+                <div class="aspect-[4/3] bg-gray-100 rounded-none flex items-center justify-center">
+                    <i class="fas fa-image text-4xl text-gray-400"></i>
+                </div>
             <?php endif; ?>
         </section>
 
         <!-- Hostel Info Card -->
         <div class="px-4">
             <section class="bg-white rounded-2xl p-6 shadow-soft mb-4">
-                <div class="text-2xl font-bold text-secondary mb-2">
+                <div class="text-2xl font-bold text-secondary mb-2 flex justify-start -center">
                     <?php echo htmlspecialchars($hostel['hostel_name']); ?>
-
+                    <?php if (!empty($hostel['rating'])): ?>
+                        <div class="flex items-center gap-1 mb-4">
+                            <span class="text-yellow-500 text-sm">★</span>
+                            <span class="font-medium text-sm"><?php echo htmlspecialchars($hostel['rating']); ?></span>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="space-y-3 text-neutral">
@@ -182,17 +187,17 @@ foreach ($rooms as $room) {
                     </div>
 
                     <?php if (!empty($hostel['distance'])): ?>
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-walking w-5 text-center"></i>
-                        <span><?php echo htmlspecialchars($hostel['distance']); ?> km from campus</span>
-                    </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-walking w-5 text-center"></i>
+                            <span><?php echo htmlspecialchars($hostel['distance']); ?> km from campus</span>
+                        </div>
                     <?php endif; ?>
 
                     <?php if (!empty($hostel['address'])): ?>
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-map-marker-alt w-5 text-center"></i>
-                        <span><?php echo htmlspecialchars($hostel['address']); ?></span>
-                    </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-map-marker-alt w-5 text-center"></i>
+                            <span><?php echo htmlspecialchars($hostel['address']); ?></span>
+                        </div>
                     <?php endif; ?>
                 </div>
             </section>
@@ -210,15 +215,15 @@ foreach ($rooms as $room) {
             <section class="bg-white rounded-2xl p-6 shadow-soft mb-4">
                 <h2 class="text-lg font-semibold mb-4">What this place offers</h2>
                 <?php if (count($amenities) > 0): ?>
-                <div class="grid grid-cols-2 gap-4">
-                    <?php foreach ($amenities as $amenity): ?>
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-check text-primary"></i>
-                        <span
-                            class="text-neutral text-sm"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
+                    <div class="grid grid-cols-2 gap-4">
+                        <?php foreach ($amenities as $amenity): ?>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-check text-primary"></i>
+                                <span
+                                    class="text-neutral text-sm"><?php echo htmlspecialchars($amenity['amenity_name']); ?></span>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
-                </div>
                 <?php endif; ?>
             </section>
 
@@ -226,88 +231,88 @@ foreach ($rooms as $room) {
             <section class="bg-white rounded-2xl p-6 shadow-soft mb-20">
                 <h2 class="text-lg font-semibold mb-4">Available Rooms</h2>
                 <?php if (count($groupedRooms) > 0): ?>
-                <div class="space-y-6">
-                    <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
-                    <div>
-                        <h3 class="text-primary font-medium mb-3"><?php
+                    <div class="space-y-6">
+                        <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
+                            <div>
+                                <h3 class="text-primary font-medium mb-3"><?php
                                                                             $roomType = ucwords(str_replace("_", " ", $roomType));
                                                                             echo htmlspecialchars($roomType);
                                                                             ?></h3>
-                        <div class="space-y-2">
-                            <?php foreach ($roomsArray as $room): ?>
-                            <div class="flex items-center justify-between p-4 rounded-lg bg-background">
-                                <div>
-                                    <?php if (!empty($room['specification'])): ?>
-                                    <p class="text-neutral text-sm">
-                                        <?php echo htmlspecialchars($room['specification']); ?></p>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="font-semibold">
-                                    $<?php echo number_format($room['price'], 2); ?>
+                                <div class="space-y-2">
+                                    <?php foreach ($roomsArray as $room): ?>
+                                        <div class="flex items-center justify-between p-4 rounded-lg bg-background">
+                                            <div>
+                                                <?php if (!empty($room['specification'])): ?>
+                                                    <p class="text-neutral text-sm">
+                                                        <?php echo htmlspecialchars($room['specification']); ?></p>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="font-semibold">
+                                                $<?php echo number_format($room['price'], 2); ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
-                            <?php endforeach; ?>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
-                </div>
                 <?php endif; ?>
             </section>
         </div>
     </main>
 
     <script>
-    // Updated modern slider logic
-    const slidesContainer = document.getElementById("slides");
-    const slides = document.querySelectorAll("#slides img");
-    const currentSlideElement = document.getElementById("currentSlide");
+        // Updated modern slider logic
+        const slidesContainer = document.getElementById("slides");
+        const slides = document.querySelectorAll("#slides img");
+        const currentSlideElement = document.getElementById("currentSlide");
 
-    let currentIndex = 0;
+        let currentIndex = 0;
 
-    function updateSlideCounter() {
-        currentSlideElement.textContent = currentIndex + 1;
-    }
-
-    slidesContainer.addEventListener('scroll', () => {
-        const index = Math.round(slidesContainer.scrollLeft / slidesContainer.offsetWidth);
-        if (currentIndex !== index) {
-            currentIndex = index;
-            updateSlideCounter();
+        function updateSlideCounter() {
+            currentSlideElement.textContent = currentIndex + 1;
         }
-    });
 
-    // Description expand/collapse
-    const readMore = document.getElementById("readMore");
-    const descriptionText = document.getElementById("descriptionText");
-    let expanded = false;
+        slidesContainer.addEventListener('scroll', () => {
+            const index = Math.round(slidesContainer.scrollLeft / slidesContainer.offsetWidth);
+            if (currentIndex !== index) {
+                currentIndex = index;
+                updateSlideCounter();
+            }
+        });
 
-    readMore.addEventListener("click", function() {
-        if (!expanded) {
-            descriptionText.classList.remove("line-clamp-3");
-            readMore.textContent = "Show less";
-        } else {
-            descriptionText.classList.add("line-clamp-3");
-            readMore.textContent = "Read more";
-        }
-        expanded = !expanded;
-    });
+        // Description expand/collapse
+        const readMore = document.getElementById("readMore");
+        const descriptionText = document.getElementById("descriptionText");
+        let expanded = false;
+
+        readMore.addEventListener("click", function() {
+            if (!expanded) {
+                descriptionText.classList.remove("line-clamp-3");
+                readMore.textContent = "Show less";
+            } else {
+                descriptionText.classList.add("line-clamp-3");
+                readMore.textContent = "Read more";
+            }
+            expanded = !expanded;
+        });
     </script>
 
     <script>
-    function shareHostel() {
-        if (navigator.share) {
-            navigator.share({
-                    title: '<?php echo htmlspecialchars($hostel['hostel_name']); ?>',
-                    url: window.location.href
-                })
-                .catch(console.error);
-        } else {
-            // Fallback: Copy to clipboard
-            navigator.clipboard.writeText(window.location.href)
-                .then(() => alert('Link copied to clipboard!'))
-                .catch(console.error);
+        function shareHostel() {
+            if (navigator.share) {
+                navigator.share({
+                        title: '<?php echo htmlspecialchars($hostel['hostel_name']); ?>',
+                        url: window.location.href
+                    })
+                    .catch(console.error);
+            } else {
+                // Fallback: Copy to clipboard
+                navigator.clipboard.writeText(window.location.href)
+                    .then(() => alert('Link copied to clipboard!'))
+                    .catch(console.error);
+            }
         }
-    }
     </script>
 
 </body>
