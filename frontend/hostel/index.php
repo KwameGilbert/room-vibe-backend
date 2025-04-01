@@ -108,9 +108,9 @@ foreach ($rooms as $room) {
     <!-- Modern floating header -->
     <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 px-4 py-3">
         <div class="max-w-2xl mx-auto flex items-center justify-between">
-            <div class="flex items-center"> 
+            <div class="flex items-center">
                 <button onclick="window.history.back()"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
+                    class="w-10 h-10 flex items-center justify-center rounded bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
                     <i class="fas fa-arrow-left text-secondary"></i>
                 </button>
                 <h1 class="text-lg font-semibold text-primary mb-2 max-w-[100%]">
