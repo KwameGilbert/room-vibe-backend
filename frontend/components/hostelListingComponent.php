@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-session_start();
+    session_start();
 }
 
 
@@ -47,128 +47,128 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Check if hostel is in wishlist
         $inWishlist = in_array($hostel['id'], $wishlistHostels);
     ?>
-    <a href="hostel/?id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
-        <div class="w-full flex gap-4 border-b border-t border-slate-300 py-5">
-            <img alt="<?= htmlspecialchars($hostel['hostel_name']) ?>" loading="lazy" width="150" height="100"
-                decoding="async" class="rounded-lg" src="<?= htmlspecialchars($image) ?>">
-            <div class="w-full pr-4">
-                <h1 class="text-lg font-semibold"><?= htmlspecialchars($hostel['hostel_name']) ?></h1>
-                <p class="text-sm text-gray-500 font-semibold">
-                    <?= htmlspecialchars($hostel['school_name']) ?> - <?= htmlspecialchars($hostel['location']) ?>
-                </p>
+        <a href="hostel/?id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
+            <div class="w-full flex gap-2 border-b border-t border-slate-300 py-5">
+                <img alt="<?= htmlspecialchars($hostel['hostel_name']) ?>" loading="lazy" width="150" height="100"
+                    decoding="async" class="rounded-lg" src="<?= htmlspecialchars($image) ?>">
+                <div class="w-full pr-4">
+                    <h1 class="text-lg font-semibold"><?= htmlspecialchars($hostel['hostel_name']) ?></h1>
+                    <p class="text-sm text-gray-500 font-semibold">
+                        <?= htmlspecialchars($hostel['school_name']) ?> - <?= htmlspecialchars($hostel['location']) ?>
+                    </p>
 
-                <!-- Rating and distance container -->
-                <div class="flex items-center justify-between gap-3 pt-1">
-                    <!-- Display filled or outline stars based on rating -->
-                    <div class="flex">
-                        <?php for ($i = 0; $i < 5; $i++): ?>
-                        <?php if ($i < $rating): ?>
-                        <i class="fas fa-star text-yellow-500"></i>
-                        <?php else: ?>
-                        <i class="far fa-star text-yellow-500"></i>
-                        <?php endif; ?>
-                        <?php endfor; ?>
+                    <!-- Rating and distance container -->
+                    <div class="flex items-center justify-between gap-3 pt-1">
+                        <!-- Display filled or outline stars based on rating -->
+                        <div class="flex">
+                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                <?php if ($i < $rating): ?>
+                                    <i class="fas fa-star text-yellow-500"></i>
+                                <?php else: ?>
+                                    <i class="far fa-star text-yellow-500"></i>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                        </div>
+                        <!-- Display distance with a map-marker icon -->
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <?= htmlspecialchars($distance) ?> km
+                        </div>
                     </div>
-                    <!-- Display distance with a map-marker icon -->
-                    <div class="flex items-center text-gray-500 text-sm">
-                        <i class="fas fa-map-marker-alt mr-1"></i>
-                        <?= htmlspecialchars($distance) ?> km
-                    </div>
-                </div>
 
-                <div class="flex items-center justify-between pt-1">
-                    <button class="<?= $statusClass ?> px-2 text-white font-semibold rounded-md">
-                        <?= $statusText ?>
-                    </button>
-                    <!-- Wishlist star (clickable) -->
-                    <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-2xl cursor-pointer wishlist-toggle"
-                        data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>">
-                    </i>
+                    <div class="flex items-center justify-between pt-1">
+                        <button class="<?= $statusClass ?> px-2 text-white font-semibold rounded-md">
+                            <?= $statusText ?>
+                        </button>
+                        <!-- Wishlist star (clickable) -->
+                        <i class="<?= $inWishlist ? 'fas' : 'far' ?> fa-star text-yellow-500 text-2xl cursor-pointer wishlist-toggle"
+                            data-hostel-id="<?= $hostel['id'] ?>" data-in-wishlist="<?= $inWishlist ? 'true' : 'false' ?>">
+                        </i>
+                    </div>
                 </div>
             </div>
-        </div>
-    </a>
+        </a>
     <?php endforeach; ?>
 </div>
 
 <script>
-(function() {
-    // Create (or get) the notification modal element only once.
-    let notificationModalListing = document.getElementById('notification-modal');
-    if (!notificationModalListing) {
-        notificationModalListing = document.createElement('div');
-        notificationModalListing.id = 'notification-modal';
-        notificationModalListing.className =
-            'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
-        notificationModalListing.style.transition = 'transform 0.3s ease-in-out';
-        document.body.appendChild(notificationModalListing);
-    }
+    (function() {
+        // Create (or get) the notification modal element only once.
+        let notificationModalListing = document.getElementById('notification-modal');
+        if (!notificationModalListing) {
+            notificationModalListing = document.createElement('div');
+            notificationModalListing.id = 'notification-modal';
+            notificationModalListing.className =
+                'fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50';
+            notificationModalListing.style.transition = 'transform 0.3s ease-in-out';
+            document.body.appendChild(notificationModalListing);
+        }
 
-    // Define the wishlist toggle function.
-    function toggleWishlistHandler(event) {
-        event.preventDefault();
+        // Define the wishlist toggle function.
+        function toggleWishlistHandler(event) {
+            event.preventDefault();
 
-        let element = this;
-        let hostelId = element.getAttribute("data-hostel-id");
-        let inWishlist = element.getAttribute("data-in-wishlist") === "true";
+            let element = this;
+            let hostelId = element.getAttribute("data-hostel-id");
+            let inWishlist = element.getAttribute("data-in-wishlist") === "true";
 
-        fetch("./wishlist/wishlistHandler.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ? 1 : 0}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Toggle star icon
-                    element.classList.toggle("fas");
-                    element.classList.toggle("far");
-                    element.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
+            fetch("./wishlist/wishlistHandler.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `hostel_id=${hostelId}&in_wishlist=${inWishlist ? 1 : 0}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Toggle star icon
+                        element.classList.toggle("fas");
+                        element.classList.toggle("far");
+                        element.setAttribute("data-in-wishlist", inWishlist ? "false" : "true");
 
-                    // Show success notification
-                    notificationModalListing.innerHTML = `
+                        // Show success notification
+                        notificationModalListing.innerHTML = `
                     <div class="bg-green-500 text-white px-4 py-3 text-center shadow-lg">
                         <i class="fas fa-check-circle mr-3"></i>
                         ${data.message}
                     </div>
                 `;
-                } else {
-                    // Show error notification
-                    notificationModalListing.innerHTML = `
+                    } else {
+                        // Show error notification
+                        notificationModalListing.innerHTML = `
                     <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
                         <i class="fas fa-exclamation-circle mr-3"></i>
                         ${data.message || "Operation failed."}
                     </div>
                 `;
-                }
-                notificationModalListing.style.transform = 'translateY(0)';
-                setTimeout(() => {
-                    notificationModalListing.style.transform = 'translateY(-100%)';
-                }, 2000);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                notificationModalListing.innerHTML = `
+                    }
+                    notificationModalListing.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        notificationModalListing.style.transform = 'translateY(-100%)';
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    notificationModalListing.innerHTML = `
                 <div class="bg-red-500 text-white px-4 py-3 text-center shadow-lg">
                     Operation failed.
                 </div>
             `;
-                notificationModalListing.style.transform = 'translateY(0)';
-                setTimeout(() => {
-                    notificationModalListing.style.transform = 'translateY(-100%)';
-                }, 2000);
-            });
-    }
-
-    // Attach the event listener only if one isn't already attached.
-    const wishlistToggles = document.querySelectorAll('.wishlist-toggle');
-    wishlistToggles.forEach(el => {
-        if (!el.dataset.listenerAttached) {
-            el.addEventListener('click', toggleWishlistHandler);
-            el.dataset.listenerAttached = 'true';
+                    notificationModalListing.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        notificationModalListing.style.transform = 'translateY(-100%)';
+                    }, 2000);
+                });
         }
-    });
-})();
+
+        // Attach the event listener only if one isn't already attached.
+        const wishlistToggles = document.querySelectorAll('.wishlist-toggle');
+        wishlistToggles.forEach(el => {
+            if (!el.dataset.listenerAttached) {
+                el.addEventListener('click', toggleWishlistHandler);
+                el.dataset.listenerAttached = 'true';
+            }
+        });
+    })();
 </script>

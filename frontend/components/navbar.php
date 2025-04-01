@@ -1,6 +1,6 @@
 <!-- Bottom Navigation -->
-<nav class="fixed bottom-0 left-0 right-0 bg-white shadow-md 2xl:hidden z-50 px-3">
-    <ul class="flex justify-between items-center w-full h-full py-2 px-2">
+<nav class="fixed bottom-0 left-0 right-0 bg-white shadow-md 2xl:hidden z-50 px-2">
+    <ul class="flex justify-around items-center w-full h-full py-2 px-0">
         <li class="nav-link explore cursor-pointer select-none" data-page="explore"
             style="-webkit-tap-highlight-color: transparent; -webkit-touch-callout: none;">
             <div class="flex flex-col items-center">
