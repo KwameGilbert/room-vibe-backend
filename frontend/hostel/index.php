@@ -173,12 +173,7 @@ foreach ($rooms as $room) {
                     <?php echo htmlspecialchars($hostel['hostel_name']); ?>
                 </h1>
 
-                <?php if (!empty($hostel['rating'])): ?>
-                <div class="flex items-center gap-1 mb-4">
-                    <span class="text-yellow-500 text-sm">★</span>
-                    <span class="font-medium"><?php echo htmlspecialchars($hostel['rating']); ?></span>
-                </div>
-                <?php endif; ?>
+
 
                 <div class="space-y-3 text-neutral">
                     <div class="flex items-center gap-3">
