@@ -235,7 +235,10 @@ foreach ($rooms as $room) {
                 <div class="space-y-6">
                     <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
                     <div>
-                        <h3 class="text-primary font-medium mb-3"><?php echo htmlspecialchars($roomType); ?></h3>
+                        <h3 class="text-primary font-medium mb-3"><?php
+                                                                            $roomType = str_replace("_", " ", $roomType);
+                                                                            echo htmlspecialchars($roomType);
+                                                                            ?></h3>
                         <div class="space-y-2">
                             <?php foreach ($roomsArray as $room): ?>
                             <div class="flex items-center justify-between p-4 rounded-lg bg-background">
