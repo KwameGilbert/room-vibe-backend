@@ -110,7 +110,7 @@ foreach ($rooms as $room) {
         <div class="max-w-2xl mx-auto flex items-center justify-between">
             <div class="flex items-center">
                 <button onclick="window.history.back()"
-                    class="flex items-center justify-center rounded hover:bg-gray-50 transition-colors">
+                    class="flex items-center justify-center w-10 rounded hover:bg-gray-50 transition-colors">
                     <i class="fas fa-arrow-left text-primary"></i>
                 </button>
                 <h1 class="text-lg font-semibold text-secondary max-w-[100%]">
