@@ -56,7 +56,7 @@ foreach ($rooms as $room) {
         theme: {
             extend: {
                 colors: {
-                    primary: '#FF385C', // Modern Airbnb-style red
+                    primary: '#F59E0B', // Same as tailwind text-yellow-500
                     secondary: '#484848',
                     neutral: '#767676',
                     background: '#F7F7F7'
