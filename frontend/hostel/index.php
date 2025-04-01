@@ -112,15 +112,33 @@ foreach ($rooms as $room) {
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
                 <i class="fas fa-arrow-left text-secondary"></i>
             </button>
-            <h1 class="text-xl font-bold text-primary mb-2">
+            <h1 class="text-lg font-semibold text-primary mb-2 max-w-[100%]">
                 <?php echo htmlspecialchars($hostel['hostel_name']); ?>
             </h1>
             <button onclick="shareHostel()"
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
-                <i class="fas fa-share-alt text-secondary"></i>
+                class="flex items-center bg-primary text-white px-3 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none text-sm">
+                <i class="fas fa-share-alt mr-2"></i>
+                <span>Share</span>
             </button>
         </div>
     </header>
+    <header class="px-4 py-3 bg-white shadow-sm sticky top-0 z-50">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="text-lg font-semibold max-w-[100%]">
+                    Sunrise Hostel</h1>
+            </div>
+            <button onclick="shareHostel()"
+                class="flex items-center bg-primary text-white px-3 py-2 rounded-full shadow hover:bg-orange-600 focus:outline-none text-sm">
+                <i class="fas fa-share-alt mr-2"></i>
+                <span>Share</span>
+            </button>
+        </div>
+    </header>
+
 
     <!-- Main content with padding for fixed header -->
     <main class="pt-16 pb-20 max-w-2xl mx-auto">
