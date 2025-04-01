@@ -6,5 +6,5 @@ git add -A
 git commit --allow-empty -m "%commit_message%"
 git push
 echo "Done Commiting"
-timeout /t 60 > nul
+timeout /t 120 > nul
 goto loop
