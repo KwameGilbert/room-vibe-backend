@@ -122,11 +122,12 @@ foreach ($rooms as $room) {
             </button>
         </div>
     </header>
-    <header class="px-4 py-3 bg-white shadow-sm sticky top-0 z-50">
+    <!-- <header class="px-4 py-3 bg-white shadow-sm sticky top-0 z-50">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <button onclick="window.history.back()" class="text-primary text-2xl mr-3 focus:outline-none">
-                    <i class="fas fa-arrow-left"></i>
+                <button onclick="window.history.back()"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-arrow-left text-secondary"></i>
                 </button>
                 <h1 class="text-lg font-semibold max-w-[100%]">
                     Sunrise Hostel</h1>
@@ -137,7 +138,7 @@ foreach ($rooms as $room) {
                 <span>Share</span>
             </button>
         </div>
-    </header>
+    </header> -->
 
 
     <!-- Main content with padding for fixed header -->
