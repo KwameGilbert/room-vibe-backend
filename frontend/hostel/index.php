@@ -112,6 +112,9 @@ foreach ($rooms as $room) {
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
                 <i class="fas fa-arrow-left text-secondary"></i>
             </button>
+            <h1 class="text-2xl font-bold text-primary mb-2">
+                <?php echo htmlspecialchars($hostel['hostel_name']); ?>
+            </h1>
             <button onclick="shareHostel()"
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 shadow-soft hover:bg-gray-50 transition-colors">
                 <i class="fas fa-share-alt text-secondary"></i>
