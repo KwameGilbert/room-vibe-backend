@@ -58,8 +58,6 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     <main class="max-w-2xl mx-auto pt-20 px-4 pb-8">
         <!-- Hostel Info -->
         <div class="bg-white rounded-lg p-6 mb-6 shadow flex">
-            <img src="<?php echo htmlspecialchars(file_exists("./images/hostels/{$hostel_id}/1.jpg") ? "./images/hostels/{$hostel_id}/1.jpg" : "./images/hostels/default-image.jpg"); ?>"
-                alt="Hostel Image" class="w-1/2 h-full object-cover flex-shrink-0">
             <div class="w-1/2 p-4">
                 <h2 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($hostel['hostel_name']); ?>
                 </h2>
@@ -69,6 +67,8 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                     <span class="font-medium text-sm"><?php echo htmlspecialchars($hostel['rating']); ?></span>
                 </div>
             </div>
+            <img src="<?php echo htmlspecialchars(file_exists("./images/hostels/{$hostel_id}/1.jpg") ? "./images/hostels/{$hostel_id}/1.jpg" : "./images/hostels/default-image.jpg"); ?>"
+                alt="Hostel Image" class="w-1/2 h-full object-cover flex-shrink-0 rounded-l-lg">
         </div>
 
         <!-- Booking Form -->
