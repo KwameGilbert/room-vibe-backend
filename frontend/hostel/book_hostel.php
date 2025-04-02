@@ -57,18 +57,45 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     <!-- Main Content -->
     <main class="max-w-2xl mx-auto pt-20 px-4 pb-8">
         <!-- Hostel Info -->
-        <div class="bg-white rounded-lg p-6 mb-6 shadow flex">
-            <div class="w-1/2 p-4">
-                <h2 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($hostel['hostel_name']); ?>
-                </h2>
-                <p class="text-gray-600 mt-2"><?php echo htmlspecialchars($hostel['school_name']); ?></p>
-                <div class="flex items-center gap-1 mt-2">
-                    <span class="text-yellow-500 text-sm">★</span>
-                    <span class="font-medium text-sm"><?php echo htmlspecialchars($hostel['rating']); ?></span>
+        <div class="w-full flex gap-2 border border-slate-300 rounded-lg bg-white p-4 mb-6 shadow">
+            <img src="<?php echo htmlspecialchars(file_exists("./images/hostels/{$hostel_id}/1.jpg") ? "./images/hostels/{$hostel_id}/1.jpg" : "./images/hostels/default-image.jpg"); ?>"
+                alt="<?= htmlspecialchars($hostel['hostel_name']) ?>"
+                class="w-[150px] h-[100px] rounded-lg object-cover">
+            <div class="w-full pr-4">
+                <h2 class="text-lg font-semibold"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
+                <p class="text-sm text-gray-500 font-semibold">
+                    <?= htmlspecialchars($hostel['school_name']) ?> - <?= htmlspecialchars($hostel['location']) ?>
+                </p>
+
+                <!-- Rating and distance container -->
+                <div class="flex items-center justify-between gap-3 pt-1">
+                    <!-- Display filled stars based on rating -->
+                    <div class="flex">
+                        <?php
+                        $rating = isset($hostel['rating']) ? floor($hostel['rating']) : 0;
+                        for ($i = 0; $i < 5; $i++):
+                        ?>
+                        <?php if ($i < $rating): ?>
+                        <i class="fas fa-star text-yellow-500"></i>
+                        <?php else: ?>
+                        <i class="far fa-star text-yellow-500"></i>
+                        <?php endif; ?>
+                        <?php endfor; ?>
+                    </div>
+                    <!-- Display distance with a map-marker icon -->
+                    <div class="flex items-center text-gray-500 text-sm">
+                        <i class="fas fa-map-marker-alt mr-1"></i>
+                        <?= htmlspecialchars($hostel['distance'] ?? 'N/A') ?> km
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-1">
+                    <button
+                        class="<?= ($hostel['accomodation_status'] == 1) ? 'bg-green-500' : 'bg-red-500' ?> px-2 text-white font-semibold rounded-md">
+                        <?= ($hostel['accomodation_status'] == 1) ? 'Available' : 'Full' ?>
+                    </button>
                 </div>
             </div>
-            <img src="<?php echo htmlspecialchars(file_exists("./images/hostels/{$hostel_id}/1.jpg") ? "./images/hostels/{$hostel_id}/1.jpg" : "./images/hostels/default-image.jpg"); ?>"
-                alt="Hostel Image" class="w-1/2 h-full object-cover flex-shrink-0 rounded-l-lg">
         </div>
 
         <!-- Booking Form -->
