@@ -57,14 +57,17 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     <!-- Main Content -->
     <main class="max-w-2xl mx-auto pt-20 px-4 pb-8">
         <!-- Hostel Info -->
-        <div class="bg-white rounded-lg p-6 mb-6 shadow">
-            <h2 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
-            <p class="text-gray-600 mt-2"><?php echo htmlspecialchars($hostel['school_name']); ?></p>
-            <img src="<?php echo htmlspecialchars($hostel['image'] ? $hostel['image'] : "./images/hostels/default-image.jpg"); ?>"
-                alt="Hostel Image" class="w-full h-full object-cover flex-shrink-0">
-            <div class="flex items-center gap-1 mt-2">
-                <span class="text-yellow-500 text-sm">★</span>
-                <span class="font-medium text-sm"><?php echo htmlspecialchars($hostel['rating']); ?></span>
+        <div class="bg-white rounded-lg p-6 mb-6 shadow flex">
+            <img src="<?php echo htmlspecialchars(file_exists("./images/hostels/{$hostel_id}/1.jpg") ? "./images/hostels/{$hostel_id}/1.jpg" : "./images/hostels/default-image.jpg"); ?>"
+                alt="Hostel Image" class="w-1/2 h-full object-cover flex-shrink-0">
+            <div class="w-1/2 p-4">
+                <h2 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($hostel['hostel_name']); ?>
+                </h2>
+                <p class="text-gray-600 mt-2"><?php echo htmlspecialchars($hostel['school_name']); ?></p>
+                <div class="flex items-center gap-1 mt-2">
+                    <span class="text-yellow-500 text-sm">★</span>
+                    <span class="font-medium text-sm"><?php echo htmlspecialchars($hostel['rating']); ?></span>
+                </div>
             </div>
         </div>
 
