@@ -82,6 +82,39 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
+                <!-- Academic Information -->
+                <div>
+                    <h3 class="font-semibold mb-3">Academic Information</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Program</label>
+                            <input type="text" name="program" required placeholder="Enter your program" 
+                                   class="w-full p-2 border rounded-lg focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Year of Study</label>
+                            <select name="yearOfStudy" required 
+                                    class="w-full p-2 border rounded-lg focus:ring-primary focus:border-primary">
+                                <option value="">Select year of study</option>
+                                <option value="1">First Year</option>
+                                <option value="2">Second Year</option>
+                                <option value="3">Third Year</option>
+                                <option value="4">Fourth Year</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Academic Session</label>
+                            <select name="session" required 
+                                    class="w-full p-2 border rounded-lg focus:ring-primary focus:border-primary">
+                                <option value="">Select academic session</option>
+                                <option value="2024/2025 Fulltime">2024/2025 Fulltime</option>
+                                <option value="2025/2026 Fulltime">2025/2026 Fulltime</option>
+                                <option value="Sandwich">Sandwich</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Contact Information -->
                 <div>
                     <h3 class="font-semibold mb-3">Contact Information</h3>
