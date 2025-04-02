@@ -60,7 +60,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         <div class="bg-white rounded-lg p-6 mb-6 shadow">
             <h2 class="text-2xl font-bold text-gray-900"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>
             <p class="text-gray-600 mt-2"><?php echo htmlspecialchars($hostel['school_name']); ?></p>
-            <img src="<?php echo htmlspecialchars($hostel['image']): "./images/hostels/default-image.jpg" ; ?>"
+            <img src="<?php echo htmlspecialchars($hostel['image'] ? $hostel['image'] : "./images/hostels/default-image.jpg"); ?>"
                 alt="Hostel Image" class="w-full h-full object-cover flex-shrink-0">
             <div class="flex items-center gap-1 mt-2">
                 <span class="text-yellow-500 text-sm">★</span>
