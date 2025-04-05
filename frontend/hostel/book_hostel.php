@@ -352,7 +352,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
             data.rooms.forEach(room => {
                 roomSelect.innerHTML += `
-                    <option value="${room.room_id}" data-price="${room.price}" data-room_number="$room.room_number{}"
+                    <option value="${room.id}" data-price="${room.price}" data-room_number="${room.room_number}">
                         Room ${room.room_number} ${room.specification ? '- ' + room.specification : ''}
                     </option>`;
             });

@@ -92,6 +92,7 @@ try {
             paid, 
             created_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+  
     ");
     
     // Execute the statement with the form data
