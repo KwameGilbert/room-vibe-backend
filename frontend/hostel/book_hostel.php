@@ -499,7 +499,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
             const result = await response.json();
             if (result.success) {
                 alert('Booking successful!');
-                window.location.href = 'booking_confirmation.php?id=' + result.booking_id;
+                window.location.href = 'booking_details.php?id=' + result.booking_id;
             } else {
                 throw new Error(result.message || 'Booking failed');
             }
