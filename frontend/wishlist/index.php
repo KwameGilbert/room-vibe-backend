@@ -25,7 +25,7 @@ $wishlistItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div id="wishlistheader">
-    <h1 class="text-xl font-semibold text-center mt-4 mb-4">My Wishlist</h1>
+    <h1 class="bg-orange-400 text-white text-xl font-semibold text-center py-3 mb-4">My Wishlist</h1>
 </div>
 
 <div id="wishlist" class="grid grid-cols-1 px-3 mb-20">

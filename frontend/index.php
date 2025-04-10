@@ -10,8 +10,28 @@ $student_id = $_SESSION['student_id'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Vibe</title>
-    <?php include './components/links.php'; ?>
-    <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <?php include_once __DIR__ . "/includes/links.php"; ?>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configurations -->
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'poppins': ['Poppins', 'sans-serif']
+                },
+                colors: {
+                    'primary': #fd7e14,
+                    'primary-dark': #e76b00,
+                    'secondary': #fbbf24,
+                    'baby-powder': #FFFFFC
+                }
+            }
+        }
+    }
+    </script>
 </head>
 
 <body class="bg-gray-100">
@@ -20,20 +40,9 @@ $student_id = $_SESSION['student_id'];
 
     <?php include './components/navbar.php' ?>
 
-    <script src="./js/index.min.js"></script>
+    <script src="./scripts/index.min.js"></script>
 
-    <script>
-    // Check if Service Workers are supported
-    // if ('serviceWorker' in navigator) {
-    //     window.addEventListener('load', () => {
-    //         navigator.serviceWorker.register('./service-worker.min.js').then((registration) => {
-    //             console.log('Service Worker registered successfully with scope: ', registration.scope);
-    //         }).catch((error) => {
-    //             console.log('Service Worker registration failed: ', error);
-    //         });
-    //     });
-    // };
-    </script>
+
 </body>
 
 </html>

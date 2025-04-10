@@ -106,7 +106,7 @@ foreach ($rooms as $room) {
 
 <body class="font-sans text-secondary antialiased">
     <!-- Modern floating header -->
-    <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 px-4 py-3">
+    <header class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 p-3">
         <div class="max-w-2xl mx-auto flex items-center justify-between">
             <div class="flex items-center">
                 <button onclick="window.history.back()"
@@ -270,7 +270,7 @@ foreach ($rooms as $room) {
     <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4">
         <div class="max-w-2xl mx-auto">
             <button onclick="window.location.href='./book_hostel.php?id=<?php echo htmlspecialchars($hostel_id); ?>'"
-                class="w-full bg-primary hover:bg-orange-600 text-white font-bold py-4 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                class="w-full bg-primary hover:bg-primary-500 text-white font-bold py-4 px-4 rounded-lg transition duration-200 flex items-center justify-center">
                 <i class="fas fa-calendar-check mr-2"></i>
                 Book Now
             </button>

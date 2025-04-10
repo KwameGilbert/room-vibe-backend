@@ -37,7 +37,7 @@ $wishlist = $stmt->fetch(PDO::FETCH_ASSOC)['wishlist'] ?? 0;
 $profilePicture = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
 
 // For demo: assume the student record has a 'verified' field
-$verified = $student['verified'] ?? 0;
+$verified = $student['verified'] ?? 1;
 
 ?>
 <!DOCTYPE html>
@@ -47,10 +47,11 @@ $verified = $student['verified'] ?? 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Profile</title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind CSS -->
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configurations -->
     <script>
     tailwind.config = {
         theme: {
@@ -59,15 +60,16 @@ $verified = $student['verified'] ?? 0;
                     'poppins': ['Poppins', 'sans-serif']
                 },
                 colors: {
-                    'primary': '#fd7e14',
-                    'yellow': '#fbbf24',
-                    /* using Tailwind yellow or your custom value */
-                    'graycustom': '#4a4a4a'
+                    'primary': #fd7e14,
+                    'primary-dark': #e76b00,
+                    'secondary': #fbbf24,
+                    'baby-powder': #FFFFFC
                 }
             }
         }
     }
     </script>
+
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">
@@ -77,13 +79,14 @@ $verified = $student['verified'] ?? 0;
     </div>
 
     <!-- Profile Header -->
-    <header class="bg-white shadow">
+    <header class="bg-baby-powder shadow">
         <div class="max-w-4xl mx-auto px-4 py-2 flex items-center">
             <!-- Student Profile Picture -->
             <div class="relative">
-                <img class="w-16 h-16 rounded-full object-cover border-2 border-yellow-500"
+                <img class="w-16 h-16 rounded-full object-cover border-2 border-secondary-500"
                     src="<?php echo htmlspecialchars($profilePicture); ?>" alt="Profile Picture" />
-                <span class="absolute bottom-0 right-0 w-4 h-4 bg-yellow-500 rounded-full border-2 border-white"></span>
+                <span
+                    class="absolute bottom-0 right-0 w-4 h-4 bg-secondary-500 rounded-full border-2 border-white"></span>
             </div>
             <!-- Name and Email -->
             <div class="ml-4">
@@ -92,7 +95,7 @@ $verified = $student['verified'] ?? 0;
                 </h2>
                 <p class="text-gray-600 text-sm"><?php echo htmlspecialchars($student['email']); ?></p>
                 <?php if (!empty($student['verified']) && $student['verified'] == 1): ?>
-                <span class="text-xs bg-green-100 text-yellow-700 px-2 py-1 rounded-full mt-1 inline-block">
+                <span class="text-xs bg-green-100 text-secondary-700 px-2 py-1 rounded-full mt-1 inline-block">
                     <i class="fas fa-check-circle mr-1"></i>Verified Student
                 </span>
                 <?php endif; ?>
@@ -102,13 +105,14 @@ $verified = $student['verified'] ?? 0;
 
     <!-- Promotional Card -->
     <section class="max-w-4xl mx-auto px-4 mt-6">
-        <div class="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 shadow rounded-lg p-6 text-center">
+        <div
+            class="bg-gradient-to-r from-secondary-400 via-secondary-500 to-secondary-600 shadow rounded-lg p-6 text-center">
             <h1 class="text-3xl font-bold text-white">RoomVibe</h1>
             <p class="mt-2 text-white text-opacity-90">
                 Hostel bookings and accommodation just got easier on your campus.
             </p>
             <button
-                class="mt-4 bg-white text-yellow-600 hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition duration-200 shadow-sm">
+                class="mt-4 bg-white text-secondary-600 hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition duration-200 shadow-sm">
                 Book Now
             </button>
         </div>
@@ -118,15 +122,15 @@ $verified = $student['verified'] ?? 0;
     <section class="max-w-4xl mx-auto px-4 mt-6">
         <div class="grid grid-cols-3 gap-4 text-center">
             <div class="bg-white shadow rounded-lg p-4">
-                <p class="text-3xl font-bold text-yellow-500"><?php echo $bookings; ?></p>
+                <p class="text-3xl font-bold text-secondary-500"><?php echo $bookings; ?></p>
                 <p class="text-sm text-gray-600">Bookings</p>
             </div>
             <div class="bg-white shadow rounded-lg p-4">
-                <p class="text-3xl font-bold text-yellow-500"><?php echo $reviews; ?></p>
+                <p class="text-3xl font-bold text-secondary-500"><?php echo $reviews; ?></p>
                 <p class="text-sm text-gray-600">Reviews</p>
             </div>
             <div class="bg-white shadow rounded-lg p-4">
-                <p class="text-3xl font-bold text-yellow-500"><?php echo $wishlist; ?></p>
+                <p class="text-3xl font-bold text-secondary-500"><?php echo $wishlist; ?></p>
                 <p class="text-sm text-gray-600">Wishlist</p>
             </div>
         </div>
@@ -138,8 +142,8 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('personal-info')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-user-circle text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-user-circle text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Personal Info</span>
                     </div>
@@ -149,8 +153,8 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('booking-history')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-history text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-history text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Booking History</span>
                     </div>
@@ -160,8 +164,8 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('payment-methods')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-credit-card text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-credit-card text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Payment Methods</span>
                     </div>
@@ -171,11 +175,11 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('referral-program')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-gift text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-gift text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Referral Program</span>
-                        <span class="ml-2 text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">New</span>
+                        <span class="ml-2 text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full">New</span>
                     </div>
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </div>
@@ -183,8 +187,8 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('contact-us')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-envelope text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-envelope text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Contact Us</span>
                     </div>
@@ -194,8 +198,8 @@ $verified = $student['verified'] ?? 0;
             <li class="p-4 hover:bg-gray-50 cursor-pointer transition duration-200">
                 <div class="flex justify-between items-center" onclick="loadPage('help-support')">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-question-circle text-yellow-500"></i>
+                        <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center">
+                            <i class="fas fa-question-circle text-secondary-500"></i>
                         </div>
                         <span class="text-gray-800 font-medium ml-3">Help & Support</span>
                     </div>

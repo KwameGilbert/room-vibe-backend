@@ -8,7 +8,6 @@
     <!-- Tailwind CSS CDN for demonstration purposes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-    /* Set background image and cover entire viewport */
     body {
         background: url('./images/hero-bg.cd29a761.jpg') no-repeat center center/cover;
     }
@@ -44,7 +43,7 @@
         <!-- Call-to-Action Buttons at bottom -->
         <div class="w-full text-center">
             <div class="flex flex-col gap-4">
-                <a href="./signup/" class="bg-[#fd7e14] hover:bg-orange-600 text-white py-3 rounded-lg font-semibold">
+                <a href="./signup/" class="bg-[#fd7e14] hover:bg-orange-500 text-white py-3 rounded-lg font-semibold">
                     Sign Up Now
                 </a>
                 <a href="./login/" class="bg-white hover:bg-gray-200 text-[#fd7e14] py-3 rounded-lg font-semibold">
@@ -53,15 +52,6 @@
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        // Example: add a class to the storyset image after 1 second if needed.
-        setTimeout(() => {
-            document.querySelector('#storyset').classList.add('animated');
-        }, 1000);
-    });
-    </script>
+    <?php include_once __DIR__ . '/includes/serviceworkers.php'; ?>
 </body>
-
 </html>

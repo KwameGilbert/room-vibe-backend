@@ -4,31 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Login</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    'poppins': ['Poppins', 'sans-serif']
-                },
-                colors: {
-                    'primary': '#fd7e14',
-                    'primary-dark': '#e76b00'
-                }
-            }
-        }
-    }
-    </script>
+    <?= include_once __DIR__ . '/../includes/links.php';?>
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">
-    
+
     <!-- Notification Container -->
     <div id="notification"
         class="fixed top-0 left-0 right-0 transform -translate-y-full transition-transform duration-300 ease-in-out z-50">

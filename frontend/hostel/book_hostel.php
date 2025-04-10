@@ -42,7 +42,6 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Paystack Inline Script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
-
     <style>
     .loading {
         position: relative;
@@ -77,7 +76,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <body class="bg-gray-100">
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-md shadow-sm z-50 p-4 pt-0">
+    <header class="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-md shadow-sm z-50 p-4">
         <div class="max-w-2xl mx-auto flex items-center justify-between">
             <button onclick="window.history.back()" class="p-2 text-yellow-500 hover:text-yellow-800">
                 <i class="fas fa-arrow-left"></i>
@@ -499,7 +498,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
             const result = await response.json();
             if (result.success) {
                 alert('Booking successful!');
-                window.location.href = 'booking_details.php?id=' + result.booking_id;
+                window.location.href = './../booking/booking_details.php?id=' + result.booking_id;
             } else {
                 throw new Error(result.message || 'Booking failed');
             }
