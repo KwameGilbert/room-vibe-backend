@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Function to display loading indicator
     function showLoading() {
-        return '<div class="text-center text-yellow-500 py-4 h-screen flex items-center justify-center"><i class="fas fa-spinner fa-spin fa-3x"></i><p class="ml-3">Loading...</p></div>';
+        return '<div class="text-center text-orange-400 py-4 h-screen flex items-center justify-center"><i class="fas fa-spinner fa-spin fa-3x"></i><p class="ml-3">Loading...</p></div>';
     }
     
     // Function to display error message

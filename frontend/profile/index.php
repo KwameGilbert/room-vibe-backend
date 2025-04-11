@@ -48,28 +48,8 @@ $verified = $student['verified'] ?? 1;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Profile</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Tailwind Configurations -->
-    <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    'poppins': ['Poppins', 'sans-serif']
-                },
-                colors: {
-                    'primary': #fd7e14,
-                    'primary-dark': #e76b00,
-                    'secondary': #fbbf24,
-                    'baby-powder': #FFFFFC
-                }
-            }
-        }
-    }
-    </script>
-
+    <?php include_once "./../includes/links.php"; ?>
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">
