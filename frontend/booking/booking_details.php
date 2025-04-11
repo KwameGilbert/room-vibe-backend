@@ -265,12 +265,54 @@ function safeOutput($value) {
                 <a href="./../" class="flex-1 py-3 text-center bg-gray-200 text-gray-800 rounded-lg font-semibold">
                     <i class="fas fa-home mr-2"></i>Home
                 </a>
-                <button class="flex-1 py-3 bg-orange-400 text-white rounded-lg font-semibold">
+                <button onclick="downloadReceipt(<?= $booking_id ?>)"
+                    class="flex-1 py-3 bg-orange-400 text-white rounded-lg font-semibold hover:bg-orange-500 transition duration-200">
                     <i class="fas fa-receipt mr-2"></i>Receipt
                 </button>
             </div>
         </div>
     </main>
+
+    <script>
+    function downloadReceipt(bookingId) {
+        // Show loading indicator
+        const button = document.querySelector('button[onclick^="downloadReceipt"]');
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+        button.disabled = true;
+
+        // Request the PDF
+        fetch(`generate_receipt.php?id=${bookingId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Create a link to download the PDF
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `RoomVibe_Receipt_${bookingId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+
+                // Restore button state
+                button.innerHTML = originalContent;
+                button.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error generating receipt:', error);
+                // Restore button state
+                button.innerHTML = originalContent;
+                button.disabled = false;
+                alert('Failed to generate receipt. Please try again.');
+            });
+    }
+    </script>
 </body>
 
 </html>

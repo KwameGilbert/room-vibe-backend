@@ -34,7 +34,7 @@ $wishlistItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $isAvailable = ($item['accomodation_status'] == 1);
             $statusText = $isAvailable ? "Available" : "Full";
             $statusClass = $isAvailable ? "bg-green-500" : "bg-red-500";
-            $image = !empty($item['image']) ? $item['image'] : './images/default-image.jpg';
+            $image = !empty($item['image']) ? $item['image'] : './hostel/images/hostels/default-image.jpg';
             $rating = isset($item['rating']) ? floor($item['rating']) : 0;
             $distance = $item['distance'] ?? 'N/A';
         ?>
