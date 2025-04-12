@@ -309,6 +309,19 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     const bookingForm = document.getElementById('bookingForm');
     const submitButton = document.getElementById('submitButton');
 
+    // Configure toast notifications
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
     // Loading, error, and clear functions
     function showLoading(element) {
         element.classList.add('loading');
@@ -343,19 +356,6 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     function clearErrors() {
         document.querySelectorAll('.error-message').forEach(el => el.remove());
         document.querySelectorAll('.form-group.error').forEach(el => el.classList.remove('error'));
-    }
-
-    // Show toast notification using SweetAlert
-    function showToast(title, icon = 'info') {
-        Swal.fire({
-            title: title,
-            icon: icon,
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true
-        });
     }
 
     // Fetch rooms for selected room type
@@ -447,7 +447,10 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         // Get price directly from data attribute
         const price = parseFloat(priceDisplay.getAttribute('data-price'));
         if (isNaN(price) || price <= 0) {
-            showToast("Invalid room price. Please select a valid room.", "error");
+            Toast.fire({
+                icon: 'error',
+                title: 'Invalid room price. Please select a valid room.'
+            });
             return;
         }
 
@@ -481,7 +484,10 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                 ref: 'BOOK_' + Math.floor((Math.random() * 1000000000) + 1),
                 onClose: function() {
                     hideLoading(submitButton);
-                    showToast('Payment cancelled.', 'warning');
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Payment cancelled'
+                    });
                 },
                 callback: function(response) {
                     // Payment successful; append payment reference and paid flag
@@ -495,14 +501,10 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                         })
                         .catch(error => {
                             console.error('Error processing booking:', error);
-                            Swal.fire({
-                                title: 'Payment Processed',
-                                text: 'Payment was successful but booking failed: ' +
-                                    error.message,
+                            Toast.fire({
                                 icon: 'warning',
-                                timer: 4000,
-                                timerProgressBar: true,
-                                showConfirmButton: false
+                                title: 'Payment was successful but booking failed',
+                                text: error.message
                             });
                         });
                 }
@@ -512,7 +514,11 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (error) {
             hideLoading(submitButton);
             console.error('Payment initialization error:', error);
-            showToast('Failed to initialize payment: ' + error.message, 'error');
+            Toast.fire({
+                icon: 'error',
+                title: 'Failed to initialize payment',
+                text: error.message
+            });
         }
     });
 
@@ -532,13 +538,9 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
             const result = await response.json();
             if (result.success) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Booking successful!',
+                Toast.fire({
                     icon: 'success',
-                    timer: 4000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
+                    title: 'Booking successful!'
                 }).then(() => {
                     window.location.href = './../booking/booking_details.php?id=' + result.booking_id;
                 });
@@ -547,7 +549,11 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
             }
         } catch (error) {
             console.error('Error:', error);
-            showToast('Failed to process booking: ' + error.message, 'error');
+            Toast.fire({
+                icon: 'error',
+                title: 'Booking failed',
+                text: error.message
+            });
         } finally {
             hideLoading(bookingForm);
         }
