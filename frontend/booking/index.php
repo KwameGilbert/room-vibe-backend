@@ -65,7 +65,7 @@ function safeOutput($value) {
     </header>
 
     <!-- Main Content -->
-    <main class="pt-16 pb-20 px-4">
+    <main class="pt-20 pb-20 px-4">
         <?php if (empty($bookings)): ?>
         <!-- Empty State -->
         <div class="flex flex-col items-center justify-center h-80 mt-6">

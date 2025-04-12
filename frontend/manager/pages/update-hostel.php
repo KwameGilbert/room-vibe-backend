@@ -68,7 +68,7 @@ $pageTitle = 'Update Hostel';
 <?php include_once '../includes/navbar.php'; ?>
 
 <!-- Main Content Area -->
-<div class="ml-64 pt-16 px-6 py-8">
+<div class="w-[100%] ml-64 pt-20 px-6 py-8">
     <div class="container mx-auto">
         <?php if (isset($errorMessage) && !$hostel): ?>
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">

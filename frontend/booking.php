@@ -53,7 +53,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-2xl mx-auto pt-16 px-4 pb-20">
+    <main class="max-w-2xl mx-auto pt-20 px-4 pb-20">
         <!-- Hostel Info -->
         <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
             <h2 class="font-semibold text-lg"><?php echo htmlspecialchars($hostel['hostel_name']); ?></h2>

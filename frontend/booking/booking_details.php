@@ -65,7 +65,7 @@ function safeOutput($value) {
     </header>
 
     <!-- Main Content with proper spacing for fixed header -->
-    <main class="pt-16 pb-20 px-4">
+    <main class="pt-20 pb-20 px-4">
         <!-- Booking Status Card -->
         <div class="bg-white rounded-xl shadow mb-4 overflow-hidden">
             <div

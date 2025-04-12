@@ -2,7 +2,7 @@
 require_once '../config/auth.php';
 requireManagerLogin();
 
-require_once '../config/manager-config.php';
+require_once '../../config/Database.php';
 $database = new Database();
 $conn = $database->getConnection();
 
@@ -98,7 +98,7 @@ $pageTitle = 'Edit Room Type';
 <?php include_once '../includes/navbar.php'; ?>
 
 <!-- Main Content Area -->
-<div class="ml-64 pt-16 px-6 py-8">
+<div class="w-[100%] ml-64 pt-20 px-6 py-8">
     <div class="container mx-auto">
         <?php if (isset($errorMessage) && !$roomType): ?>
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">

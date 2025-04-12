@@ -119,7 +119,7 @@ $pageTitle = 'Manage Rooms';
 <?php include_once '../includes/navbar.php'; ?>
 
 <!-- Main Content Area -->
-<div class="ml-64 pt-16 px-6 py-8">
+<div class="w-[100%] ml-64 pt-20 px-6 py-8">
     <div class="container mx-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-800">Manage Rooms</h1>

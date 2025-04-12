@@ -13,7 +13,7 @@ $error = '';
 // Process login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $email = $_POST['email'];
         $password = $_POST['password'];
         
         // Connect to database

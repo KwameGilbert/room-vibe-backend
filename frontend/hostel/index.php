@@ -128,7 +128,7 @@ foreach ($rooms as $room) {
 
 
     <!-- Main content with padding for fixed header -->
-    <main class="pt-16 pb-20 max-w-2xl mx-auto">
+    <main class="pt-20 pb-20 max-w-2xl mx-auto">
         <!-- Image Slider -->
         <section class="relative mb-6">
             <?php
@@ -239,10 +239,8 @@ foreach ($rooms as $room) {
                 <div class="space-y-6">
                     <?php foreach ($groupedRooms as $roomType => $roomsArray): ?>
                     <div>
-                        <h3 class="text-primary font-medium mb-3"><?php
-                                                                            $roomType = ucwords(str_replace("_", " ", $roomType));
-                                                                            echo htmlspecialchars($roomType);
-                                                                            ?></h3>
+                        <h3 class="text-primary font-medium mb-3">
+                            <?php echo htmlspecialchars($roomType);?></h3>
                         <div class="space-y-2">
                             <?php foreach ($roomsArray as $room): ?>
                             <div class="flex items-center justify-between p-4 rounded-lg bg-background">

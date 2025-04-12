@@ -28,7 +28,7 @@ if (!$hostel) {
 <?php include_once '../includes/sidebar.php'; ?>
 <?php include_once '../includes/navbar.php'; ?>
 
-<div class="ml-64 pt-16 px-6 py-8">
+<div class="w-[100%] ml-64 pt-20 px-6 py-8">
     <div class="container mx-auto">
         <h2 class="text-2xl font-semibold text-gray-800">Reports</h2>
         <?php if (isset($errorMessage)): ?>
