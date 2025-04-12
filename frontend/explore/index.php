@@ -1,42 +1,41 @@
- <!-- Header -->
- <?php include __DIR__ . '/../components/header.php'; ?>
+<!-- Header -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
- <!-- Filters -->
- <?php include __DIR__ . '/../components/filters.php'; ?>
+<!-- Filters -->
+<?php include __DIR__ . '/../components/filters.php'; ?>
 
- <!-- Main Content -->
- <?php include __DIR__ . '/../components/hostelListingComponent.php'; ?>
- <script>
+<!-- Main Content -->
+<?php include __DIR__ . '/../components/hostelListingComponent.php'; ?>
+<script>
 function filterHostels() {
     const searchInput = document.getElementById("search");
-    const
-        hostelList = document.getElementById("hostel-list");
-    const
-        hostels = hostelList.getElementsByClassName("w-full flex gap-4 border-b border-t border-slate-300 py-5");
-    const
-        query = searchInput.value.trim().toLowerCase();
-    Array.from(hostels).forEach(hostel => {
-        const name = hostel.querySelector("h1").textContent.toLowerCase();
-        const school = hostel.querySelector("p").textContent.toLowerCase();
+    const hostelList = document.getElementById("hostel-list");
+    const hostels = hostelList.getElementsByClassName("hostel-item"); // Update class name
+    const query = searchInput.value.trim().toLowerCase();
 
-        // Show or hide based on search query
-        if (name.includes(query) || school.includes(query)) {
-            hostel.style.display = "flex"; // Show
+    Array.from(hostels).forEach(hostel => {
+        const name = hostel.querySelector(".hostel-name").textContent.toLowerCase();
+        const location = hostel.querySelector(".hostel-location").textContent.toLowerCase();
+
+        if (name.includes(query) || location.includes(query)) {
+            hostel.parentElement.style.display = "block";
         } else {
-            hostel.style.display = "none"; // Hide
+            hostel.parentElement.style.display = "none";
         }
     });
 
-    // Check if all hostels are hidden
-    const visibleHostels = Array.from(hostels).filter(h => h.style.display !== "none");
-    const noResultsMsg = document.getElementById("no-results") || (() => {
-        const msg = document.createElement("div");
-        msg.id = "no-results";
-        msg.className = "text-center py-8 text-gray-500";
-        msg.textContent = "No hostels found";
-        hostelList.appendChild(msg);
-        return msg;
-    })();
+    // Check if any hostels are visible
+    const visibleHostels = Array.from(hostels).filter(h => h.parentElement.style.display !== "none");
+    const noResultsMsg = document.getElementById("no-results") || createNoResultsElement(hostelList);
     noResultsMsg.style.display = visibleHostels.length === 0 ? "block" : "none";
 }
- </script>
+
+function createNoResultsElement(container) {
+    const msg = document.createElement("div");
+    msg.id = "no-results";
+    msg.className = "text-center py-8 text-gray-500 w-full";
+    msg.textContent = "No hostels found";
+    container.appendChild(msg);
+    return msg;
+}
+</script>

@@ -48,12 +48,12 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $inWishlist = in_array($hostel['id'], $wishlistHostels);
     ?>
     <a href="hostel/?id=<?= htmlspecialchars($hostel['id']) ?>" class="select-none">
-        <div class="w-full flex gap-2 border-b border-t border-slate-300 py-4">
+        <div class="hostel-item w-full flex gap-2 border-b border-t border-slate-300 py-4">
             <img alt="<?= htmlspecialchars($hostel['hostel_name']) ?>" loading="lazy" width="150" height="100"
                 decoding="async" class="rounded-lg" src="<?= htmlspecialchars($image) ?>">
             <div class="w-full pr-4">
-                <h1 class="text-lg font-semibold"><?= htmlspecialchars($hostel['hostel_name']) ?></h1>
-                <p class="text-sm text-gray-500 font-semibold">
+                <h1 class="hostel-name text-lg font-semibold"><?= htmlspecialchars($hostel['hostel_name']) ?></h1>
+                <p class="hostel-location text-sm text-gray-500 font-semibold">
                     <?= htmlspecialchars($hostel['school_name']) ?> - <?= htmlspecialchars($hostel['location']) ?>
                 </p>
 

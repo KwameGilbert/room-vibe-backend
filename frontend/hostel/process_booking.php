@@ -32,8 +32,7 @@ $requiredFields = [
     'emergency_contact_relationship',
     'emergency_contact_phone',
     'payment_reference',
-    'paid',
-    'notes'
+    'paid'
 ];
 
 // Validate that all required fields are provided

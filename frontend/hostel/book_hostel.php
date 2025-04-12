@@ -411,7 +411,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
             const price = selectedRoom.getAttribute('data-price');
             if (price) {
                 const formattedPrice = parseFloat(price).toFixed(2);
-                priceDisplay.textContent = `GHS ${formattedPrice}`;
+                priceDisplay.textContent = `GH₵ ${formattedPrice}`;
                 priceDisplay.setAttribute('data-price', formattedPrice);
             } else {
                 priceDisplay.textContent = '-';

@@ -4,7 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Login</title>
-    <?php include_once './../includes/links.php';?>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'poppins': ['Poppins', 'sans-serif']
+                },
+                colors: {
+                    '[#fd7e14]': '#fd7e14',
+                    '[#e76b00]': '#e76b00'
+                }
+            }
+        }
+    }
+    </script>
+    <!-- Load Tailwind CSS from the CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">
@@ -20,7 +39,7 @@
                 <!-- Login Illustration -->
                 <img src="./../images/storyset/login_animate.svg" alt="Login Illustration"
                     class="w-full max-w-[180px] h-auto mx-auto mb-4 block">
-                <h1 class="text-2xl font-bold text-primary mb-1">Welcome to RoomVibe</h1>
+                <h1 class="text-2xl font-bold text-[#fd7e14] mb-1">Welcome to RoomVibe</h1>
                 <p class="text-sm text-gray-500">Sign in to continue</p>
             </div>
 
@@ -34,7 +53,7 @@
                                 class="fas fa-user absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-500 text-base"></i>
                             <input type="email" id="email" name="email" placeholder="Enter your email" required
                                 class="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-lg text-sm transition-all
-                                       focus:outline-none focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-20">
+                                       focus:outline-none focus:border-[#fd7e14] focus:ring focus:ring-[#fd7e14] focus:ring-opacity-20">
                         </div>
                     </div>
 
@@ -46,17 +65,17 @@
                             <input type="password" id="password" name="password" placeholder="Enter your password"
                                 required
                                 class="w-full py-3 pl-10 pr-3 border border-gray-300 rounded-lg text-sm transition-all
-                                       focus:outline-none focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-20">
+                                       focus:outline-none focus:border-[#fd7e14] focus:ring focus:ring-[#fd7e14] focus:ring-opacity-20">
                         </div>
                         <div class="text-right mt-1">
-                            <a href="#" class="text-xs text-gray-500 hover:text-primary transition-colors">Forgot
+                            <a href="#" class="text-xs text-gray-500 hover:text-[#fd7e14] transition-colors">Forgot
                                 password?</a>
                         </div>
                     </div>
 
                     <button type="submit" id="login-button"
-                        class="w-full bg-primary text-white border-0 rounded-lg py-3 text-base font-semibold 
-                               cursor-pointer transition-colors hover:bg-primary-dark mt-1 flex items-center justify-center">
+                        class="w-full bg-[#fd7e14] text-white border-0 rounded-lg py-3 text-base font-semibold 
+                               cursor-pointer transition-colors hover:bg-[#e76b00] mt-1 flex items-center justify-center">
                         <span>Sign In</span>
                     </button>
                 </form>
@@ -88,7 +107,7 @@
 
             <div class="text-center mt-0 text-gray-500 text-sm">
                 Don't have an account? <a href="./../signup/"
-                    class="text-primary font-semibold hover:underline">Register now</a>
+                    class="text-[#fd7e14] font-semibold hover:underline">Register now</a>
             </div>
         </div>
     </div>

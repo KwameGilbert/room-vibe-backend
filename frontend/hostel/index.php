@@ -251,7 +251,7 @@ foreach ($rooms as $room) {
                                     <?php endif; ?>
                                 </div>
                                 <div class="font-semibold">
-                                    $<?php echo number_format($room['price'], 2); ?>
+                                    GH₵<?php echo number_format($room['price'], 2); ?>
                                 </div>
                             </div>
                             <?php endforeach; ?>
