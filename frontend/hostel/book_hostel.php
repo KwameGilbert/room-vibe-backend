@@ -42,6 +42,8 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Paystack Inline Script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
     .loading {
         position: relative;
@@ -277,6 +279,18 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
+                <!-- Notes Section -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Additional Notes</h3>
+                    <div class="form-group">
+                        <label for="notes" class="block text-sm text-gray-700 mb-1">Special Requests (Optional)</label>
+                        <textarea id="notes" name="notes" rows="3"
+                            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                            placeholder="Any special requests or additional information for your booking"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Maximum 200 characters</p>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" id="submitButton"
                     class="w-full bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded font-medium transition">
@@ -291,6 +305,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     const roomTypeSelect = document.getElementById('roomType');
     const roomSelect = document.getElementById('room_id');
     const priceDisplay = document.getElementById('roomPrice');
+    const notes = document.getElementById('notes');
     const bookingForm = document.getElementById('bookingForm');
     const submitButton = document.getElementById('submitButton');
 
@@ -328,6 +343,19 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
     function clearErrors() {
         document.querySelectorAll('.error-message').forEach(el => el.remove());
         document.querySelectorAll('.form-group.error').forEach(el => el.classList.remove('error'));
+    }
+
+    // Show toast notification using SweetAlert
+    function showToast(title, icon = 'info') {
+        Swal.fire({
+            title: title,
+            icon: icon,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true
+        });
     }
 
     // Fetch rooms for selected room type
@@ -419,7 +447,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         // Get price directly from data attribute
         const price = parseFloat(priceDisplay.getAttribute('data-price'));
         if (isNaN(price) || price <= 0) {
-            alert("Invalid room price. Please select a valid room.");
+            showToast("Invalid room price. Please select a valid room.", "error");
             return;
         }
 
@@ -431,6 +459,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         const roomId = roomSelect.value;
         const selectedRoomOption = roomSelect.options[roomSelect.selectedIndex];
         const roomNumber = selectedRoomOption ? selectedRoomOption.getAttribute('data-room_number') : '';
+        const notesValue = notes.value;
 
         // Prepare form data
         const formData = new FormData(bookingForm);
@@ -438,7 +467,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         formData.append('room_id', roomId);
         formData.append('roomNumber', roomNumber);
         formData.append('roomTypeId', roomTypeId);
-
+        formData.append('notes', notesValue);
 
         try {
             // Initiate Paystack payment
@@ -452,7 +481,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                 ref: 'BOOK_' + Math.floor((Math.random() * 1000000000) + 1),
                 onClose: function() {
                     hideLoading(submitButton);
-                    alert('Payment cancelled.');
+                    showToast('Payment cancelled.', 'warning');
                 },
                 callback: function(response) {
                     // Payment successful; append payment reference and paid flag
@@ -466,9 +495,15 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                         })
                         .catch(error => {
                             console.error('Error processing booking:', error);
-                            alert('Payment was successful but booking failed: ' +
-                                error
-                                .message);
+                            Swal.fire({
+                                title: 'Payment Processed',
+                                text: 'Payment was successful but booking failed: ' +
+                                    error.message,
+                                icon: 'warning',
+                                timer: 4000,
+                                timerProgressBar: true,
+                                showConfirmButton: false
+                            });
                         });
                 }
             });
@@ -477,7 +512,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (error) {
             hideLoading(submitButton);
             console.error('Payment initialization error:', error);
-            alert('Failed to initialize payment: ' + error.message);
+            showToast('Failed to initialize payment: ' + error.message, 'error');
         }
     });
 
@@ -497,14 +532,22 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
             const result = await response.json();
             if (result.success) {
-                alert('Booking successful!');
-                window.location.href = './../booking/booking_details.php?id=' + result.booking_id;
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Booking successful!',
+                    icon: 'success',
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = './../booking/booking_details.php?id=' + result.booking_id;
+                });
             } else {
                 throw new Error(result.message || 'Booking failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to process booking: ' + error.message);
+            showToast('Failed to process booking: ' + error.message, 'error');
         } finally {
             hideLoading(bookingForm);
         }
