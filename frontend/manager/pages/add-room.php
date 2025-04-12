@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include_once '../includes/sidebar.php'; ?>
 <?php include_once '../includes/navbar.php'; ?>
 
-<div class="ml-64 pt-16 px-6 py-8">
-    <div class="container mx-auto">
+<div class="w-[100%] ml-64 pt-20 px-6 py-8 w-full">
+    <div class="w-full">
         <h2 class="text-2xl font-semibold text-gray-800">Add New Room</h2>
         <form method="POST" action="" class="p-6 space-y-6 bg-white shadow-md rounded-lg">
             <div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoomVibe Login</title>
-    <?= include_once __DIR__ . '/../includes/links.php';?>
+    <?php include_once './../includes/links.php';?>
 </head>
 
 <body class="h-full w-full overflow-auto bg-gray-100 text-gray-800 font-poppins flex flex-col">

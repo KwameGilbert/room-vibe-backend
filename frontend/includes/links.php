@@ -33,5 +33,7 @@ tailwind.config = {
     }
 }
 </script>
+
+
 <!-- Load Tailwind CSS from the CDN -->
 <script src="https://cdn.tailwindcss.com"></script>

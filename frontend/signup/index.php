@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <div class="w-full max-w-md mx-auto px-5 flex flex-col justify-center min-h-full pt-16">
+    <div class="w-full max-w-md mx-auto px-5 flex flex-col justify-center min-h-full pt-20">
         <div class="flex-1 flex flex-col justify-center">
             <!-- Section 1: Account Credentials -->
             <section id="section-1" class="mb-4">
