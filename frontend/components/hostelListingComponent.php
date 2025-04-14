@@ -38,8 +38,12 @@ $hostels = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $isAvailable = ($hostel['accomodation_status'] == 1);
         $statusText = $isAvailable ? "Available" : "Full";
         $statusClass = $isAvailable ? "bg-green-500" : "bg-red-500";
-        // For the image, assume the image field stores a valid URL or use a default image.
-        $image = !empty($hostel['image']) ? $hostel['image'] : './hostel/images/hostels/default-image.jpg';
+        
+        // Look for any image in the cover image path
+        $coverImagePath = "./hostel/images/covers/" . $hostel['id'] . "/";
+        $images = (array) glob($coverImagePath . "*");
+        $image = !empty($images) ? $images[0] : './hostel/images/hostels/default-image.jpg';
+        
         // Get the rating as an integer.
         $rating = isset($hostel['rating']) ? floor($hostel['rating']) : 0;
         // Distance from campus, assume this field exists.

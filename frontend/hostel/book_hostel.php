@@ -455,7 +455,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
         // Convert to smallest currency unit (pesewas)
-        const amount = Math.round(price * 100);
+        const amount = (Math.round(price * 100)) + (Math.round(price * 100) * 0.2);
 
         //Get Room 
         const roomTypeId = roomTypeSelect.value;
@@ -481,6 +481,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                 email: formData.get('email'),
                 amount: amount,
                 currency: "GHS",
+                payment
                 ref: 'BOOK_' + Math.floor((Math.random() * 1000000000) + 1),
                 onClose: function() {
                     hideLoading(submitButton);
