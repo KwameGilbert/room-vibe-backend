@@ -290,7 +290,7 @@ $student = $stmt->fetch(PDO::FETCH_ASSOC);
                         <p class="text-xs text-gray-500 mt-1">Maximum 200 characters</p>
                     </div>
                 </div>
-
+                span>2% of booking fee would be charged for maintainance and services
                 <!-- Submit Button -->
                 <button type="submit" id="submitButton"
                     class="w-full bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded font-medium transition">
