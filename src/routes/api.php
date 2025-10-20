@@ -9,5 +9,8 @@ return function($app) {
     (require_once __DIR__ . '/php/ReviewRoute.php')($app);
     (require_once __DIR__ . '/php/StudentRoute.php')($app);
     (require_once __DIR__ . '/php/BookingRoute.php')($app);
+    (require_once __DIR__ . '/php/WarehouseRoute.php')($app);
+    (require_once __DIR__ . '/php/ShipmentRoute.php')($app);
+    (require_once __DIR__ . '/php/ParcelRoute.php')($app);
 
 };
