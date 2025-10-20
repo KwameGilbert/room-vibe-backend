@@ -189,8 +189,8 @@ class Parcel {
      * @return array Returns array with 'success' boolean and 'error' message if applicable.
      */
     public function updateParcel($id, array $parcel): array {
-        // Validate that shipment_id is not being set to null
-        if (isset($parcel['shipment_id']) && empty($parcel['shipment_id'])) {
+        // Validate that shipment_id is not being set to null or empty
+        if (array_key_exists('shipment_id', $parcel) && empty($parcel['shipment_id'])) {
             return [
                 'success' => false,
                 'error' => 'Shipment ID cannot be empty - all parcels must belong to a shipment'
@@ -198,7 +198,7 @@ class Parcel {
         }
 
         // Validate that shipment exists if shipment_id is being updated
-        if (isset($parcel['shipment_id']) && !$this->shipment->shipmentExists($parcel['shipment_id'])) {
+        if (array_key_exists('shipment_id', $parcel) && !empty($parcel['shipment_id']) && !$this->shipment->shipmentExists($parcel['shipment_id'])) {
             return [
                 'success' => false,
                 'error' => 'Shipment does not exist'

@@ -194,7 +194,7 @@ class Shipment {
      */
     public function updateShipment($id, array $shipment): array {
         // Validate that warehouse exists if warehouse_id is being updated
-        if (isset($shipment['warehouse_id']) && !$this->warehouse->warehouseExists($shipment['warehouse_id'])) {
+        if (array_key_exists('warehouse_id', $shipment) && !$this->warehouse->warehouseExists($shipment['warehouse_id'])) {
             return [
                 'success' => false,
                 'error' => 'Warehouse does not exist'
